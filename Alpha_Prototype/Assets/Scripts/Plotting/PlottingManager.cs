@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 [System.Serializable]
 public struct Combinations
@@ -26,6 +27,7 @@ public class PlottingManager : MonoBehaviour
     }
 
     public List<Combinations> dictionary;
+    public bool isConnected = false;
     public List<Vector2> Path;
     List<SpriteRenderer> TileSprites;
 
@@ -36,84 +38,125 @@ public class PlottingManager : MonoBehaviour
     public LayerMask PlottingLayerMask;
     public Sprite ErrorSprite;
 
-    int startOffset = 1;
-    int endOffset = 1;
+    public int startOffset = 0;
+    public int endOffset = 0;
 
     private void Start()
     {
-        Path = new List<Vector2>();
-        TileSprites = new List<SpriteRenderer>();
+        Path = new List<Vector2>
+        {
+            new Vector2(StartPoint.transform.position.x, StartPoint.transform.position.z),
+            new Vector2(EndPoint.transform.position.x, EndPoint.transform.position.z)
+        };
 
-        Path.Add(new Vector2(StartPoint.transform.position.x, StartPoint.transform.position.z));
-        Path.Add(new Vector2(EndPoint.transform.position.x, EndPoint.transform.position.z));
+        TileSprites = new List<SpriteRenderer>
+        {
+            StartPoint.GetComponentInChildren<SpriteRenderer>(),
+            EndPoint.GetComponentInChildren<SpriteRenderer>()
+        };
 
-        TileSprites.Add(StartPoint.GetComponentInChildren<SpriteRenderer>());
-        TileSprites.Add(EndPoint.GetComponentInChildren<SpriteRenderer>());
-
-        UpdateSprites();
+        updateSprites();
     }
 
-    List<Vector2> getPathNeighbours(int index)
+    List<Vector2> getNeighbours(int index)
     {
-        List<Vector2> list = new List<Vector2>();
-        list.Add(new Vector2(Path[index].x + 1, Path[index].y));
-        list.Add(new Vector2(Path[index].x - 1, Path[index].y));
-        list.Add(new Vector2(Path[index].x, Path[index].y + 1));
-        list.Add(new Vector2(Path[index].x, Path[index].y - 1));
+        List<Vector2> list = new List<Vector2>
+        {
+            new Vector2(Path[index].x + 1, Path[index].y),
+            new Vector2(Path[index].x - 1, Path[index].y),
+            new Vector2(Path[index].x, Path[index].y + 1),
+            new Vector2(Path[index].x, Path[index].y - 1)
+        };
 
         return list;
     }
 
-    void UpdateSprites()
+    void updateSprites()
     {
+        Vector2 start, end;
         Vector2 prev = Path[0];
         prev.x -= 1;
 
-        Vector2 start, end;
-        bool found_key;
-
-        for (int i=0; i<Path.Count-1; i++)
+        for(int i=0; i < startOffset; i++)
         {
             start = prev - Path[i];
-            end = Path[i+1] - Path[i];
-
-            found_key = false;
-            foreach(var key in dictionary)
+            end = Path[i + 1] - Path[i];
+            bool found_match = false;
+            foreach(var entry in dictionary)
             {
-                if((key.start == start && key.end == end) || (key.start == end && key.end == start))
+                if((entry.start == start && entry.end == end) || (entry.start == end && entry.end == start))
                 {
-                    TileSprites[i].transform.rotation = Quaternion.Euler(90.0f, key.rotation, 0.0f);
-                    TileSprites[i].sprite = key.sprite;
-                    found_key = true;
+                    TileSprites[i].sprite = entry.sprite;
+                    TileSprites[i].transform.rotation = Quaternion.Euler(90.0f, entry.rotation, 0);
+                    found_match = true;
                     break;
                 }
             }
-            if(!found_key)
-            {
+
+            if(!found_match)
                 TileSprites[i].sprite = ErrorSprite;
-            }
 
             prev = Path[i];
         }
 
-        start = prev - Path[Path.Count - 1];
-        end = -start;
+        start = prev - Path[startOffset];
+        
+        if (!isConnected)
+            end = start * -1;
+        else
+            end = Path[startOffset + 1] - Path[startOffset];
 
-        found_key = false;
-        foreach (var key in dictionary)
+        foreach (var entry in dictionary)
         {
-            if ((key.start == start && key.end == end) || (key.start == end && key.end == start))
+            if ((entry.start == start && entry.end == end) || (entry.start == end && entry.end == start))
             {
-                TileSprites[Path.Count - 1].transform.rotation = Quaternion.Euler(90.0f, key.rotation, 0.0f);
-                TileSprites[Path.Count - 1].sprite = key.sprite;
-                found_key = true;
+                TileSprites[startOffset].sprite = entry.sprite;
+                TileSprites[startOffset].transform.rotation = Quaternion.Euler(90.0f, entry.rotation, 0);
                 break;
             }
         }
-        if (!found_key)
+
+        prev = Path[Path.Count - 1];
+        prev.x += 1;
+
+        for(int i = Path.Count-1; i > Path.Count - 1 - endOffset; i--)
         {
-            TileSprites[Path.Count - 1].sprite = ErrorSprite;
+            start = prev - Path[i];
+            end = Path[i - 1] - Path[i];
+
+            bool found_match = false;
+            foreach (var entry in dictionary)
+            {
+                if ((entry.start == start && entry.end == end) || (entry.start == end && entry.end == start))
+                {
+                    TileSprites[i].sprite = entry.sprite;
+                    TileSprites[i].transform.rotation = Quaternion.Euler(90.0f, entry.rotation, 0);
+                    found_match = true;
+                    break;
+                }
+            }
+
+            if (!found_match)
+                TileSprites[i].sprite = ErrorSprite;
+
+            prev = Path[i];
         }
+
+        start = prev - Path[Path.Count - 1 - endOffset];
+        if (!isConnected)
+            end = start * -1;
+        else
+            end = Path[Path.Count - 1 - endOffset - 1] - Path[Path.Count - 1 - endOffset];
+        foreach (var entry in dictionary)
+        {
+            if ((entry.start == start && entry.end == end) || (entry.start == end && entry.end == start))
+            {
+                TileSprites[Path.Count - 1 - endOffset].sprite = entry.sprite;
+                TileSprites[Path.Count - 1 - endOffset].transform.rotation = Quaternion.Euler(90.0f, entry.rotation, 0);
+                break;
+            }
+        }
+
     }
 
     private void Update()
@@ -123,21 +166,23 @@ public class PlottingManager : MonoBehaviour
         RaycastHit hit;
         if(Physics.Raycast(cursor, out hit, 1000.0f, PlottingLayerMask))
         {
-            CursorIndicator.gameObject.SetActive(true);
+            if (!isConnected)
+                CursorIndicator.gameObject.SetActive(true);
+            else
+                return;
 
             GameObject tile = hit.transform.gameObject;
             Vector2 tile_position = new Vector2(tile.transform.position.x, tile.transform.position.z);
 
-            List<Vector2> start_path_neighbours = getPathNeighbours(startOffset-1);
-            List<Vector2> end_path_neighbours = getPathNeighbours(Path.Count-endOffset);
-
             CursorIndicator.transform.position = new Vector3(tile_position.x, CursorIndicator.transform.position.y, tile_position.y);
+            List<Vector2> start_neighbours = getNeighbours(startOffset);
+            List<Vector2> end_neighbours = getNeighbours(Path.Count - 1 - endOffset);
 
-            if (start_path_neighbours.Contains(tile_position) || end_path_neighbours.Contains(tile_position))
+            if(start_neighbours.Contains(tile_position) || end_neighbours.Contains(tile_position))
             {
                 CursorIndicator.color = Color.green;
             }
-            else if (tile_position == Path[0] || tile_position == Path[Path.Count - 1])
+            else if (Path[startOffset] == tile_position || Path[Path.Count - 1 - endOffset] == tile_position)
             {
                 CursorIndicator.color = Color.green;
                 return;
@@ -148,34 +193,59 @@ public class PlottingManager : MonoBehaviour
                 return;
             }
 
-            if(Path.Contains(tile_position))
+            if(Input.GetMouseButton(0))
             {
-                if ((Path[Path.Count - endOffset] == tile_position) || (Path[startOffset] == tile_position))
+                if(Path.Contains(tile_position))
                 {
-                    Debug.Log("Should Delete?");
-                }
-                else
-                {
-                    //Invalid Path
-                    CursorIndicator.color = Color.red;
-                }
-            }
-            else
-            {
-                if (start_path_neighbours.Contains(tile_position))
-                {
-                    Path.Insert(startOffset, tile_position);
-                    TileSprites.Insert(startOffset, tile.GetComponentInChildren<SpriteRenderer>());
-                    startOffset++;
-                }
-                else
-                {
-                    Path.Insert(Path.Count - endOffset, tile_position);
-                    TileSprites.Insert(Path.Count - endOffset, tile.GetComponentInChildren<SpriteRenderer>());
-                    endOffset++;
-                }
+                    // may require to delete
+                    if(startOffset-1 >= 0 && Path[startOffset-1] == tile_position)
+                    {
+                        Path.RemoveAt(startOffset);
+                        TileSprites[startOffset].sprite = null;
+                        TileSprites.RemoveAt(startOffset);
 
-                UpdateSprites();
+                        startOffset--;
+                        updateSprites();
+                    }
+                    else if((Path.Count - 1 -(endOffset-1)) < Path.Count && Path[(Path.Count - 1 - (endOffset - 1))] == tile_position)
+                    {
+                        int index = Path.Count - 1 - endOffset;
+                        Path.RemoveAt(index);
+                        TileSprites[index].sprite = null;
+                        TileSprites.RemoveAt(index);
+                        
+                        endOffset--;
+                        updateSprites();
+                    }
+                    // maybe invalid
+                    else
+                    {
+                        CursorIndicator.color = Color.red;
+                    }
+                }
+                else
+                {
+                    if(start_neighbours.Contains(tile_position))
+                    {
+                        Path.Insert(startOffset + 1, tile_position);
+                        TileSprites.Insert(startOffset + 1, tile.GetComponentInChildren<SpriteRenderer>());
+
+                        startOffset++;
+                    }
+                    else
+                    {
+                        int index = Path.Count - 1 - (endOffset);
+                        Path.Insert(index, tile_position);
+                        TileSprites.Insert(index, tile.GetComponentInChildren<SpriteRenderer>());
+                        
+                        endOffset++;
+                    }
+
+                    if (start_neighbours.Contains(tile_position) && end_neighbours.Contains(tile_position))
+                        isConnected = true;
+
+                    updateSprites();
+                }
             }
         }
     }
