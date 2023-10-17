@@ -27,19 +27,21 @@ public class PlottingManager : MonoBehaviour
     }
 
     public List<Combinations> dictionary;
-    public bool isConnected = false;
-    public List<Vector2> Path;
+    
+    bool isConnected = false;
+    List<Vector2> Path;
     List<SpriteRenderer> TileSprites;
 
+    [Header("Path Start/End")]
     public GameObject StartPoint;
     public GameObject EndPoint;
 
+    [Header("Path Raycast Settings")]
     public SpriteRenderer CursorIndicator;
     public LayerMask PlottingLayerMask;
-    public Sprite ErrorSprite;
-
-    public int startOffset = 0;
-    public int endOffset = 0;
+    
+    int startOffset = 0;
+    int endOffset = 0;
 
     private void Start()
     {
@@ -58,7 +60,7 @@ public class PlottingManager : MonoBehaviour
         updateSprites();
     }
 
-    List<Vector2> getNeighbours(int index)
+    private List<Vector2> getNeighbours(int index)
     {
         List<Vector2> list = new List<Vector2>
         {
@@ -70,8 +72,7 @@ public class PlottingManager : MonoBehaviour
 
         return list;
     }
-
-    void updateSprites()
+    private void updateSprites()
     {
         Vector2 start, end;
         Vector2 prev = Path[0];
@@ -81,20 +82,15 @@ public class PlottingManager : MonoBehaviour
         {
             start = prev - Path[i];
             end = Path[i + 1] - Path[i];
-            bool found_match = false;
             foreach(var entry in dictionary)
             {
                 if((entry.start == start && entry.end == end) || (entry.start == end && entry.end == start))
                 {
                     TileSprites[i].sprite = entry.sprite;
                     TileSprites[i].transform.rotation = Quaternion.Euler(90.0f, entry.rotation, 0);
-                    found_match = true;
                     break;
                 }
             }
-
-            if(!found_match)
-                TileSprites[i].sprite = ErrorSprite;
 
             prev = Path[i];
         }
@@ -124,20 +120,15 @@ public class PlottingManager : MonoBehaviour
             start = prev - Path[i];
             end = Path[i - 1] - Path[i];
 
-            bool found_match = false;
             foreach (var entry in dictionary)
             {
                 if ((entry.start == start && entry.end == end) || (entry.start == end && entry.end == start))
                 {
                     TileSprites[i].sprite = entry.sprite;
                     TileSprites[i].transform.rotation = Quaternion.Euler(90.0f, entry.rotation, 0);
-                    found_match = true;
                     break;
                 }
             }
-
-            if (!found_match)
-                TileSprites[i].sprite = ErrorSprite;
 
             prev = Path[i];
         }
@@ -248,5 +239,19 @@ public class PlottingManager : MonoBehaviour
                 }
             }
         }
+    }
+
+    public List<Vector2> getTraversalPath()
+    {
+        List<Vector2> list = new List<Vector2>();
+
+        int end = startOffset + 1;
+        if (isConnected)
+            end = Path.Count;
+
+        for(int i=0; i<end; i++)
+            list.Add(Path[i]);
+
+        return list;
     }
 }

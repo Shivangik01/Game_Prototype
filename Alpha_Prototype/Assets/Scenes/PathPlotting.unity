@@ -641,6 +641,7 @@ MonoBehaviour:
     end: {x: 0, y: -1}
     rotation: 0
     sprite: {fileID: 21300000, guid: 39ba4c9fa688e0e4eb41b2ff92bc253e, type: 3}
+  isConnected: 0
   Path: []
   StartPoint: {fileID: 718005028}
   EndPoint: {fileID: 471771280}
@@ -649,6 +650,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1
   ErrorSprite: {fileID: 21300000, guid: c366194a52c442c439c55ce6d3f38583, type: 3}
+  startOffset: 0
+  endOffset: 0
 --- !u!4 &70932200
 Transform:
   m_ObjectHideFlags: 0
