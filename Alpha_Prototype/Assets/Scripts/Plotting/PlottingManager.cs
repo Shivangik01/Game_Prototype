@@ -32,14 +32,22 @@ public class PlottingManager : MonoBehaviour
     List<Vector2> Path;
     List<SpriteRenderer> TileSprites;
 
+
     [Header("Path Start/End")]
     public GameObject StartPoint;
     public GameObject EndPoint;
 
+    [Header("Delivery Targets")]
+    public Transform DeliveryTilesParent;
+    List<GameObject> DeliveryTiles;
+
+    Dictionary<Transform, List<Vector2>> Deliverables;
+
     [Header("Path Raycast Settings")]
     public SpriteRenderer CursorIndicator;
     public LayerMask PlottingLayerMask;
-    
+    public LayerMask DeliveryLayerMask;
+
     int startOffset = 0;
     int endOffset = 0;
 
@@ -56,6 +64,15 @@ public class PlottingManager : MonoBehaviour
             StartPoint.GetComponentInChildren<SpriteRenderer>(),
             EndPoint.GetComponentInChildren<SpriteRenderer>()
         };
+
+        DeliveryTiles = new List<GameObject>();
+        foreach(Transform child in DeliveryTilesParent)
+        {
+            if(child.gameObject.CompareTag("Targets"))
+                DeliveryTiles.Add(child.gameObject);
+        }
+
+        Deliverables = new Dictionary<Transform, List<Vector2>>();
 
         updateSprites();
     }
@@ -150,8 +167,112 @@ public class PlottingManager : MonoBehaviour
 
     }
 
+    private void AddPoint(int index, Vector2 position, SpriteRenderer renderer)
+    {
+        foreach (GameObject d in DeliveryTiles)
+        {
+            Vector2 pos = new Vector2(d.transform.position.x, d.transform.position.z);
+            if (new Vector2(position.x + 1, position.y) == pos)
+            {
+                if (Deliverables.ContainsKey(d.transform))
+                    Deliverables[d.transform].Add(position);
+                else
+                {
+                    Deliverables[d.transform] = new List<Vector2>
+                    {
+                        position
+                    };
+                    d.transform.position = new Vector3(d.transform.position.x, 0.2f, d.transform.position.z);
+                }
+            }
+            else if (new Vector2(position.x - 1, position.y) == pos)
+            {
+                if (Deliverables.ContainsKey(d.transform))
+                    Deliverables[d.transform].Add(position);
+                else
+                {
+                    Deliverables[d.transform] = new List<Vector2>
+                    {
+                        position
+                    };
+                    d.transform.position = new Vector3(d.transform.position.x, 0.2f, d.transform.position.z);
+                }
+            }
+            else if (new Vector2(position.x, position.y + 1) == pos)
+            {
+                if (Deliverables.ContainsKey(d.transform))
+                    Deliverables[d.transform].Add(position);
+                else
+                {
+                    Deliverables[d.transform] = new List<Vector2>
+                    {
+                        position
+                    };
+                    d.transform.position = new Vector3(d.transform.position.x, 0.2f, d.transform.position.z);
+                }
+            }
+            else if (new Vector2(position.x, position.y - 1) == pos)
+            {
+                if (Deliverables.ContainsKey(d.transform))
+                    Deliverables[d.transform].Insert(Math.Min(3, Deliverables[d.transform].Count - 1), position);
+                else
+                {
+                    Deliverables[d.transform] = new List<Vector2>
+                    {
+                        position
+                    };
+                    d.transform.position = new Vector3(d.transform.position.x, 0.2f, d.transform.position.z);
+                }
+            }
+        }
+
+        Path.Insert(index, position);
+        TileSprites.Insert(index, renderer);
+    }
+
+    private void RemovePoint(int index)
+    {
+        List<Transform> removals = new List<Transform>();
+        foreach(var entry in Deliverables)
+        {
+            if (entry.Value.Contains(Path[index]))
+            {
+                entry.Value.Remove(Path[index]);
+                if (entry.Value.Count == 0)
+                {
+                    entry.Key.position = new Vector3(entry.Key.position.x, 0, entry.Key.position.z);
+                    removals.Add(entry.Key);
+                }
+            }
+        }
+        foreach(var r in removals)
+            Deliverables.Remove(r);
+
+        Path.RemoveAt(index);
+        TileSprites[index].sprite = null;
+        TileSprites.RemoveAt(index);
+    }
+
+    private void debugPrintDeliveries()
+    {
+        foreach(var entry in Deliverables)
+        {
+            string printing = "";
+            printing += entry.Key.name;
+            printing += ": ";
+            foreach(var p in entry.Value)
+            {
+                printing += "(" + p.x.ToString() + "," + p.y.ToString() + "), ";
+            }
+            Debug.Log(printing);
+        }
+    }
+
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Q))
+            debugPrintDeliveries();
+
         CursorIndicator.gameObject.SetActive(false);
         Ray cursor = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
@@ -160,7 +281,7 @@ public class PlottingManager : MonoBehaviour
             if (!isConnected)
                 CursorIndicator.gameObject.SetActive(true);
             else
-                return;
+                goto skipTileModifier;
 
             GameObject tile = hit.transform.gameObject;
             Vector2 tile_position = new Vector2(tile.transform.position.x, tile.transform.position.z);
@@ -176,12 +297,12 @@ public class PlottingManager : MonoBehaviour
             else if (Path[startOffset] == tile_position || Path[Path.Count - 1 - endOffset] == tile_position)
             {
                 CursorIndicator.color = Color.green;
-                return;
+                goto skipTileModifier;
             }
             else
             {
                 CursorIndicator.color = Color.red;
-                return;
+                goto skipTileModifier;
             }
 
             if(Input.GetMouseButton(0))
@@ -191,20 +312,14 @@ public class PlottingManager : MonoBehaviour
                     // may require to delete
                     if(startOffset-1 >= 0 && Path[startOffset-1] == tile_position)
                     {
-                        Path.RemoveAt(startOffset);
-                        TileSprites[startOffset].sprite = null;
-                        TileSprites.RemoveAt(startOffset);
-
+                        RemovePoint(startOffset);
                         startOffset--;
                         updateSprites();
                     }
                     else if((Path.Count - 1 -(endOffset-1)) < Path.Count && Path[(Path.Count - 1 - (endOffset - 1))] == tile_position)
                     {
                         int index = Path.Count - 1 - endOffset;
-                        Path.RemoveAt(index);
-                        TileSprites[index].sprite = null;
-                        TileSprites.RemoveAt(index);
-                        
+                        RemovePoint(index);
                         endOffset--;
                         updateSprites();
                     }
@@ -218,17 +333,13 @@ public class PlottingManager : MonoBehaviour
                 {
                     if(start_neighbours.Contains(tile_position))
                     {
-                        Path.Insert(startOffset + 1, tile_position);
-                        TileSprites.Insert(startOffset + 1, tile.GetComponentInChildren<SpriteRenderer>());
-
+                        AddPoint(startOffset + 1, tile_position, tile.GetComponentInChildren<SpriteRenderer>());
                         startOffset++;
                     }
                     else
                     {
                         int index = Path.Count - 1 - (endOffset);
-                        Path.Insert(index, tile_position);
-                        TileSprites.Insert(index, tile.GetComponentInChildren<SpriteRenderer>());
-                        
+                        AddPoint(index, tile_position, tile.GetComponentInChildren<SpriteRenderer>());                        
                         endOffset++;
                     }
 
@@ -239,8 +350,42 @@ public class PlottingManager : MonoBehaviour
                 }
             }
         }
+        skipTileModifier:
+        if (Physics.Raycast(cursor, out hit, 1000.0f, DeliveryLayerMask))
+        {
+            if(Input.GetMouseButtonDown(0))
+                hit.transform.GetComponent<Animator>().SetTrigger("Squash");
+        }
     }
 
+    public void ResetPaths()
+    {
+        foreach(SpriteRenderer sr in TileSprites)
+        {
+            sr.sprite = null;
+        }
+
+        Path.Clear();
+        Path.Add(new Vector2(StartPoint.transform.position.x, StartPoint.transform.position.z));
+        Path.Add(new Vector2(EndPoint.transform.position.x, EndPoint.transform.position.z));
+
+        TileSprites.Clear();
+        TileSprites.Add(StartPoint.GetComponentInChildren<SpriteRenderer>());
+        TileSprites.Add(EndPoint.GetComponentInChildren<SpriteRenderer>());
+
+        startOffset = 0;
+        endOffset = 0;
+        isConnected = false;
+
+        foreach (var entry in Deliverables)
+        {
+            entry.Key.position = new Vector3(entry.Key.position.x, 0.0f, entry.Key.position.z);
+        }
+
+        Deliverables.Clear();
+
+        updateSprites();
+    }
     public List<Vector2> getTraversalPath()
     {
         List<Vector2> list = new List<Vector2>();
