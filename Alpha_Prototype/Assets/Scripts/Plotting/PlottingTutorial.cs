@@ -1,13 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlottingTutorial : MonoBehaviour
 {
-    public SpriteRenderer tutorialSprite;
-    public float zOffset = -2.5f;
-
+    [Header("Click Tutorial")]
     public float timeGap = 5f;
+    public Image tutorialSprite;
+    public Vector2 Offset;
+    public float moveSpeed = 100.0f;
+    public Gradient fallOffs;
+
     int prevStart, prevEnd;
     bool connected;
 
@@ -28,8 +32,6 @@ public class PlottingTutorial : MonoBehaviour
         if (connected)
             return;
 
-        if (tutorialSprite.gameObject.activeSelf)        
-            tutorialSprite.transform.LookAt(Camera.main.transform);
         int currStart, currEnd;
 
         PlottingManager.Instance.getPathRaw(out currStart, out currEnd, out connected);
@@ -74,23 +76,27 @@ public class PlottingTutorial : MonoBehaviour
     {
         Vector2 pos1, pos2;
         PlottingManager.Instance.getOpenPoints(out pos1, out pos2);
-        tutorialSprite.gameObject.SetActive(true);        
+
+        pos1 = Camera.main.WorldToScreenPoint(new Vector3(pos1.x, 0.5f, pos1.y));
+        pos2 = Camera.main.WorldToScreenPoint(new Vector3(pos2.x, 0.5f, pos2.y));
+
+        tutorialSprite.gameObject.SetActive(true);
         Vector3 spritePos1, spritePos2;
-        spritePos1 = new Vector3(pos1.x, tutorialSprite.transform.position.y, pos1.y + zOffset);
-        spritePos2 = new Vector3(pos2.x, tutorialSprite.transform.position.y, pos2.y + zOffset);
-        
+        spritePos1 = new Vector3(pos1.x, pos1.y, 0) + new Vector3(Offset.x, Offset.y, 0);
+        spritePos2 = new Vector3(pos2.x, pos2.y, 0) + new Vector3(Offset.x, Offset.y, 0);
+        float totalDistance = Vector3.Distance(spritePos1, spritePos2);
+
         while (true)
         {
             tutorialSprite.transform.position = spritePos1;
-            float alphaFactor = 0;
-            tutorialSprite.color = new Color(1, 1, 1, alphaFactor);
+            float startTime = Time.time;
 
             while (Vector3.Distance(tutorialSprite.transform.position, spritePos2) > 0.3f)
             {
-                alphaFactor += Time.deltaTime;
-                alphaFactor = Mathf.Clamp01(alphaFactor);
-                tutorialSprite.color = new Color(1, 1, 1, alphaFactor);
-                tutorialSprite.transform.position = Vector3.Lerp(tutorialSprite.transform.position, spritePos2, Time.deltaTime);
+                float distCovered = (Time.time - startTime) * moveSpeed;
+
+                tutorialSprite.color = fallOffs.Evaluate(distCovered / totalDistance);
+                tutorialSprite.transform.position = Vector3.Lerp(spritePos1, spritePos2, distCovered/totalDistance);
                 yield return null;
             }
 
