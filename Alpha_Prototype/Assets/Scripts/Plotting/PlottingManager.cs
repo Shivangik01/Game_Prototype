@@ -386,6 +386,20 @@ public class PlottingManager : MonoBehaviour
 
         updateSprites();
     }
+
+    public void getPathRaw(out int startIndex, out int endIndex, out bool connected)
+    {
+        startIndex = startOffset;
+        endIndex = endOffset;
+        connected = isConnected;
+    }
+
+    public void getOpenPoints(out Vector2 startPoint, out Vector2 endPoint)
+    {
+        startPoint = Path[startOffset];
+        endPoint = Path[Path.Count - 1 - endOffset];
+    }
+
     public List<Vector2> getTraversalPath()
     {
         List<Vector2> list = new List<Vector2>();
