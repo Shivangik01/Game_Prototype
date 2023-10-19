@@ -1,4 +1,3 @@
-using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -48,46 +47,18 @@ public class AnalyticsHandler : MonoBehaviour
 
     IEnumerator PostPathData_coroutine(List<Vector2> path, int level)
     {
-
-    sendingData = true;
+        sendingData = true;
         string URL = url + "levels/" + level.ToString() + ".json";
 
         using (UnityWebRequest response = UnityWebRequest.Get(URL))
-{
-    yield return response.SendWebRequest();
-    if (response.responseCode == 200)
-    {
-        string json = @"{
-                    1:
-                    {
-                        ""uni_number"": 001,
-                        ""level"" : 3,
-                        ""Hp"" : 15
-                    },
-                    2:
-                    {
-                        ""uni_number"": 000,
-                        ""level"" : 0,
-                        ""Hp"" : 0
-                    }
-                    }";
-
-        BoundsConve
-        var values = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, string>>>(json);
-        foreach (var uni in values)
         {
-            //you can print values here or add to a list or ...
-            string uni_number = uni.Value["uni_number"];
-            string levels = uni.Value["level"];
-            string Hp = uni.Value["Hp"];
-            Debug.Log(uni_number);
-            Debug.Log(levels);
-            Debug.Log(Hp);
+            yield return response.SendWebRequest();
+            if (response.responseCode == 200)
+            {
+                Debug.Log(response.downloadHandler.text);
+            }
         }
-    }
-}
-
-sendingData = false;
-yield return null;
+        sendingData = false;
+        yield return null;
     }
 }
