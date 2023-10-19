@@ -398,5 +398,6 @@ public class PlottingManager : MonoBehaviour
             list.Add(Path[i]);
 
         return list;
+
     }
 }
