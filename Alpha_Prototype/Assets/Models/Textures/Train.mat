@@ -20,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Base_0
+  m_Name: Train
   m_Shader: {fileID: -6465566751694194690, guid: b09e187711828314e96da34d75dc6e27,
     type: 3}
   m_Parent: {fileID: 0}
@@ -65,7 +65,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 22a3847253fd2334d90713c69270696e, type: 3}
+        m_Texture: {fileID: 2800000, guid: 28e45c5de8edb6f4eabe7e713a66ce58, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:

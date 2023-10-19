@@ -8,13 +8,26 @@ public class DeliveryManager : MonoBehaviour
     public SpriteRenderer PackageSpriteRenderer;
     public Sprite Package;
 
+    public Animator playerAnimator;
+
+    public bool delivered;
+
     private void Start()
     {
+        delivered = false;
         PackageSpriteRenderer.sprite = Package;
     }
 
     private void Update()
     {
-        DemandBox.transform.LookAt(Camera.main.transform);
+        if(!delivered)
+            DemandBox.transform.LookAt(Camera.main.transform);
+    }
+
+    public void makeDelivery()
+    {
+        playerAnimator.SetBool("Happy", true);
+        delivered = true;
+        DemandBox.SetActive(false);
     }
 }
