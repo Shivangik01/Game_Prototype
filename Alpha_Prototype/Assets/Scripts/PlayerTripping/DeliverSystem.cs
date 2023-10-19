@@ -9,9 +9,29 @@ public class DeliverSystem : MonoBehaviour
     public GameObject DeliveryObject;
     public Transform startPosition;
 
+    List<GameObject> instantiated;
+
+    private void Start()
+    {
+        instantiated = new List<GameObject>();
+    }
+
     public void deliverObject(DeliveryManager deliveryTarget)
     {
         StartCoroutine(DeliverPackage(startPosition, deliveryTarget));
+    }
+
+    public void KillCoroutines()
+    {
+        StopAllCoroutines();
+        foreach (GameObject obj in instantiated)
+        {
+            if(obj != null)
+            {
+                Destroy(obj);
+            }
+        }
+        instantiated.Clear();
     }
 
     IEnumerator DeliverPackage(Transform A, DeliveryManager B)
@@ -20,6 +40,7 @@ public class DeliverSystem : MonoBehaviour
         float TotalDistance = Vector3.Distance(A.position, B_loc.position);
         float speed = TotalDistance / time;
         GameObject package = Instantiate(DeliveryObject);
+        instantiated.Add(package);
         package.transform.position = A.position;
         float startTime = Time.time;
         

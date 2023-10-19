@@ -7,8 +7,28 @@ public class UIManager : MonoBehaviour
 {
     public void ResetPaths()
     {
+        PlayerController.Instance.gameObject.GetComponent<DeliverSystem>().KillCoroutines();
+        
+        foreach (var e in PlottingManager.Instance.getDeliverables())
+        {
+            Animator anim = e.Key.GetComponent<DeliveryManager>().playerAnimator;
+            anim.SetBool("Happy", false);
+            anim.Rebind();
+            anim.Update(0f);
+        }
+        
         PlottingManager.Instance.ResetPaths();
         PlayerController.Instance.ResetTrain();
+    }
+
+    public void SwitchPacking()
+    {
+        SceneHandler.Instance.SwitchToPacking();
+    }
+
+    public void SwitchPlotting()
+    {
+        SceneHandler.Instance.SwitchToPlotting();
     }
 
     public void FadeInInfo(CanvasGroup info)

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -54,26 +55,118 @@ public class PlottingManager : MonoBehaviour
 
     private void Start()
     {
-        Path = new List<Vector2>
+        if (SceneHandler.Instance.Path.Count == 0)
         {
-            new Vector2(StartPoint.transform.position.x, StartPoint.transform.position.z),
-            new Vector2(EndPoint.transform.position.x, EndPoint.transform.position.z)
-        };
+            Path = new List<Vector2>
+            {
+                new Vector2(StartPoint.transform.position.x, StartPoint.transform.position.z),
+                new Vector2(EndPoint.transform.position.x, EndPoint.transform.position.z)
+            };
 
-        TileSprites = new List<SpriteRenderer>
+            TileSprites = new List<SpriteRenderer>
+            {
+                StartPoint.GetComponentInChildren<SpriteRenderer>(),
+                EndPoint.GetComponentInChildren<SpriteRenderer>()
+            };
+        }
+        else
         {
-            StartPoint.GetComponentInChildren<SpriteRenderer>(),
-            EndPoint.GetComponentInChildren<SpriteRenderer>()
-        };
+            Path = SceneHandler.Instance.Path;
+            TileSprites = new List<SpriteRenderer>();
+
+            startOffset = SceneHandler.Instance.startOffset;
+            endOffset = SceneHandler.Instance.endOffset;
+        }
 
         DeliveryTiles = new List<GameObject>();
         foreach(Transform child in DeliveryTilesParent)
         {
-            if(child.gameObject.CompareTag("Targets"))
+            if (child.gameObject.CompareTag("Targets") && child.gameObject.activeSelf)
+            {
                 DeliveryTiles.Add(child.gameObject);
+                Vector2 pos = new Vector2(child.position.x, child.position.z);
+                if(SceneHandler.Instance.Delivered.Contains(pos))
+                    child.gameObject.GetComponent<DeliveryManager>().makeDelivery();
+            }
         }
 
         Deliverables = new Dictionary<Transform, List<Vector2>>();
+
+        if(SceneHandler.Instance.Path.Count > 0)
+        {
+            foreach (var position in Path)
+            {
+                TileSprites.Add(null);
+
+                foreach (GameObject d in DeliveryTiles)
+                {
+                    Vector2 pos = new Vector2(d.transform.position.x, d.transform.position.z);
+                    if (new Vector2(position.x + 1, position.y) == pos)
+                    {
+                        if (Deliverables.ContainsKey(d.transform))
+                            Deliverables[d.transform].Add(position);
+                        else
+                        {
+                            Deliverables[d.transform] = new List<Vector2>
+                    {
+                        position
+                    };
+                            d.transform.position = new Vector3(d.transform.position.x, 0.2f, d.transform.position.z);
+                        }
+                    }
+                    else if (new Vector2(position.x - 1, position.y) == pos)
+                    {
+                        if (Deliverables.ContainsKey(d.transform))
+                            Deliverables[d.transform].Add(position);
+                        else
+                        {
+                            Deliverables[d.transform] = new List<Vector2>
+                    {
+                        position
+                    };
+                            d.transform.position = new Vector3(d.transform.position.x, 0.2f, d.transform.position.z);
+                        }
+                    }
+                    else if (new Vector2(position.x, position.y + 1) == pos)
+                    {
+                        if (Deliverables.ContainsKey(d.transform))
+                            Deliverables[d.transform].Add(position);
+                        else
+                        {
+                            Deliverables[d.transform] = new List<Vector2>
+                    {
+                        position
+                    };
+                            d.transform.position = new Vector3(d.transform.position.x, 0.2f, d.transform.position.z);
+                        }
+                    }
+                    else if (new Vector2(position.x, position.y - 1) == pos)
+                    {
+                        if (Deliverables.ContainsKey(d.transform))
+                            Deliverables[d.transform].Insert(Math.Min(3, Deliverables[d.transform].Count - 1), position);
+                        else
+                        {
+                            Deliverables[d.transform] = new List<Vector2>
+                    {
+                        position
+                    };
+                            d.transform.position = new Vector3(d.transform.position.x, 0.2f, d.transform.position.z);
+                        }
+                    }
+                }
+            }
+
+            MeshRenderer[] meshes = DeliveryTilesParent.GetComponentsInChildren<MeshRenderer>();
+            foreach (MeshRenderer child in meshes)
+            {
+                Vector2 pos = new Vector2(child.transform.position.x, child.transform.position.z);
+                if (Path.Contains(pos))
+                {
+                    int index = Path.IndexOf(pos);
+                    TileSprites[index] = child.GetComponentInChildren<SpriteRenderer>();
+                }
+            }
+        }
 
         updateSprites();
 
@@ -443,5 +536,17 @@ public class PlottingManager : MonoBehaviour
             list.Add(Path[i]);
 
         return list;
+    }
+
+    public List<Vector2> getRawPath(out int startOffset, out int endOffset)
+    {
+        startOffset = this.startOffset;
+        endOffset = this.endOffset;
+        return Path;
+    }
+
+    public Dictionary<Transform, List<Vector2>> getDeliverables()
+    {
+        return Deliverables;
     }
 }
