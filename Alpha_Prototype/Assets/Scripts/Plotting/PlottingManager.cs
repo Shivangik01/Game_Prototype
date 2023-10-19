@@ -36,6 +36,7 @@ public class PlottingManager : MonoBehaviour
     [Header("Path Start/End")]
     public GameObject StartPoint;
     public GameObject EndPoint;
+    public int farOffset;
 
     [Header("Delivery Targets")]
     public Transform DeliveryTilesParent;
@@ -75,6 +76,36 @@ public class PlottingManager : MonoBehaviour
         Deliverables = new Dictionary<Transform, List<Vector2>>();
 
         updateSprites();
+
+        {
+            float x = StartPoint.transform.position.x - 1;
+            float y = StartPoint.transform.position.y + 0.001f;
+            float z = StartPoint.transform.position.z;
+
+            for(int i=0; i<farOffset; i++)
+            {
+                GameObject empty = Instantiate(new GameObject(), this.transform);
+                empty.AddComponent<SpriteRenderer>().sprite = dictionary[0].sprite;
+                empty.transform.position = new Vector3(x, y, z);
+                empty.transform.rotation = Quaternion.Euler(-90.0f, 90.0f, 0.0f);
+                x--;
+            }
+        }
+
+        {
+            float x = EndPoint.transform.position.x + 1;
+            float y = EndPoint.transform.position.y + 0.001f;
+            float z = EndPoint.transform.position.z;
+
+            for (int i = 0; i < farOffset; i++)
+            {
+                GameObject empty = Instantiate(new GameObject(), this.transform);
+                empty.AddComponent<SpriteRenderer>().sprite = dictionary[0].sprite;
+                empty.transform.position = new Vector3(x, y, z);
+                empty.transform.rotation = Quaternion.Euler(-90.0f, 90.0f, 0.0f);
+                x++;
+            }
+        }
     }
 
     private List<Vector2> getNeighbours(int index)
