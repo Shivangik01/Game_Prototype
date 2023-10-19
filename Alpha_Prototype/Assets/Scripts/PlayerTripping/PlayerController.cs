@@ -1,3 +1,5 @@
+
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,88 +8,70 @@ public class PlayerController : MonoBehaviour
 {
     public float movementSpeed = 5f;
     public float rotationSpeed = 5f;
-    //List<DeliverManager> deliveries;
 
+    public Transform Engine; // The train's engine part that you want to move and rotate.
+    public Transform Carriage;
+
+    // Start the movement along the path.
     public void MoveAlongPath()
     {
         StopAllCoroutines();
         StartCoroutine(TraverseaPath());
     }
 
+    // Coroutine for moving along a path.
     IEnumerator TraverseaPath()
     {
-        //int index = 0;
-        //List<Vector2> traversalPath = PlottingManager.Instance.getTraversalPath();
-        //transform.position = new Vector3(traversalPath[0].x, transform.position.y, traversalPath[0].y);
-        //Vector3 endPos = new Vector3(traversalPath[traversalPath.Count - 1].x, transform.position.y, traversalPath[traversalPath.Count - 1].y);
-        //while (true)
-        //{
-        //    // Check if the player has reached the current target point
-        //    Vector3 targetPoint = new Vector3(traversalPath[index].x, transform.position.y, traversalPath[index].y);
-        //    if (Vector3.Distance(transform.position, targetPoint) < 0.1f)
-        //    {
-        //        //if delivery is to be made Wait for 2 seconds
-        //        // Move to the next point in the path
-        //        index++;
-
-        //        // If reached the end of the path, reset the index to loop the movement
-        //        if (index >= traversalPath.Count)
-        //        {
-        //            index = 0;
-        //            break;
-        //            //isMoving = false; // Stop moving when the path is completed
-        //        }
-        //    }
-
-        //    // Move towards the current target point
-        //    transform.position = Vector3.MoveTowards(transform.position, targetPoint, movementSpeed * Time.deltaTime);
-        //    yield return null;
-        //}
-
         int index = 0;
         List<Vector2> traversalPath = PlottingManager.Instance.getTraversalPath();
+        Engine.position = new Vector3(traversalPath[0].x, Engine.position.y, traversalPath[0].y); // Set initial position.
 
-        // Set initial position at the starting point
-        transform.position = new Vector3(traversalPath[0].x, transform.position.y, traversalPath[0].y);
+        // Set initial rotation for the Engine.
+        Engine.rotation = Quaternion.Euler(-90, 0, 0);
 
         while (true)
         {
             if (index >= traversalPath.Count)
             {
-                // End of the path reached, exit the loop
-                break;
+                break; // Path completed, exit loop.
             }
 
-            // Calculate the current target point in the path
-            Vector3 targetPoint = new Vector3(traversalPath[index].x, transform.position.y, traversalPath[index].y);
+            Vector3 targetPoint = new Vector3(traversalPath[index].x, Engine.position.y, traversalPath[index].y);
 
-            // Check if the player has reached the current target point
-            if (Vector3.Distance(transform.position, targetPoint) < 0.1f)
+            if (Vector3.Distance(Engine.position, targetPoint) < 0.1f)
             {
-                // Reached the current point, move to the next point in the path
-                index++;
-                continue;  // Skip the rest of the loop to avoid "MoveTowards" the same point.
+                index++; // Target point reached, proceed to next point.
+                continue;
             }
 
-            // Calculate the direction to the target point
-            Vector3 directionToNextPoint = (targetPoint - transform.position).normalized;
+            // Calculate the direction to the target point, ensuring no vertical movement.
+            Vector3 directionToNextPoint = (targetPoint - Engine.position).normalized;
+            directionToNextPoint.y = 0; // Maintain horizontal direction.
 
-            // If you need the player to move along the vertical axis (y), remove the '.y' assignment below
-            directionToNextPoint.y = 0;  // Keep the direction strictly horizontal
-
-            // Rotate the player to face the target direction
-            if (directionToNextPoint != Vector3.zero)  // Prevents the character from looking in the 'zero' direction, which can cause issues.
+            if (directionToNextPoint != Vector3.zero)
             {
-                Quaternion toRotation = Quaternion.LookRotation(directionToNextPoint, Vector3.up);
-                transform.rotation = Quaternion.Slerp(transform.rotation, toRotation, rotationSpeed * Time.deltaTime);
+                // Find the rotation to the next point.
+                Quaternion toRotation = Quaternion.LookRotation(directionToNextPoint);
+
+                // Correct the forward direction due to model-world space differences.
+                // This compensates for the model's forward direction being opposite to Unity's standard.
+                toRotation *= Quaternion.Euler(0, 180, 0); // Flip the forward direction.
+
+                // Extract the Euler angles and preserve the current X rotation of -90 degrees.
+                Vector3 rotationAngles = toRotation.eulerAngles;
+                rotationAngles.x = -90; // Keep the X rotation locked at -90 degrees.
+
+                // Create a new Quaternion rotation from the modified Euler angles.
+                toRotation = Quaternion.Euler(rotationAngles);
+
+                // Smoothly rotate the Engine towards the calculated rotation.
+                Engine.rotation = Quaternion.Slerp(Engine.rotation, toRotation, rotationSpeed * Time.deltaTime);
             }
 
-            // Move the player towards the target point
-            transform.position = Vector3.MoveTowards(transform.position, targetPoint, movementSpeed * Time.deltaTime);
+            // Move the Engine towards the target point.
+            Engine.position = Vector3.MoveTowards(Engine.position, targetPoint, movementSpeed * Time.deltaTime);
 
-            yield return null; // Wait until next frame
+            yield return null; // Proceed to the next frame before continuing the loop.
         }
-
-        //transform.position = endPos;
     }
 }
