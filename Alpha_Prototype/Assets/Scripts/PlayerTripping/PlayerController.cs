@@ -21,6 +21,8 @@ public class PlayerController : MonoBehaviour
     public float movementSpeed = 2f; // Decreased for more realistic train speed.
     public float rotationSpeed = 50f; // Decreased to smooth out turns.
 
+    public DeliveryManager temp;
+
     public Transform Engine;
     public Transform Carriage;
 
@@ -89,6 +91,9 @@ public class PlayerController : MonoBehaviour
 
             if (Vector3.Distance(Engine.position, targetPoint) < 0.1f)
             {
+
+                transform.GetComponent<DeliverSystem>().deliverObject(temp);
+                yield return new WaitForSeconds(2.0f);
                 index++; // Target point reached, proceed to next point.
                 continue;
             }
