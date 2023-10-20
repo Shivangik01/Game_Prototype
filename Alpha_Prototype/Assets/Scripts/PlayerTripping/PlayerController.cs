@@ -80,6 +80,7 @@ public class PlayerController : MonoBehaviour
 
         foreach (var e in PlottingManager.Instance.getDeliverables())
         {
+            e.Key.GetComponent<DeliveryManager>().delivered = false;
             Animator anim = e.Key.GetComponent<DeliveryManager>().playerAnimator;
             anim.SetBool("Happy", false);
             anim.Rebind();
@@ -142,8 +143,11 @@ public class PlayerController : MonoBehaviour
                             Vector2 d_pos = new Vector2(d.transform.position.x, d.transform.position.z);
                             if (Vector2.Distance(d_pos, pos) <= 0.1f)
                             {
-                                deliveryTile = d;
-                                break;
+                                if (!d.delivered)
+                                {
+                                    deliveryTile = d;
+                                    break;
+                                }
                             }
                         }
 
@@ -248,6 +252,8 @@ public class PlayerController : MonoBehaviour
         // Ensure the carriage stops at the exact position and rotation of the engine.
         Carriage.position = lastPosition;
         Carriage.rotation = lastRotation;
+
+
     }
 }
 
