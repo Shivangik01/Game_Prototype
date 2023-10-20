@@ -29,7 +29,7 @@ public class PlottingManager : MonoBehaviour
 
     public List<Combinations> dictionary;
     
-    bool isConnected = false;
+    public bool isConnected = false;
     List<Vector2> Path;
     List<SpriteRenderer> TileSprites;
 
@@ -377,27 +377,13 @@ public class PlottingManager : MonoBehaviour
         TileSprites.RemoveAt(index);
     }
 
-    private void debugPrintDeliveries()
-    {
-        foreach(var entry in Deliverables)
-        {
-            string printing = "";
-            printing += entry.Key.name;
-            printing += ": ";
-            foreach(var p in entry.Value)
-            {
-                printing += "(" + p.x.ToString() + "," + p.y.ToString() + "), ";
-            }
-            Debug.Log(printing);
-        }
-    }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Q))
-            debugPrintDeliveries();
-
         CursorIndicator.gameObject.SetActive(false);
+        if (PlayerController.Instance.isSimulating)
+            return;
+
         Ray cursor = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
         if(Physics.Raycast(cursor, out hit, 1000.0f, PlottingLayerMask))
@@ -535,6 +521,11 @@ public class PlottingManager : MonoBehaviour
         for(int i=0; i<end; i++)
             list.Add(Path[i]);
 
+        if (isConnected)
+        {
+            Vector2 pos = new Vector2(EndPoint.transform.position.x+6, EndPoint.transform.position.z);
+            list.Add(pos);
+        }
         return list;
     }
 
