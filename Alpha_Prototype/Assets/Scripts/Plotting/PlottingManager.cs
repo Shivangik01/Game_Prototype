@@ -87,6 +87,12 @@ public class PlottingManager : MonoBehaviour
                 Vector2 pos = new Vector2(child.position.x, child.position.z);
                 if(SceneHandler.Instance.Delivered.Contains(pos))
                     child.gameObject.GetComponent<DeliveryManager>().makeDelivery();
+                else
+                {
+                    int index = SceneHandler.Instance.DeliveryTargets.IndexOf(pos);
+                    child.gameObject.GetComponent<DeliveryManager>().Package = SceneHandler.Instance.DeliveryRequirements[index];
+                    child.gameObject.GetComponent<DeliveryManager>().PackageSpriteRenderer.sprite = SceneHandler.Instance.DeliveryRequirements[index];
+                }
             }
         }
 
@@ -177,7 +183,8 @@ public class PlottingManager : MonoBehaviour
 
             for(int i=0; i<farOffset; i++)
             {
-                GameObject empty = Instantiate(new GameObject(), this.transform);
+                GameObject empty = new GameObject();
+                empty.transform.parent = this.transform;
                 empty.AddComponent<SpriteRenderer>().sprite = dictionary[0].sprite;
                 empty.transform.position = new Vector3(x, y, z);
                 empty.transform.rotation = Quaternion.Euler(-90.0f, 90.0f, 0.0f);
@@ -192,7 +199,8 @@ public class PlottingManager : MonoBehaviour
 
             for (int i = 0; i < farOffset; i++)
             {
-                GameObject empty = Instantiate(new GameObject(), this.transform);
+                GameObject empty = new GameObject();
+                empty.transform.parent = this.transform;
                 empty.AddComponent<SpriteRenderer>().sprite = dictionary[0].sprite;
                 empty.transform.position = new Vector3(x, y, z);
                 empty.transform.rotation = Quaternion.Euler(-90.0f, 90.0f, 0.0f);

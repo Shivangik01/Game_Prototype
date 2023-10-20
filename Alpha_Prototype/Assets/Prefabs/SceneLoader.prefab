@@ -46,10 +46,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Min: {x: 0, y: 0}
   Max: {x: 0, y: 0}
-  DeliveryTargets: []
-  DeliveryRequirements: []
+  DeliveryTargets:
+  - {x: 0, y: 1}
+  DeliveryRequirements:
+  - {fileID: 21300000, guid: 5a2ec6cc01706e942889b8927ee98898, type: 3}
   Packing_Level: 0
   Plotting_Level: 1
+  New_Level: 0
   Path: []
   startOffset: 0
   endOffset: 0

@@ -96,6 +96,8 @@ public class PlayerController : MonoBehaviour
         Carriage.gameObject.SetActive(false);
         StopAllCoroutines();
 
+        QueueUI.Instance.ResetUI();
+
         pauseButton.SetActive(false);
         playButton.SetActive(true);
 
@@ -157,6 +159,7 @@ public class PlayerController : MonoBehaviour
                                 if (!d.delivered)
                                 {
                                     deliveries_queue.Dequeue();
+                                    QueueUI.Instance.PopQueue();
                                     deliveryTile = d;
                                     break;
                                 }
