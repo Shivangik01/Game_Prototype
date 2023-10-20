@@ -107,7 +107,7 @@ public class PlayerController : MonoBehaviour
 
     IEnumerator TraversePath()
     {
-        Queue<Vector2> deliveries_queue = SceneHandler.Instance.StackedItems;
+        Queue<Vector2> deliveries_queue = new Queue<Vector2>(SceneHandler.Instance.StackedItems);
         Engine.gameObject.SetActive(true);
         isSimulating = true;
         int index = 0;
@@ -223,8 +223,8 @@ public class PlayerController : MonoBehaviour
         if(PlottingManager.Instance.isConnected && deliveries_queue.Count ==  0)
         {
             //push the path data
-            //int a, b;
-            //AnalyticsHandler.Instance.PostPathData(PlottingManager.Instance.getRawPath(out a, out b), SceneHandler.Instance.Packing_Level);
+            int a, b;
+            AnalyticsHandler.Instance.PostPathData(PlottingManager.Instance.getRawPath(out a, out b), SceneHandler.Instance.Packing_Level);
             SceneHandler.Instance.SwitchToPacking(true);
         }
 
