@@ -224,6 +224,7 @@ public class PlayerController : MonoBehaviour
         {
             //push the path data
             int a, b;
+            List<Vector2> rawPath = PlottingManager.Instance.getRawPath(out a, out b);
             AnalyticsHandler.Instance.PostPathData(PlottingManager.Instance.getRawPath(out a, out b), SceneHandler.Instance.Packing_Level);
             SceneHandler.Instance.SwitchToPacking(true);
         }
