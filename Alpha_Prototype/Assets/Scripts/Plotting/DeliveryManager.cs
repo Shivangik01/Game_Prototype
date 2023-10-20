@@ -7,6 +7,7 @@ public class DeliveryManager : MonoBehaviour
     public GameObject DemandBox;
     public SpriteRenderer PackageSpriteRenderer;
     public Sprite Package;
+    public GameObject deliveryLocation;
 
     public Animator playerAnimator;
 

@@ -7,8 +7,18 @@ public class UIManager : MonoBehaviour
 {
     public void ResetPaths()
     {
-        PlottingManager.Instance.ResetPaths();
         PlayerController.Instance.ResetTrain();
+        PlottingManager.Instance.ResetPaths();
+    }
+
+    public void SwitchPacking()
+    {
+        SceneHandler.Instance.SwitchToPacking();
+    }
+
+    public void SwitchPlotting()
+    {
+        SceneHandler.Instance.SwitchToPlotting();
     }
 
     public void FadeInInfo(CanvasGroup info)
