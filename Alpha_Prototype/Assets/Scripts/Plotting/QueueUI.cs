@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -30,14 +31,14 @@ public class QueueUI : MonoBehaviour
         isPopping = false;
         original_sprites = new List<Sprite>();
         pops = new Queue<int>();
-        Queue<Vector2> tiles = SceneHandler.Instance.StackedItems;
+        Queue<Vector2> tiles = new Queue<Vector2>(SceneHandler.Instance.StackedItems);
         while (tiles.Count > 0)
         {
             Vector2 loc = tiles.Dequeue();
             int index = SceneHandler.Instance.DeliveryTargets.IndexOf(loc);
             original_sprites.Add(SceneHandler.Instance.DeliveryRequirements[index]);
         }
-
+        
         spawnedTiles = new List<GameObject>();
         ResetUI();
     }
