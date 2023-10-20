@@ -105,6 +105,7 @@ public class PlayerController : MonoBehaviour
 
     IEnumerator TraversePath()
     {
+        //Queue<Vector2> delivieries = SceneHandler.Instance.stackedPackages;
         Engine.gameObject.SetActive(true);
         isSimulating = true;
         int index = 0;
@@ -151,10 +152,12 @@ public class PlayerController : MonoBehaviour
                         foreach(DeliveryManager d in deliveries)
                         {
                             Vector2 d_pos = new Vector2(d.transform.position.x, d.transform.position.z);
+                            //check queue peek if same vector2 then deliver
                             if (Vector2.Distance(d_pos, pos) <= 0.1f)
                             {
                                 if (!d.delivered)
                                 {
+                                    // dequeue top of queue
                                     deliveryTile = d;
                                     break;
                                 }
@@ -214,6 +217,15 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(3.0f);
         Engine.gameObject.SetActive(false);
         isSimulating = false;
+
+        //check if all delveries are done and 
+        // queue is empty = delivereies are done
+        //if (PlottingManager.Instance.isConnected ==  true && deliveries are done){
+        //push the path data
+        //load then new level or packing scene
+        //SceneHandler.Instance.SwitchToPacking(true);}
+
+
 
         ResetTrain();
         isEngineMoving = false; // Reset the movement flag when the engine stops.

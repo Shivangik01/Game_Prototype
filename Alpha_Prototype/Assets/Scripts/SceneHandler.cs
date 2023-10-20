@@ -14,6 +14,8 @@ public class SceneHandler : MonoBehaviour
     public int Packing_Level;
     public int Plotting_Level;
 
+    public int newLevel;
+
     public List<Vector2> Path;
     public int startOffset, endOffset;
     public List<Vector2> Delivered;
@@ -45,9 +47,14 @@ public class SceneHandler : MonoBehaviour
         SceneManager.LoadScene(Plotting_Level);
     }
 
-    public void SwitchToPacking()
+    public void SwitchToPacking(bool deleteQueue)
     {
+        //Popping queue and pushing in delivered list
         Path = PlottingManager.Instance.getRawPath(out startOffset, out endOffset);
+
+        //If delivered.cout == deliverytargets.count
+        //SceneManager.LoadScene(newLevel);
+        //else
         SceneManager.LoadScene(Packing_Level);
     }
 }

@@ -7,13 +7,17 @@ public class UIManager : MonoBehaviour
 {
     public void ResetPaths()
     {
+        int a, b;
+        AnalyticsHandler.Instance.PostPathData(PlottingManager.Instance.getRawPath(out a, out b), 1);
+
         PlayerController.Instance.ResetTrain();
         PlottingManager.Instance.ResetPaths();
+
     }
 
     public void SwitchPacking()
     {
-        SceneHandler.Instance.SwitchToPacking();
+        //SceneHandler.Instance.SwitchToPacking();
     }
 
     public void SwitchPlotting()
