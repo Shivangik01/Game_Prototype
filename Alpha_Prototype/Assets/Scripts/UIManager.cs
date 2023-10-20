@@ -32,6 +32,15 @@ public class UIManager : MonoBehaviour
         StartCoroutine(HideObject(info));
     }
 
+    public void SetActive(GameObject button)
+    {
+        button.gameObject.SetActive(true);
+    }
+    public void SetInactive(GameObject button)
+    {
+        button.gameObject.SetActive(false);
+    }
+
     IEnumerator ShowObject(CanvasGroup image)
     {
         image.alpha = 0.0f;
