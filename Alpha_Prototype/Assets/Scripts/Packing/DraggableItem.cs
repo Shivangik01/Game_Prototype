@@ -34,14 +34,19 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
    
     }
 
+    public GameObject spotlight;
+
+
     public void Start()
     {
         deliver.interactable = false;
+        spotlight.SetActive(false);
     }
 
     public void OnBeginDrag(PointerEventData eventData)
     {
         Debug.Log("Begin drag");
+        spotlight.SetActive(true);
         parentAfterDrag = transform.parent;
         transform.SetParent(transform.root);
         transform.SetAsLastSibling();
@@ -50,6 +55,7 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     public void OnDrag(PointerEventData eventData)
     {
         Debug.Log("Dragging");
+        spotlight.SetActive(true);
         Debug.Log(Input.mousePosition);
         transform.position = Input.mousePosition;
         lastPosition = Input.mousePosition;
@@ -98,6 +104,7 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     public void OnEndDrag(PointerEventData eventData)
     {
         Debug.Log("End drag");
+        spotlight.SetActive(false);
         Debug.Log(occupiedBy);
         Debug.Log(isOccupied);
         Debug.Log(piece);

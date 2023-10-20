@@ -46,13 +46,13 @@ public class DynamicDragging : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
     List<List<char>> toPass = new List<List<char>> { };
 
-
-
+    public GameObject spotlight;
 
 
     public void Start()
     {
         deliver.interactable = false;
+        spotlight.SetActive(false);
 
         Vector2 cellSize = gridLayoutGroup.cellSize;
         Vector2 spacing = gridLayoutGroup.spacing;
@@ -179,9 +179,11 @@ public class DynamicDragging : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     public void OnBeginDrag(PointerEventData eventData)
     {
         Debug.Log("Begin drag");
+        spotlight.SetActive(true);
         parentAfterDrag = transform.parent;
         transform.SetParent(transform.root);
         transform.SetAsLastSibling();
+
     }
 
 
@@ -189,10 +191,13 @@ public class DynamicDragging : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     public void OnDrag(PointerEventData eventData)
     {
         Debug.Log("Dragging");
+        spotlight.SetActive(true);
         Debug.Log(Input.mousePosition);
         transform.position = Input.mousePosition;
         lastPosition = Input.mousePosition;
         //Debug.Log(eventData.pointerEnter.name);
+
+
 
         piece = eventData.pointerEnter.name;
 
@@ -201,6 +206,7 @@ public class DynamicDragging : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
         Debug.Log(gridX);
         Debug.Log(gridY);
+
 
         if (hasObject == false && eventData.pointerEnter.name == "z-shape")
         {
@@ -231,6 +237,7 @@ public class DynamicDragging : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     public void OnEndDrag(PointerEventData eventData)
     {
         Debug.Log("End drag");
+        spotlight.SetActive(false);
 
         Vector2 cellSize = gridLayoutGroup.cellSize;
         Vector2 spacing = gridLayoutGroup.spacing;
