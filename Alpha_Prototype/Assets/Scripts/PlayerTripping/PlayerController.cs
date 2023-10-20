@@ -21,7 +21,7 @@ public class PlayerController : MonoBehaviour
     public float movementSpeed = 2f; // Decreased for more realistic train speed.
     public float rotationSpeed = 50f; // Decreased to smooth out turns.
 
-    public DeliveryManager temp;
+    public Transform DeliveryTilesParent;
 
     public Transform Engine;
     public Transform Carriage;
@@ -33,11 +33,24 @@ public class PlayerController : MonoBehaviour
     // Reduced distance for closer follow.
     private float minDistanceToEngine = 0.8f; // This ensures the carriage remains close.
 
+    public List<DeliveryManager> deliveries;
+    public bool isSimulating;
+
     private void Start()
     {
+        isSimulating = false;
+
         pathPositions = new Queue<Vector3>();
         pathRotations = new Queue<Quaternion>();
         isEngineMoving = false;
+
+        foreach (Transform child in DeliveryTilesParent)
+        {
+            if (child.gameObject.CompareTag("Targets") && child.gameObject.activeSelf)
+            {
+                deliveries.Add(child.gameObject.GetComponent<DeliveryManager>());
+            }
+        }
     }
 
     public void MoveAlongPath()
@@ -46,6 +59,16 @@ public class PlayerController : MonoBehaviour
         pathRotations.Clear(); // Clearing the previous rotations, if any.
         isEngineMoving = true; // Set the movement flag.
 
+        GetComponent<DeliverSystem>().KillCoroutines();
+
+        foreach (var e in PlottingManager.Instance.getDeliverables())
+        {
+            Animator anim = e.Key.GetComponent<DeliveryManager>().playerAnimator;
+            anim.SetBool("Happy", false);
+            anim.Rebind();
+            anim.Update(0f);
+        }
+
         StopAllCoroutines();
         StartCoroutine(TraversePath());
         StartCoroutine(FollowEngine());
@@ -53,6 +76,16 @@ public class PlayerController : MonoBehaviour
 
     public void ResetTrain()
     {
+        GetComponent<DeliverSystem>().KillCoroutines();
+
+        foreach (var e in PlottingManager.Instance.getDeliverables())
+        {
+            Animator anim = e.Key.GetComponent<DeliveryManager>().playerAnimator;
+            anim.SetBool("Happy", false);
+            anim.Rebind();
+            anim.Update(0f);
+        }
+
         Engine.gameObject.SetActive(false);
         Carriage.gameObject.SetActive(false);
         StopAllCoroutines();
@@ -62,6 +95,7 @@ public class PlayerController : MonoBehaviour
     IEnumerator TraversePath()
     {
         Engine.gameObject.SetActive(true);
+        isSimulating = true;
         int index = 0;
         List<Vector2> traversalPath = PlottingManager.Instance.getTraversalPath();
 
@@ -91,9 +125,41 @@ public class PlayerController : MonoBehaviour
 
             if (Vector3.Distance(Engine.position, targetPoint) < 0.1f)
             {
+                DeliveryManager deliveryTile = null;
+                for(int x=-1; x<=1; x++)
+                {
+                    for(int y = -1; y<=1; y++)
+                    {
+                        if (x == y || (x == 1 && y == -1) || (y == 1 && x == -1))
+                            continue;
 
-                transform.GetComponent<DeliverSystem>().deliverObject(temp);
-                yield return new WaitForSeconds(2.0f);
+                        Vector2 pos = new Vector2(targetPoint.x, targetPoint.z);
+                        pos.x += x;
+                        pos.y += y;
+
+                        foreach(DeliveryManager d in deliveries)
+                        {
+                            Vector2 d_pos = new Vector2(d.transform.position.x, d.transform.position.z);
+                            if (Vector2.Distance(d_pos, pos) <= 0.1f)
+                            {
+                                deliveryTile = d;
+                                break;
+                            }
+                        }
+
+                        if (deliveryTile != null)
+                            break;
+                    }
+
+                    if (deliveryTile != null)
+                        break;
+                }
+
+                if (deliveryTile != null)
+                {
+                    transform.GetComponent<DeliverSystem>().deliverObject(deliveryTile);
+                    yield return new WaitForSeconds(2.0f);
+                }
                 index++; // Target point reached, proceed to next point.
                 continue;
             }
@@ -133,6 +199,7 @@ public class PlayerController : MonoBehaviour
 
         yield return new WaitForSeconds(3.0f);
         Engine.gameObject.SetActive(false);
+        isSimulating = false;
         isEngineMoving = false; // Reset the movement flag when the engine stops.
     }
 

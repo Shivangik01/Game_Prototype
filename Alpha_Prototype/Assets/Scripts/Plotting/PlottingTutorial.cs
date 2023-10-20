@@ -35,11 +35,11 @@ public class PlottingTutorial : MonoBehaviour
         int currStart, currEnd;
 
         PlottingManager.Instance.getPathRaw(out currStart, out currEnd, out connected);
-        
-        if (connected)
+        bool isSmulating = PlayerController.Instance.isSimulating;
+        if (connected || isSmulating)
             EndCoroutine();
 
-        if (currStart == prevStart && currEnd == prevEnd)
+        if (currStart == prevStart && currEnd == prevEnd && !isSmulating)
             cur_time += Time.deltaTime;
         else
             cur_time = 0;

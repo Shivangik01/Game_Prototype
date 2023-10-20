@@ -2444,9 +2444,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movementSpeed: 5
   rotationSpeed: 5
-  temp: {fileID: 0}
+  DeliveryTilesParent: {fileID: 0}
   Engine: {fileID: 0}
   Carriage: {fileID: 0}
+  deliveries: []
 --- !u!65 &417548490
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -14433,9 +14434,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movementSpeed: 2
   rotationSpeed: 3
-  temp: {fileID: 1621955104}
+  DeliveryTilesParent: {fileID: 339113224}
   Engine: {fileID: 2417689720788937771}
   Carriage: {fileID: 3232519649187405309}
+  deliveries: []
 --- !u!114 &7553275766131887099
 MonoBehaviour:
   m_ObjectHideFlags: 0
