@@ -2448,6 +2448,8 @@ MonoBehaviour:
   DeliveryTilesParent: {fileID: 0}
   Engine: {fileID: 0}
   Carriage: {fileID: 0}
+  pauseButton: {fileID: 0}
+  playButton: {fileID: 0}
   deliveries: []
   isSimulating: 0
 --- !u!65 &417548490
@@ -7242,7 +7244,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1069152486
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7408,7 +7410,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -1123194294, guid: ab1f951883da37948914e8da5730b0fe, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 778500b26fe334b45911d0b50a272ac1, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -14890,6 +14892,8 @@ MonoBehaviour:
   DeliveryTilesParent: {fileID: 339113224}
   Engine: {fileID: 2417689720788937771}
   Carriage: {fileID: 3232519649187405309}
+  pauseButton: {fileID: 1069152485}
+  playButton: {fileID: 1838264561}
   deliveries: []
   isSimulating: 0
 --- !u!114 &7553275766131887099
