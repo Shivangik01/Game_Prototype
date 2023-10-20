@@ -171,6 +171,7 @@ public class PlayerController : MonoBehaviour
 
             yield return null; // Wait for the next frame.
         }
+     
         Carriage.gameObject.SetActive(false);
 
         // Ensure the carriage stops at the exact position and rotation of the engine.
