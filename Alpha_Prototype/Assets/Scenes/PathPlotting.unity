@@ -1195,9 +1195,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1898654853}
-        m_TargetAssemblyTypeName: QueueUI, Assembly-CSharp
-        m_MethodName: PopQueue
+      - m_Target: {fileID: 1681553334}
+        m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+        m_MethodName: ResetPaths
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -13108,10 +13108,6 @@ MonoBehaviour:
   TilePrefab: {fileID: 257174820073137424, guid: c4ec86dfe186d4845aa7120760d5d2a6,
     type: 3}
   ContainerTransform: {fileID: 1053127062}
-  original_sprites:
-  - {fileID: 21300000, guid: 923f3d9fcc2988544a9881fa817c58e5, type: 3}
-  - {fileID: 21300000, guid: 50b678ea8eb163f418844096d366a8f1, type: 3}
-  - {fileID: 21300000, guid: 5a2ec6cc01706e942889b8927ee98898, type: 3}
 --- !u!225 &1898654854
 CanvasGroup:
   m_ObjectHideFlags: 0
