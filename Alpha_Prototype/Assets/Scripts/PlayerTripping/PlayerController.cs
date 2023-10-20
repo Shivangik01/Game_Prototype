@@ -30,6 +30,8 @@ public class PlayerController : MonoBehaviour
     private Queue<Quaternion> pathRotations;
     private bool isEngineMoving;
 
+    
+
     // Reduced distance for closer follow.
     private float minDistanceToEngine = 0.8f; // This ensures the carriage remains close.
 
@@ -90,6 +92,7 @@ public class PlayerController : MonoBehaviour
         Engine.gameObject.SetActive(false);
         Carriage.gameObject.SetActive(false);
         StopAllCoroutines();
+        isSimulating = false;
     }
    
 
