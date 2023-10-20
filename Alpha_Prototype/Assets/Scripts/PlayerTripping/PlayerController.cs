@@ -30,6 +30,9 @@ public class PlayerController : MonoBehaviour
     private Queue<Quaternion> pathRotations;
     private bool isEngineMoving;
 
+    public GameObject pauseButton;
+    public GameObject playButton;
+
     
 
     // Reduced distance for closer follow.
@@ -92,6 +95,10 @@ public class PlayerController : MonoBehaviour
         Engine.gameObject.SetActive(false);
         Carriage.gameObject.SetActive(false);
         StopAllCoroutines();
+
+        pauseButton.SetActive(false);
+        playButton.SetActive(true);
+
         isSimulating = false;
     }
    
@@ -207,6 +214,8 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(3.0f);
         Engine.gameObject.SetActive(false);
         isSimulating = false;
+
+        ResetTrain();
         isEngineMoving = false; // Reset the movement flag when the engine stops.
     }
 
