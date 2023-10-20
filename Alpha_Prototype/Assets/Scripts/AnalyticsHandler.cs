@@ -14,11 +14,13 @@ public class AnalyticsHandler : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
+            DontDestroyOnLoad(this.gameObject);
         }
         else
         {
             Destroy(this.gameObject);
         }
+
     }
 
     string url = "https://woodsy-wayfinder-default-rtdb.firebaseio.com/";
@@ -43,7 +45,8 @@ public class AnalyticsHandler : MonoBehaviour
 
     public void PostPathData(List<Vector2> path, int level)
     {
-        PathData.Enqueue(Tuple.Create(path, level));
+        List<Vector2> newList = new List<Vector2>(path);
+        PathData.Enqueue(Tuple.Create(newList, level));
     }
 
     //IEnumerator PostPathData_coroutine(List<Vector2> path, int level)
@@ -71,15 +74,26 @@ public class AnalyticsHandler : MonoBehaviour
 
         // Convert the path data to JSON format.
         // Here, you may need to create a wrapper class if your data structure is complex.
-        string jsonData = JsonUtility.ToJson(path); // This might require adjustments based on your data structure.
+        //string jsonData = JsonUtility.ToJson(path); // This might require adjustments based on your data structure.
+        string json = "{\"" + level.ToString() + "\":[";
+        for (int i=0; i<path.Count; i++)
+        {
+            Vector2 item = path[i];
+            json += "\"" + item.x.ToString() + "," + item.y.ToString() + "\"";
+            if (i + 1 < path.Count)
+                json += ",";
+        }
+        json += "]}";
 
+        Debug.Log(json);
         // Construct the URL for the Firebase database.
         // Ensure this URL points to the correct location in your database (i.e., 'levels/level_x').
         string firebaseUrl = $"{url}levels/{level}.json";
 
         // Create a PUT request with the Firebase URL and the JSON payload.
-        using (UnityWebRequest request = UnityWebRequest.Put(firebaseUrl, jsonData))
+        using (UnityWebRequest request = UnityWebRequest.Put(firebaseUrl, json))
         {
+            request.method = "POST";
             // Set the content type of the request.
             request.SetRequestHeader("Content-Type", "application/json");
 

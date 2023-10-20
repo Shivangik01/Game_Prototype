@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028326, g: 0.22571333, b: 0.30692202, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -843,6 +843,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2178908842546099502, guid: 608b04be3714ec84e8ca89b0c7720c14,
         type: 3}
+      propertyPath: New_Level
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2178908842546099502, guid: 608b04be3714ec84e8ca89b0c7720c14,
+        type: 3}
       propertyPath: Packing_Level
       value: 2
       objectReference: {fileID: 0}
@@ -851,6 +856,32 @@ PrefabInstance:
       propertyPath: Plotting_Level
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 2178908842546099502, guid: 608b04be3714ec84e8ca89b0c7720c14,
+        type: 3}
+      propertyPath: DeliveryTargets.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2178908842546099502, guid: 608b04be3714ec84e8ca89b0c7720c14,
+        type: 3}
+      propertyPath: DeliveryRequirements.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2178908842546099502, guid: 608b04be3714ec84e8ca89b0c7720c14,
+        type: 3}
+      propertyPath: DeliveryTargets.Array.data[1].x
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2178908842546099502, guid: 608b04be3714ec84e8ca89b0c7720c14,
+        type: 3}
+      propertyPath: DeliveryTargets.Array.data[1].y
+      value: -2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2178908842546099502, guid: 608b04be3714ec84e8ca89b0c7720c14,
+        type: 3}
+      propertyPath: DeliveryRequirements.Array.data[1]
+      value: 
+      objectReference: {fileID: 21300000, guid: 923f3d9fcc2988544a9881fa817c58e5,
+        type: 3}
     - target: {fileID: 4145671126410643461, guid: 608b04be3714ec84e8ca89b0c7720c14,
         type: 3}
       propertyPath: m_Name
