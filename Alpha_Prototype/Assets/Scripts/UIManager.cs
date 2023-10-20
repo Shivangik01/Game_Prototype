@@ -17,7 +17,7 @@ public class UIManager : MonoBehaviour
 
     public void SwitchPacking()
     {
-        //SceneHandler.Instance.SwitchToPacking();
+        SceneHandler.Instance.SwitchToPacking(false);
     }
 
     public void SwitchPlotting()

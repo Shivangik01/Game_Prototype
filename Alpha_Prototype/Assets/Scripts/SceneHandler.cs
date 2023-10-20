@@ -13,22 +13,26 @@ public class SceneHandler : MonoBehaviour
 
     public int Packing_Level;
     public int Plotting_Level;
-
-    public int newLevel;
+    public int New_Level;
 
     public List<Vector2> Path;
     public int startOffset, endOffset;
     public List<Vector2> Delivered;
 
+    public Queue<Vector2> StackedItems;
+
     public static SceneHandler Instance = null;
 
     private void Awake()
     {
-        if(Instance == null)
+        if (Instance == null)
+        {
             Instance = this;
+            StackedItems = new Queue<Vector2>();
+        }
         else
         {
-            if(Instance.Packing_Level == Packing_Level)
+            if (Instance.Packing_Level == Packing_Level)
             {
                 Destroy(this.gameObject);
             }
@@ -36,6 +40,7 @@ public class SceneHandler : MonoBehaviour
             {
                 Destroy(Instance.gameObject);
                 Instance = this;
+                StackedItems = new Queue<Vector2>();
             }
         }
 
@@ -49,12 +54,20 @@ public class SceneHandler : MonoBehaviour
 
     public void SwitchToPacking(bool deleteQueue)
     {
-        //Popping queue and pushing in delivered list
+        if(deleteQueue)
+        {
+            while(StackedItems.Count > 0)
+            {
+                Delivered.Add(StackedItems.Peek());
+                StackedItems.Dequeue();
+            }
+        }
+        
         Path = PlottingManager.Instance.getRawPath(out startOffset, out endOffset);
 
-        //If delivered.cout == deliverytargets.count
-        //SceneManager.LoadScene(newLevel);
-        //else
-        SceneManager.LoadScene(Packing_Level);
+        if (Delivered.Count == DeliveryTargets.Count)
+            SceneManager.LoadScene(New_Level);
+        else
+            SceneManager.LoadScene(Packing_Level);
     }
 }
