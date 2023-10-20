@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+
 public class SceneHandler : MonoBehaviour
 {
     public Vector2Int Min;
@@ -20,7 +21,9 @@ public class SceneHandler : MonoBehaviour
     public List<Vector2> Delivered;
 
     public Queue<Vector2> StackedItems;
+    public Queue<Vector2> stackedPackages;
 
+    public List<Sprite> Packages;
     public static SceneHandler Instance = null;
 
     private void Awake()
@@ -49,6 +52,18 @@ public class SceneHandler : MonoBehaviour
 
     public void SwitchToPlotting()
     {
+        StackedItems = new Queue<Vector2>();
+
+        Packages = DraggableItem.Instance.getTiles();
+
+        foreach(var pack in Packages)
+        {
+            StackedItems.Enqueue(PlayerManager.Instance.getDeliveryPosition());
+        }
+
+        
+
+
         SceneManager.LoadScene(Plotting_Level);
     }
 

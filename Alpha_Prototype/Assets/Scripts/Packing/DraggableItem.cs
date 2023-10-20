@@ -10,25 +10,36 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     private Vector3 gridPoint;
     public Vector3 lastPosition;
     private Vector3 startPosition;
-    public string piece;
+    public Sprite piece;
+    public Vector2 deliverPosition;
 
     public GridLayoutGroup gridLayoutGroup;
 
     private bool hasObject = false;
     public static bool isOccupied = false;
 
-    private static string occupiedBy;
+    public static List<Sprite> occupiedBy = new List<Sprite>();
 
     private float snapSensivity = 50.0f;
 
     Transform parentAfterDrag;
+
+    public static DraggableItem Instance;
+
+
+    private void Awake()
+    {
+        if (Instance == null)
+            Instance = this;
+   
+    }
 
     public void Start()
     {
         deliver.interactable = false;
     }
 
-public void OnBeginDrag(PointerEventData eventData)
+    public void OnBeginDrag(PointerEventData eventData)
     {
         Debug.Log("Begin drag");
         parentAfterDrag = transform.parent;
@@ -44,7 +55,7 @@ public void OnBeginDrag(PointerEventData eventData)
         lastPosition = Input.mousePosition;
         //Debug.Log(eventData.pointerEnter.name);
 
-        piece = eventData.pointerEnter.name;
+        piece = transform.GetComponent<Image>().sprite;
 
         Vector2 cellSize = gridLayoutGroup.cellSize;
         Vector2 spacing = gridLayoutGroup.spacing;
@@ -61,7 +72,7 @@ public void OnBeginDrag(PointerEventData eventData)
         {
 
             gridPoint = new Vector3(gridX, gridY, 0);
-            startPosition = new Vector3(gridX-170, gridY, 0);
+            startPosition = new Vector3(gridX-180, gridY, 0);
             hasObject = true;
 
         }
@@ -99,21 +110,31 @@ public void OnBeginDrag(PointerEventData eventData)
             transform.position = gridPoint;
 
             isOccupied = true;
-            occupiedBy = eventData.pointerEnter.name;
+            occupiedBy.Add(transform.GetComponent<Image>().sprite);
 
             deliver.interactable = true;
         }
         else
         {
             transform.position = startPosition;
-            if (piece == occupiedBy)
+            if (occupiedBy.Contains(transform.GetComponent<Image>().sprite))
             {
                 isOccupied = false;
-                occupiedBy = "";
+                occupiedBy.Remove(transform.GetComponent<Image>().sprite);
 
                 deliver.interactable = false;
             }
         }
+    }
+
+    public List<Sprite> getTiles()
+    {
+        foreach(var t in occupiedBy)
+        {
+            Debug.Log(t);
+        }
+        
+        return occupiedBy;
     }
 }
         

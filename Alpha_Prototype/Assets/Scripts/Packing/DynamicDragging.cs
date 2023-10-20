@@ -4,8 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using System.Linq;
 
-//traverse the grid add the destinations in a set and return.
 //add visibility parameter based on delivered scene
 
 
@@ -13,13 +13,14 @@ using UnityEngine.UI;
 // based on row column, check if the immediate left right up wtv is free
 // place there
 
-public class DynamicDragging : MonoBehaviour
+public class DynamicDragging : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
+
+    SceneHandler sceneHandlerScript = new SceneHandler();
+
     public Button deliver;
 
     private bool hasObject = false;
-
-    private float snapSensivity = 50.0f;
 
     Transform parentAfterDrag;
 
@@ -27,29 +28,31 @@ public class DynamicDragging : MonoBehaviour
     private Dictionary<int, float> gridColumns;
     public GridLayoutGroup gridLayoutGroup;
 
-    bool[,] occupied;
+    static List<List<char>> notAllowed = new List<List<char>> {};
+
+    Dictionary<string, List<float>> pairs = new Dictionary<string, List<float>>();
+
 
     public int rows;
     public int columns;
 
-    List<string> occupiedList = new List<string> {};
+    List<Sprite> occupiedList = new List<Sprite> {};
 
-    private Vector3 gridPoint;
     public Vector3 lastPosition;
     private Vector3 startPosition;
     public string piece;
 
     public static bool isOccupied = false;
 
-    private static string occupiedBy;
+    List<List<char>> toPass = new List<List<char>> { };
 
-   
+
+
+
 
     public void Start()
     {
         deliver.interactable = false;
-
-        occupied = new bool[rows, columns];
 
         Vector2 cellSize = gridLayoutGroup.cellSize;
         Vector2 spacing = gridLayoutGroup.spacing;
@@ -62,38 +65,114 @@ public class DynamicDragging : MonoBehaviour
         // populate rows and columns
         // even split and give; odd center is same
 
+        Debug.Log(gridX);
+        Debug.Log(gridY);
+
+        float colSpace;
+        float rowSpace;
+
+        float rowSize;
+        float colSize;
+
+        if (rows % 2 == 0)
+        {
+            rowSpace = 0.5f;
+        }
+        else
+        {
+            rowSpace = 0;
+        }
+
+        if (columns % 2 == 0)
+        {
+            colSpace = 0.5f;
+        }
+        else
+        {
+            colSpace = 0f;
+        }
+
+
+        if (rows % 2 == 0)
+        {
+            rowSize = 0.5f;
+        }
+        else
+        {
+            rowSize = 0;
+        }
+
+        if (columns % 2 == 0)
+        {
+            colSize = 0.5f;
+        }
+        else
+        {
+            colSize = 0f;
+        }
+
         for (int i = 0; i <rows/2; i++)
         {
-            gridRows[i] = gridY - (rows / 2 - i - 1 / 2)*cellSize.y + (rows / 2 - i - 1 / 2) * spacing.y;
+            gridRows[i] = gridY - (((float)(rows / 2 - i - rowSize))*cellSize.y + ((float)(rows / 2 - i - rowSpace)) * spacing.y);
+ 
+            Debug.Log(i + "r" + gridRows[i]);
+
         }
         for (int i = rows / 2; i < rows; i++)
         {
-            if (i - rows / 2 > 0)
+            if (i - rows / 2 > 0 || rows % 2 == 0)
             {
-                gridRows[i] = gridY + (i - rows / 2 - 1 / 2) * cellSize.x + (i - rows / 2 - 1 / 2) * spacing.x;
+                gridRows[i] = gridY + ((float)(i - rowSize - 1)) * cellSize.x + ((float)(i - 1 - rowSpace)) * spacing.x;
+
+                //Debug.Log(((float)(i - rows / 2 - 0.5f)));
+                //Debug.Log(((float)(i - rows / 2 - 0.5f))*cellSize.y);
+                //Debug.Log(((float)(i - rows / 2 - rowSize)) * cellSize.x + ((float)(i - rows / 2 - rowSpace)) * spacing.x);
             }
             else
             {
                 gridRows[i] = gridY;
             }
+            Debug.Log(i +"r"+gridRows[i]);
         }
 
         for (int i = 0; i < columns / 2; i++)
         {
-            gridColumns[i] = gridX - (columns / 2 - i - 1 / 2) * cellSize.x + (columns / 2 - i - 1 / 2) * spacing.x;
+            gridColumns[i] = gridX - (((float)(columns / 2 - i - colSize)) * cellSize.x + ((float)(columns / 2 - i - colSpace)) * spacing.x);
+            
+            Debug.Log(i + "c" + gridColumns[i]);
         }
         for (int i = columns / 2; i < columns; i++)
         {
-            if (i - columns / 2 > 0)
+            if (i - columns / 2 > 0 || columns%2==0)
             {
-                gridColumns[i] = gridX + (i - columns / 2 - 1 / 2) * cellSize.x + (i - columns / 2 - 1 / 2) * spacing.x;
+                gridColumns[i] = gridX + ((float)(i - columns / 2 - colSize)) * cellSize.x + ((float)(i - columns / 2 - colSpace)) * spacing.x;
             }
             else
             {
                 gridColumns[i] = gridX;
             }
+            Debug.Log(i+"c"+gridColumns[i]);
         }
 
+
+        // Display the combined list of values
+        foreach (var x in gridColumns)
+        {
+            foreach (var y in gridRows)
+            {
+                Debug.Log(x.Key);
+                Debug.Log(y.Key);
+                pairs[(x.Key).ToString() + (y.Key).ToString()] = new List<float> { x.Value, y.Value };
+
+            }
+        }
+
+
+    }
+
+    public void Update()
+    {
+        //Debug.Log(Input.mousePosition);
     }
 
 
@@ -120,12 +199,11 @@ public class DynamicDragging : MonoBehaviour
         float gridX = gridLayoutGroup.transform.position.x;
         float gridY = gridLayoutGroup.transform.position.y;
 
-        Debug.Log("Position of cell : (" + gridX + ", " + gridY + ")");
-
+        Debug.Log(gridX);
+        Debug.Log(gridY);
 
         if (hasObject == false && eventData.pointerEnter.name == "z-shape")
         {
-            //gridPoint = new Vector3(gridX, gridY, 0);
             startPosition = new Vector3(gridX - 170, gridY, 0);
             hasObject = true;
 
@@ -133,9 +211,7 @@ public class DynamicDragging : MonoBehaviour
 
         if (hasObject == false && eventData.pointerEnter.name == "inverted-r-shape")
         {
-            //float posX = gridX + spacing.x + cellSize.x / 2;
-            //float posY = gridY - spacing.y / 2 - cellSize.y / 2;
-            //gridPoint = new Vector3(posX, posY, 0);
+
             startPosition = new Vector3(gridX - 170, gridY - 20, 0);
             hasObject = true;
 
@@ -143,7 +219,6 @@ public class DynamicDragging : MonoBehaviour
 
         if (hasObject == false && eventData.pointerEnter.name == "new-shape")
         {
-            //gridPoint = new Vector3(gridX, gridY, 0);
             startPosition = new Vector3(gridX - 350, gridY - 20, 0);
             hasObject = true;
 
@@ -152,59 +227,127 @@ public class DynamicDragging : MonoBehaviour
 
 
 
+
     public void OnEndDrag(PointerEventData eventData)
     {
         Debug.Log("End drag");
-        Debug.Log(occupiedBy);
-        Debug.Log(isOccupied);
-        Debug.Log(piece);
 
+        Vector2 cellSize = gridLayoutGroup.cellSize;
+        Vector2 spacing = gridLayoutGroup.spacing;
         hasObject = false;
         transform.SetParent(parentAfterDrag);
 
-        int tr=-1;
-        int tc=-1;
+        List<List<float>> objectPoints = new List<List<float>> { };
 
-        foreach (var row in gridRows)
+        if (eventData.pointerEnter.name == "inverted-r-shape")
         {
-            if(row.Value<lastPosition.y && lastPosition.y - row.Value <= 30)
+            objectPoints.Add(new List<float>{Input.mousePosition.x - cellSize.y / 2 , Input.mousePosition.y + cellSize.x / 2 });
+            objectPoints.Add(new List<float> { Input.mousePosition.x + cellSize.y / 2, Input.mousePosition.y + cellSize.x / 2 });
+            objectPoints.Add(new List<float> { Input.mousePosition.x + cellSize.y / 2, Input.mousePosition.y - cellSize.x / 2 });
+
+        }
+
+        if (eventData.pointerEnter.name == "new-shape")
+        {
+            objectPoints.Add(new List<float> { Input.mousePosition.x, Input.mousePosition.y });
+            objectPoints.Add(new List<float> { Input.mousePosition.x - cellSize.y , Input.mousePosition.y + cellSize.x  });
+            objectPoints.Add(new List<float> { Input.mousePosition.x + cellSize.y , Input.mousePosition.y});
+            objectPoints.Add(new List<float> { Input.mousePosition.x - cellSize.y , Input.mousePosition.y});
+            objectPoints.Add(new List<float> { Input.mousePosition.x + cellSize.y , Input.mousePosition.y - cellSize.x  });
+
+
+        }
+
+
+        int i = 0;
+        List<float> placement = new List<float> {};
+        List<int> fits = new List<int> {};
+
+
+
+        foreach (var p1 in objectPoints)
+        {
+            fits.Add(0);
+            foreach (var p2 in pairs)
             {
-                tr = row.Key;
+                //check not allowed boxes
+                if(Vector2.Distance(new Vector2(p1[0], p1[1]), new Vector2(p2.Value[0], p2.Value[1])) <= 22 && notAllowed.Contains(new List<char> {p2.Key[0],p2.Key[1]})==false)
+                {
+                    
+                    fits[i] = 1;
+                    if (i == 0)
+                    {
+                        placement.Add(p2.Value[0]);
+                        placement.Add(p2.Value[1]);
+                    }
+
+
+
+                    toPass.Add(new List<char> { p2.Key[0], p2.Key[1] });
+                    Debug.Log(p2.Key[0] + ',' + p2.Key[1]);
+                    
+                    break;
+                }
             }
+
+            i += 1;
+
         }
 
-        foreach (var col in gridColumns)
+        if (fits.All(item => item == 1))
         {
-            if (col.Value < lastPosition.x && lastPosition.x - col.Value <= 30)
+            if (eventData.pointerEnter.name == "inverted-r-shape")
             {
-                tc = col.Key;
+                transform.position = new Vector3(placement[0] + cellSize.y / 2 + spacing.y / 2, placement[1] - cellSize.x / 2 - spacing.x / 2, 0);          
             }
+            else if(eventData.pointerEnter.name == "new-shape")
+            {
+                transform.position = new Vector3(placement[0], placement[1], 0);
+            }
+
+            occupiedList.Add(transform.GetComponent<Image>().sprite);
+
+
+            foreach(var val in toPass)
+            {
+                notAllowed.Add(new List<char> { val[0], val[1] });
+            }
+
+            Debug.Log(notAllowed.Count);
+            toPass = new List<List<char>> { };
+
+            foreach (var s in notAllowed)
+            {
+                Debug.Log(s[0] + ',' + s[1]);
+            }
+
+
         }
-
-
-        if (tr > 0 && tc > 0 &&
-            tr - 1 >= 0 && tr - 1 < rows && tr >= 0 && tr < rows &&
-            tc >= 0 && tc < columns && tc + 1 >= 0 && tc + 1 < columns &&
-            occupied[tr - 1,tc]==false && !occupied[tr - 1,tc + 1] && !occupied[tr,tc + 1])
-        {
-            transform.position = new Vector3((gridRows[tr]+gridRows[tr-1])/2, (gridColumns[tc] + gridColumns[tc + 1]) / 2, 0);
-            occupied[tr - 1, tc] = true;
-            occupied[tr - 1, tc + 1] = true;
-            occupied[tr, tc + 1] = true;
-
-        }
+        
         else
         {
             transform.position = startPosition;
 
-            if (eventData.pointerEnter.name == "inverted-r-shape")
-            {
-                if (occupiedList.Contains("inverted-r-shape"))
+             if (occupiedList.Contains(transform.GetComponent<Image>().sprite))
+              {
+                occupiedList.Remove(transform.GetComponent<Image>().sprite);
+                foreach (var val in toPass)
                 {
-                    occupiedList.Remove("inverted-r-shape");
+                    if(notAllowed.Contains(new List<char> { val[0], val[1] }))
+                    notAllowed.Remove(new List<char> { val[0], val[1] });
                 }
             }
+            
         }
+
+        foreach(var s in occupiedList)
+        {
+            
+        }
+        //sceneHandlerScript.stackedPackages.Add(var);
+
+
+
 
 
         if (occupiedList.Count < 1)
@@ -216,29 +359,5 @@ public class DynamicDragging : MonoBehaviour
             deliver.interactable = true;
         }
 
-
-
-
-
-        //if (isOccupied == false && Vector3.Distance(gridPoint, lastPosition) < snapSensivity)
-        //{
-        //    transform.position = gridPoint;
-
-        //    isOccupied = true;
-        //    occupiedBy = eventData.pointerEnter.name;
-
-        //    deliver.interactable = true;
-        //}
-        //else
-        //{
-        //    transform.position = startPosition;
-        //    if (piece == occupiedBy)
-        //    {
-        //        isOccupied = false;
-        //        occupiedBy = "";
-
-        //        deliver.interactable = false;
-        //    }
-        //}
     }
 }
