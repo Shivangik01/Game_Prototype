@@ -6,9 +6,11 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 
+//get status flush out occupiedby
+
 public class PlayerManager : MonoBehaviour
 {
-    private Image imageComponent;
+    public Image imageComponent;
     public Vector2 deliverPosition;
 
     public static PlayerManager Instance;
@@ -32,6 +34,10 @@ public class PlayerManager : MonoBehaviour
         {
             Debug.Log("StackedIetm");
             imageComponent.enabled = true;
+            RectTransform rectTransform = imageComponent.GetComponent<RectTransform>();
+            Debug.Log(SceneHandler.Instance.StackedItemsPositions[deliverPosition]);
+            rectTransform.position = new Vector3(SceneHandler.Instance.StackedItemsPositions[deliverPosition].x, SceneHandler.Instance.StackedItemsPositions[deliverPosition].y, 0);
+            // place it to the grid
         }
     }
 

@@ -21,9 +21,11 @@ public class SceneHandler : MonoBehaviour
     public List<Vector2> Delivered;
 
     public Queue<Vector2> StackedItems;
-    public Queue<Vector2> stackedPackages;
+    public Dictionary<Vector2, Vector2> StackedItemsPositions;
 
-    public List<Sprite> Packages;
+    public List<Vector2> Packages;
+    public Dictionary<Vector2,Vector2> PackagesPosition;
+
     public static SceneHandler Instance = null;
 
     private void Awake()
@@ -32,6 +34,7 @@ public class SceneHandler : MonoBehaviour
         {
             Instance = this;
             StackedItems = new Queue<Vector2>();
+            StackedItemsPositions = new Dictionary<Vector2, Vector2>();
         }
         else
         {
@@ -44,6 +47,7 @@ public class SceneHandler : MonoBehaviour
                 Destroy(Instance.gameObject);
                 Instance = this;
                 StackedItems = new Queue<Vector2>();
+                StackedItemsPositions = new Dictionary<Vector2, Vector2>();
             }
         }
 
@@ -53,16 +57,23 @@ public class SceneHandler : MonoBehaviour
     public void SwitchToPlotting()
     {
         StackedItems = new Queue<Vector2>();
+        StackedItemsPositions = new Dictionary<Vector2, Vector2>();
 
         Packages = DraggableItem.Instance.getTiles();
 
-        foreach(var pack in Packages)
+
+        foreach (var pack in Packages)
         {
-            StackedItems.Enqueue(PlayerManager.Instance.getDeliveryPosition());
+            StackedItems.Enqueue(pack);
         }
+            
+        PackagesPosition = DraggableItem.Instance.getPositions();
 
-        
 
+        foreach (var pos in PackagesPosition)
+        {
+            StackedItemsPositions.Add(pos.Key, pos.Value);
+        }
 
         SceneManager.LoadScene(Plotting_Level);
     }
@@ -74,6 +85,7 @@ public class SceneHandler : MonoBehaviour
             while(StackedItems.Count > 0)
             {
                 Delivered.Add(StackedItems.Peek());
+                StackedItemsPositions.Remove(StackedItems.Peek());
                 StackedItems.Dequeue();
             }
         }

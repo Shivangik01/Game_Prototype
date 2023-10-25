@@ -17,4 +17,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/PathPlotting2.unity
     guid: d9d702b744bd1440e9596da1137100a4
+  - enabled: 1
+    path: Assets/Scenes/PackingScene3.unity
+    guid: 8bcbd348c48a64369b23b86f08ed0b95
   m_configObjects: {}

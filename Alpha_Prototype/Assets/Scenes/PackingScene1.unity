@@ -7846,9 +7846,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   deliver: {fileID: 728747337}
   lastPosition: {x: 0, y: 0, z: 0}
-  piece: {fileID: 0}
-  deliverPosition: {x: 0, y: 0}
+  startPosition: {x: 0, y: 0, z: 0}
   gridLayoutGroup: {fileID: 0}
+  gridPoints: []
   spotlight: {fileID: 1035634406}
 --- !u!114 &1035634409
 MonoBehaviour:
@@ -7867,7 +7867,6 @@ MonoBehaviour:
   rows: 0
   columns: 0
   lastPosition: {x: 0, y: 0, z: 0}
-  piece: 
   spotlight: {fileID: 1035634406}
 --- !u!4 &1036554212 stripped
 Transform:
@@ -9198,9 +9197,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   deliver: {fileID: 728747337}
   lastPosition: {x: 0, y: 0, z: 0}
-  piece: {fileID: 0}
-  deliverPosition: {x: 0, y: 0}
+  startPosition: {x: 449, y: 302, z: 0}
   gridLayoutGroup: {fileID: 1063216678}
+  gridPoints: []
   spotlight: {fileID: 1035634406}
 --- !u!114 &1281422523
 MonoBehaviour:
@@ -9252,6 +9251,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b14d039f04784f779f8172f8d9b7f74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  imageComponent: {fileID: 1281422523}
   deliverPosition: {x: 0, y: 1}
 --- !u!1 &1287348224
 GameObject:
