@@ -70,6 +70,7 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     {
         Debug.Log("Dragging");
         spotlight.SetActive(true);
+        moveSpotlightToDeliveryPosition();
 
         Debug.Log(Input.mousePosition);
         transform.position = Input.mousePosition;
@@ -286,6 +287,15 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         return gp;
     }
 
- 
+    private void moveSpotlightToDeliveryPosition()
+    {
+        PlayerManager scriptInstance = GetComponent<PlayerManager>();
+        if (scriptInstance != null)
+        {
+            Vector2 deliveryPosition = scriptInstance.getDeliveryPosition();
+            spotlight.transform.position = new Vector3(deliveryPosition.x, 0, deliveryPosition.y-0.5f);
+        }
+    }
+
 }
         
