@@ -1603,6 +1603,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   imageComponent: {fileID: 0}
   deliverPosition: {x: 0, y: 0}
+  startPosition: {x: 0, y: 0, z: 0}
+  outline: {fileID: 0}
 --- !u!4 &163771503
 Transform:
   m_ObjectHideFlags: 0
@@ -12087,6 +12089,7 @@ MonoBehaviour:
   deliver: {fileID: 914998770}
   lastPosition: {x: 0, y: 0, z: 0}
   startPosition: {x: 0, y: 0, z: 0}
+  imageOutline: {fileID: 0}
   gridLayoutGroup: {fileID: 1063216678}
   gridPoints: []
   spotlight: {fileID: 1575495744}
@@ -12324,6 +12327,7 @@ MonoBehaviour:
   deliver: {fileID: 914998770}
   lastPosition: {x: 0, y: 0, z: 0}
   startPosition: {x: 476, y: 269, z: 0}
+  imageOutline: {fileID: 0}
   gridLayoutGroup: {fileID: 1063216678}
   gridPoints: []
   spotlight: {fileID: 1575495744}
@@ -12341,6 +12345,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   imageComponent: {fileID: 1589931585}
   deliverPosition: {x: 1, y: 2}
+  startPosition: {x: 0, y: 0, z: 0}
+  outline: {fileID: 2083264386}
 --- !u!1001 &1592410524
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -13710,6 +13716,7 @@ MonoBehaviour:
   deliver: {fileID: 914998770}
   lastPosition: {x: 0, y: 0, z: 0}
   startPosition: {x: 317, y: 290, z: 0}
+  imageOutline: {fileID: 0}
   gridLayoutGroup: {fileID: 1063216678}
   gridPoints: []
   spotlight: {fileID: 1575495744}
@@ -13727,6 +13734,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   imageComponent: {fileID: 1814242274}
   deliverPosition: {x: 0, y: 0}
+  startPosition: {x: 0, y: 0, z: 0}
+  outline: {fileID: 53601679}
 --- !u!1001 &1823589799
 PrefabInstance:
   m_ObjectHideFlags: 0

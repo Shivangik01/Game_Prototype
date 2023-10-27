@@ -12,6 +12,7 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     public Button deliver;
     public Vector3 lastPosition; // where to keep it last
     public Vector3 startPosition; //og position
+    public Image imageOutline;
 
     public GridLayoutGroup gridLayoutGroup;
 
@@ -41,7 +42,7 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     {
         deliver.interactable = false;
         spotlight.SetActive(false);
-        notAllowed = new List<int> { };
+        
         if (SceneHandler.Instance.Delivered.Count>0)
         {
             PlayerManager[] scriptInstances = FindObjectsOfType<PlayerManager>();
@@ -59,17 +60,19 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         if (occupiedBy.Count < 1)
         {
             deliver.interactable = false;
+            notAllowed = new List<int> { };
         }
         else
         {
             deliver.interactable = true;
+            foreach (var val in notAllowed)
+            {
+                Debug.Log(val);
+            }
         }
 
 
-        foreach(var val in notAllowed)
-        {
-            Debug.Log(val);
-        }
+        
 
     }
 
@@ -154,8 +157,10 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
         }
 
+        PlayerManager objectScript = transform.GetComponent<Image>().GetComponent<PlayerManager>();
+
         int i = 0;
-        Vector2 placement = new Vector2(startPosition.x,startPosition.y);
+        Vector2 placement = new Vector2(objectScript.startPosition.x, objectScript.startPosition.y);
         int fits = 0;
         toPass = new List<int> {};
 
@@ -211,7 +216,8 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
         else
         {
-            transform.position = startPosition;
+            
+            transform.position = objectScript.startPosition;
 
             if (occupiedBy.Contains(transform.GetComponent<Image>().sprite))
             {

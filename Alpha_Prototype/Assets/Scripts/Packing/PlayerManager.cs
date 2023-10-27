@@ -12,6 +12,8 @@ public class PlayerManager : MonoBehaviour
 {
     public Image imageComponent;
     public Vector2 deliverPosition;
+    public Vector3 startPosition;
+    public Transform outline;
 
     public static PlayerManager Instance;
 
@@ -44,7 +46,7 @@ public class PlayerManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        startPosition = outline.position;
     }
 
     public Vector2 getDeliveryPosition()

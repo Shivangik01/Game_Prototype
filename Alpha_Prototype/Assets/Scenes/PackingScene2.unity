@@ -11709,6 +11709,7 @@ MonoBehaviour:
   deliver: {fileID: 914998770}
   lastPosition: {x: 0, y: 0, z: 0}
   startPosition: {x: 475, y: 270, z: 0}
+  imageOutline: {fileID: 0}
   gridLayoutGroup: {fileID: 1063216678}
   gridPoints: []
   spotlight: {fileID: 2074793106}
@@ -11726,6 +11727,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   imageComponent: {fileID: 1589931585}
   deliverPosition: {x: 3, y: -2}
+  startPosition: {x: 0, y: 0, z: 0}
+  outline: {fileID: 2058163145}
 --- !u!1001 &1590932888
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -13722,6 +13725,7 @@ MonoBehaviour:
   deliver: {fileID: 914998770}
   lastPosition: {x: 0, y: 0, z: 0}
   startPosition: {x: 309, y: 268, z: 0}
+  imageOutline: {fileID: 0}
   gridLayoutGroup: {fileID: 1063216678}
   gridPoints: []
   spotlight: {fileID: 2074793106}
@@ -13739,6 +13743,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   imageComponent: {fileID: 1814242274}
   deliverPosition: {x: 0, y: 1}
+  startPosition: {x: 0, y: 0, z: 0}
+  outline: {fileID: 1252624466}
 --- !u!1 &1824126332
 GameObject:
   m_ObjectHideFlags: 0
@@ -15702,6 +15708,7 @@ MonoBehaviour:
   deliver: {fileID: 914998770}
   lastPosition: {x: 0, y: 0, z: 0}
   startPosition: {x: 0, y: 0, z: 0}
+  imageOutline: {fileID: 0}
   gridLayoutGroup: {fileID: 0}
   gridPoints: []
   spotlight: {fileID: 2074793106}

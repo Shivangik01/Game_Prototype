@@ -9246,6 +9246,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   imageComponent: {fileID: 1281422523}
   deliverPosition: {x: 0, y: 1}
+  startPosition: {x: 0, y: 0, z: 0}
+  outline: {fileID: 486384051}
 --- !u!1 &1287348224
 GameObject:
   m_ObjectHideFlags: 0
