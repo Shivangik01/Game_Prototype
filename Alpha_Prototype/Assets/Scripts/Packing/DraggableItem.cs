@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -45,23 +46,19 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         spotlight.SetActive(false);
         deliverText.SetActive(false);
 
-        Debug.Log("Occupied by: " + occupiedBy.Count.ToString());
-        foreach (var x in occupiedBy)
-            Debug.Log(x);
+        //if (SceneHandler.Instance.StackedItems.Count>0)
+        //{
+        //    PlayerManager[] scriptInstances = FindObjectsOfType<PlayerManager>();
 
-        if (SceneHandler.Instance.StackedItems.Count>0)
-        {
-            PlayerManager[] scriptInstances = FindObjectsOfType<PlayerManager>();
-
-            foreach (var scriptInstance in scriptInstances)
-            {
-                Image spriteRenderer = scriptInstance.GetComponent<Image>();
-                if (SceneHandler.Instance.StackedItems.Contains(scriptInstance.getDeliveryPosition()))
-                {
-                    occupiedBy.Add(spriteRenderer.sprite);
-                }
-            }
-        }
+        //    foreach (var scriptInstance in scriptInstances)
+        //    {
+        //        Image spriteRenderer = scriptInstance.GetComponent<Image>();
+        //        if (SceneHandler.Instance.StackedItems.Contains(scriptInstance.getDeliveryPosition()))
+        //        {
+        //            occupiedBy.Add(spriteRenderer.sprite);
+        //        }
+        //    }
+        //}
 
         if (occupiedBy.Count < 1)
         {
@@ -71,16 +68,16 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         else
         {
             deliver.interactable = true;
-            foreach (var val in notAllowed)
-            {
-                Debug.Log(val);
-            }
+            //foreach (var val in notAllowed)
+            //{
+            //    Debug.Log(val);
+            //}
         }
     }
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        Debug.Log("Begin drag");
+        //Debug.Log("Begin drag");
         spotlight.SetActive(true);
         deliverText.SetActive(true);
         parentAfterDrag = transform.parent;
@@ -121,7 +118,7 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        Debug.Log("End drag");
+        //Debug.Log("End drag");
         spotlight.SetActive(false);
         deliverText.SetActive(false);
         gridPoints =getGridPoints();
@@ -254,7 +251,9 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         List<Vector2> items = new List<Vector2> { };
         PlayerManager[] scriptInstances = FindObjectsOfType<PlayerManager>();
 
-        foreach (var scriptInstance in scriptInstances)
+        List<PlayerManager> list = scriptInstances.ToList().OrderBy(x => -x.GetComponent<RectTransform>().localPosition.y).ToList();
+
+        foreach (var scriptInstance in list)
         {
             Image spriteRenderer = scriptInstance.GetComponent<Image>();
             if (occupiedBy.Contains(spriteRenderer.sprite))
