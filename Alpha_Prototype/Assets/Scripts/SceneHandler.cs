@@ -99,6 +99,11 @@ public class SceneHandler : MonoBehaviour
             }
             StackedItems.Clear();
             StackedItemsPositions.Clear();
+
+            Packages.Clear();
+            PackagesPosition.Clear();
+            DraggableItem.occupiedBy.Clear();
+
             Path.Clear();
         }
         else

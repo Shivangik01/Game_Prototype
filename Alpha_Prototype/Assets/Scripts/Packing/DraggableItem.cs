@@ -45,15 +45,18 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         spotlight.SetActive(false);
         deliverText.SetActive(false);
 
+        Debug.Log("Occupied by: " + occupiedBy.Count.ToString());
+        foreach (var x in occupiedBy)
+            Debug.Log(x);
 
-        if (SceneHandler.Instance.Delivered.Count>0)
+        if (SceneHandler.Instance.StackedItems.Count>0)
         {
             PlayerManager[] scriptInstances = FindObjectsOfType<PlayerManager>();
 
             foreach (var scriptInstance in scriptInstances)
             {
                 Image spriteRenderer = scriptInstance.GetComponent<Image>();
-                if (SceneHandler.Instance.Delivered.Contains(scriptInstance.getDeliveryPosition()))
+                if (SceneHandler.Instance.StackedItems.Contains(scriptInstance.getDeliveryPosition()))
                 {
                     occupiedBy.Add(spriteRenderer.sprite);
                 }

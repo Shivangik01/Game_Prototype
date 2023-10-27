@@ -21,8 +21,13 @@ public class DeliveryManager : MonoBehaviour
 
     private void Update()
     {
-        if(!delivered)
+        if (!delivered)
+        {
             DemandBox.transform.LookAt(Camera.main.transform);
+            Vector3 loc = DemandBox.transform.rotation.eulerAngles;
+
+            DemandBox.transform.rotation = Quaternion.Euler(0, loc.y, 0);
+        }
     }
 
     public void makeDelivery()
