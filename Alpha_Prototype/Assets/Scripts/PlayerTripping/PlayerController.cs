@@ -85,11 +85,7 @@ public class PlayerController : MonoBehaviour
 
         foreach (var e in PlottingManager.Instance.getDeliverables())
         {
-            e.Key.GetComponent<DeliveryManager>().delivered = false;
-            Animator anim = e.Key.GetComponent<DeliveryManager>().playerAnimator;
-            anim.SetBool("Happy", false);
-            anim.Rebind();
-            anim.Update(0f);
+            e.Key.GetComponent<DeliveryManager>().resetDelivery();
         }
 
         Engine.gameObject.SetActive(false);

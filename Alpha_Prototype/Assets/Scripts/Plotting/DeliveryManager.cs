@@ -26,7 +26,7 @@ public class DeliveryManager : MonoBehaviour
             DemandBox.transform.LookAt(Camera.main.transform);
             Vector3 loc = DemandBox.transform.rotation.eulerAngles;
 
-            DemandBox.transform.rotation = Quaternion.Euler(0, loc.y, 0);
+            DemandBox.transform.rotation = Quaternion.Euler(16, loc.y, 0);
         }
     }
 
@@ -35,5 +35,14 @@ public class DeliveryManager : MonoBehaviour
         playerAnimator.SetBool("Happy", true);
         delivered = true;
         DemandBox.SetActive(false);
+    }
+
+    public void resetDelivery()
+    {
+        playerAnimator.SetBool("Happy", false);
+        playerAnimator.Rebind();
+        playerAnimator.Update(0f);
+        delivered = true;
+        DemandBox.SetActive(true);
     }
 }
