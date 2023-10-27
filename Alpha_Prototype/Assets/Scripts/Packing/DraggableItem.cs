@@ -41,6 +41,7 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     {
         deliver.interactable = false;
         spotlight.SetActive(false);
+        notAllowed = new List<int> { };
         if (SceneHandler.Instance.Delivered.Count>0)
         {
             PlayerManager[] scriptInstances = FindObjectsOfType<PlayerManager>();
@@ -63,6 +64,13 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         {
             deliver.interactable = true;
         }
+
+
+        foreach(var val in notAllowed)
+        {
+            Debug.Log(val);
+        }
+
     }
 
     public void OnBeginDrag(PointerEventData eventData)
@@ -93,7 +101,7 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         spotlight.SetActive(true);
         moveSpotlightToDeliveryPosition();
 
-        Debug.Log(Input.mousePosition);
+        //Debug.Log(Input.mousePosition);
         transform.position = Input.mousePosition;
         lastPosition = Input.mousePosition;
 
