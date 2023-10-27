@@ -64,7 +64,8 @@ public class SceneHandler : MonoBehaviour
 
         foreach (var pack in Packages)
         {
-            StackedItems.Enqueue(pack);
+            if(!StackedItems.Contains(pack))
+                StackedItems.Enqueue(pack);
         }
             
         PackagesPosition = DraggableItem.Instance.getPositions();
@@ -72,7 +73,15 @@ public class SceneHandler : MonoBehaviour
 
         foreach (var pos in PackagesPosition)
         {
-            StackedItemsPositions.Add(pos.Key, pos.Value);
+            if (StackedItemsPositions.ContainsKey(pos.Key))
+            {
+                StackedItemsPositions[pos.Key] = pos.Value;
+            }
+            else
+            {
+                StackedItemsPositions.Add(pos.Key, pos.Value);
+            }
+                
         }
 
         SceneManager.LoadScene(Plotting_Level);

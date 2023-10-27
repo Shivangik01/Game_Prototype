@@ -41,7 +41,28 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     {
         deliver.interactable = false;
         spotlight.SetActive(false);
+        if (SceneHandler.Instance.Delivered.Count>0)
+        {
+            PlayerManager[] scriptInstances = FindObjectsOfType<PlayerManager>();
 
+            foreach (var scriptInstance in scriptInstances)
+            {
+                Image spriteRenderer = scriptInstance.GetComponent<Image>();
+                if (SceneHandler.Instance.Delivered.Contains(scriptInstance.getDeliveryPosition()))
+                {
+                    occupiedBy.Add(spriteRenderer.sprite);
+                }
+            }
+        }
+
+        if (occupiedBy.Count < 1)
+        {
+            deliver.interactable = false;
+        }
+        else
+        {
+            deliver.interactable = true;
+        }
     }
 
     public void OnBeginDrag(PointerEventData eventData)
@@ -228,7 +249,7 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     public Dictionary<Vector2,Vector2> getPositions()
     {
         Dictionary<Vector2,Vector2> packagePositions = new Dictionary<Vector2,Vector2> { };
-
+        gridPoints = getGridPoints();
         Vector3 temp = new Vector3();
         Vector2 cellSize = gridLayoutGroup.cellSize;
         Vector2 spacing = gridLayoutGroup.spacing;

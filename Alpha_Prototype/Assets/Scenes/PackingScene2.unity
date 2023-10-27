@@ -11725,7 +11725,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   imageComponent: {fileID: 1589931585}
-  deliverPosition: {x: 0, y: 1}
+  deliverPosition: {x: 3, y: -2}
 --- !u!1001 &1590932888
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -13738,7 +13738,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   imageComponent: {fileID: 1814242274}
-  deliverPosition: {x: 3, y: -2}
+  deliverPosition: {x: 0, y: 1}
 --- !u!1 &1824126332
 GameObject:
   m_ObjectHideFlags: 0
