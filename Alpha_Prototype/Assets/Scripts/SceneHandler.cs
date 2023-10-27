@@ -56,7 +56,7 @@ public class SceneHandler : MonoBehaviour
 
     public void SwitchToPlotting()
     {
-        StackedItems = new Queue<Vector2>();
+        StackedItems.Clear();
         StackedItemsPositions = new Dictionary<Vector2, Vector2>();
 
         Packages = DraggableItem.Instance.getTiles();
@@ -66,8 +66,8 @@ public class SceneHandler : MonoBehaviour
         {
             if(!StackedItems.Contains(pack))
                 StackedItems.Enqueue(pack);
-        }
-            
+        }    
+
         PackagesPosition = DraggableItem.Instance.getPositions();
 
 
@@ -89,18 +89,22 @@ public class SceneHandler : MonoBehaviour
 
     public void SwitchToPacking(bool deleteQueue)
     {
-        if(deleteQueue)
+        if (deleteQueue)
         {
-            while(StackedItems.Count > 0)
+            while (StackedItems.Count > 0)
             {
                 Delivered.Add(StackedItems.Peek());
                 StackedItemsPositions.Remove(StackedItems.Peek());
                 StackedItems.Dequeue();
             }
+            StackedItems.Clear();
+            StackedItemsPositions.Clear();
+            Path.Clear();
         }
-        
-        Path = PlottingManager.Instance.getRawPath(out startOffset, out endOffset);
-
+        else
+        {
+            Path = PlottingManager.Instance.getRawPath(out startOffset, out endOffset);
+        }
         if (Delivered.Count == DeliveryTargets.Count)
             SceneManager.LoadScene(New_Level);
         else

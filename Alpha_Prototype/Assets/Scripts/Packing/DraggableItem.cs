@@ -28,6 +28,7 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     public static DraggableItem Instance;
 
     public GameObject spotlight;
+    public GameObject deliverText;
 
     public static Dictionary<Sprite, List<int>> positions = new Dictionary<Sprite, List<int>>();
 
@@ -42,7 +43,9 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     {
         deliver.interactable = false;
         spotlight.SetActive(false);
-        
+        deliverText.SetActive(false);
+
+
         if (SceneHandler.Instance.Delivered.Count>0)
         {
             PlayerManager[] scriptInstances = FindObjectsOfType<PlayerManager>();
@@ -70,16 +73,13 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
                 Debug.Log(val);
             }
         }
-
-
-        
-
     }
 
     public void OnBeginDrag(PointerEventData eventData)
     {
         Debug.Log("Begin drag");
         spotlight.SetActive(true);
+        deliverText.SetActive(true);
         parentAfterDrag = transform.parent;
         transform.SetParent(transform.root);
         transform.SetAsLastSibling();
@@ -100,8 +100,9 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
     public void OnDrag(PointerEventData eventData)
     {
-        Debug.Log("Dragging");
+        //Debug.Log("Dragging");
         spotlight.SetActive(true);
+        deliverText.SetActive(true);
         moveSpotlightToDeliveryPosition();
 
         //Debug.Log(Input.mousePosition);
@@ -119,7 +120,8 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     {
         Debug.Log("End drag");
         spotlight.SetActive(false);
-        gridPoints=getGridPoints();
+        deliverText.SetActive(false);
+        gridPoints =getGridPoints();
 
         hasObject = false;
         transform.SetParent(parentAfterDrag);
