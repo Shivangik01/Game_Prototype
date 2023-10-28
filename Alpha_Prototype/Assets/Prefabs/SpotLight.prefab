@@ -18,7 +18,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4960237446944763828
 Transform:
   m_ObjectHideFlags: 0
@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 8743811700719577285}
   serializedVersion: 2
   m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0.5, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0.5}
   m_LocalScale: {x: 50, y: 50, z: 100}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -98,6 +98,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   deliver: {fileID: 0}
   lastPosition: {x: 0, y: 0, z: 0}
-  piece: 
+  startPosition: {x: 0, y: 0, z: 0}
+  imageOutline: {fileID: 0}
   gridLayoutGroup: {fileID: 0}
+  gridPoints: []
   spotlight: {fileID: 8743811700719577285}
+  deliverText: {fileID: 0}

@@ -1,8 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-
 
 public class SceneHandler : MonoBehaviour
 {
@@ -23,8 +23,6 @@ public class SceneHandler : MonoBehaviour
     public Queue<Vector2> StackedItems;
     public Dictionary<Vector2, Vector2> StackedItemsPositions;
 
-    public List<Vector2> Packages;
-    public Dictionary<Vector2,Vector2> PackagesPosition;
 
     public static SceneHandler Instance = null;
 
@@ -57,31 +55,25 @@ public class SceneHandler : MonoBehaviour
     public void SwitchToPlotting()
     {
         StackedItems.Clear();
-        StackedItemsPositions = new Dictionary<Vector2, Vector2>();
+        List<Vector2> positions = new List<Vector2>();
 
-        Packages = DraggableItem.Instance.getTiles();
+        foreach (var entry in StackedItemsPositions)
+            positions.Add(entry.Value);
 
+        positions.Sort((a, b) => {
+            return a.y.CompareTo(b.y);
+        });
 
-        foreach (var pack in Packages)
+        for (int idx = 0; idx < positions.Count; idx++)
         {
-            if(!StackedItems.Contains(pack))
-                StackedItems.Enqueue(pack);
-        }    
-
-        PackagesPosition = DraggableItem.Instance.getPositions();
-
-
-        foreach (var pos in PackagesPosition)
-        {
-            if (StackedItemsPositions.ContainsKey(pos.Key))
+            foreach (var entry in StackedItemsPositions)
             {
-                StackedItemsPositions[pos.Key] = pos.Value;
+                if (entry.Value == positions[idx])
+                {
+                    StackedItems.Enqueue(entry.Key);
+                    break;
+                }
             }
-            else
-            {
-                StackedItemsPositions.Add(pos.Key, pos.Value);
-            }
-                
         }
 
         SceneManager.LoadScene(Plotting_Level);
@@ -99,10 +91,6 @@ public class SceneHandler : MonoBehaviour
             }
             StackedItems.Clear();
             StackedItemsPositions.Clear();
-
-            Packages.Clear();
-            PackagesPosition.Clear();
-            DraggableItem.occupiedBy.Clear();
 
             Path.Clear();
         }
