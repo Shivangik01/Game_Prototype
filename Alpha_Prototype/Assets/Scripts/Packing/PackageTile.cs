@@ -23,43 +23,37 @@ public class PackageTile : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         {
             Destroy(this.gameObject);
         }
-
-        Invoke("Initialize", 0.03f);
-        
+        else if (SceneHandler.Instance.StackedItemsPositions.ContainsKey(deliveryRepresentations))
+        {
+            transform.position = SceneHandler.Instance.StackedItemsPositions[deliveryRepresentations];
+            Invoke("Initialize", 0.03f);
+        }
     }
 
     public void Initialize()
     {
-        //Debug.Log("Here");
-        if (SceneHandler.Instance.StackedItemsPositions.ContainsKey(deliveryRepresentations))
+        Vector2 finalPos = transform.position;
+
+        List<Vector2> checkers = new List<Vector2>();
+        foreach (Transform transform_offset in offsets)
         {
-            transform.position = SceneHandler.Instance.StackedItemsPositions[deliveryRepresentations];
-            Vector2 finalPos = transform.position;
+            Vector2 off = transform_offset.position;
+            checkers.Add(off);
+        }
 
-            List<Vector2> checkers = new List<Vector2>();
-            foreach (Transform transform_offset in offsets)
-            {
-                Vector2 off = transform_offset.position;
-                checkers.Add(off);
-            }
-
-            if (GridManager.Instance.inGrid(checkers, out finalPos))
-            {
-                GridManager.Instance.markOccupied(checkers, true);
-            }
+        if (GridManager.Instance.inGrid(checkers, out finalPos))
+        {
+            GridManager.Instance.markOccupied(checkers, true);
         }
     }
 
     Transform parentAfterDrag;
     public void OnBeginDrag(PointerEventData eventData)
     {
-
         spotlight.SetActive(true);
-        deliverText.SetActive(true);
+        spotlight.transform.position = new Vector3(deliveryRepresentations.x, spotlight.transform.position.y, deliveryRepresentations.y);
 
-        parentAfterDrag = transform.parent;
-        transform.SetParent(transform.root);
-        transform.SetAsLastSibling();
+        deliverText.SetActive(true);
 
         Vector2 finalPos = transform.position;
 
@@ -70,9 +64,12 @@ public class PackageTile : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
             checkers.Add(off);
         }
 
+        parentAfterDrag = transform.parent;
+        transform.SetParent(transform.root);
+        transform.SetAsLastSibling();
+
         if (GridManager.Instance.inGrid(checkers, out finalPos, true))
         {
-            //Debug.Log("Making All False");
             GridManager.Instance.markOccupied(checkers, false);
             SceneHandler.Instance.StackedItemsPositions.Remove(deliveryRepresentations);
         }
@@ -80,11 +77,6 @@ public class PackageTile : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
 
     public void OnDrag(PointerEventData eventData)
     {
-        spotlight.SetActive(true);
-        deliverText.SetActive(true);
-
-        spotlight.transform.position = new Vector3(deliveryRepresentations.x, 0, deliveryRepresentations.y - 0.5f);
-
         transform.position = Input.mousePosition;
     }
 
@@ -114,15 +106,15 @@ public class PackageTile : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
             transform.position = originalPosition.position;
         }
 
-        transform.parent = parentAfterDrag;
+        transform.SetParent(parentAfterDrag);
     }
 
-    //private void OnDrawGizmos()
-    //{
-    //    foreach(var off in offsets)
-    //    {
-    //        Gizmos.color = Color.red;
-    //        Gizmos.DrawSphere(off.position, 1.0f);
-    //    }    
-    //}
+    private void OnDrawGizmos()
+    {
+        foreach(var off in offsets)
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawSphere(off.position, 1.0f);
+        }    
+    }
 }

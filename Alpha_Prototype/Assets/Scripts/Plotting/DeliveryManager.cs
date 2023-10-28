@@ -23,10 +23,8 @@ public class DeliveryManager : MonoBehaviour
     {
         if (!delivered)
         {
-            DemandBox.transform.LookAt(Camera.main.transform);
-            Vector3 loc = DemandBox.transform.rotation.eulerAngles;
-
-            DemandBox.transform.rotation = Quaternion.Euler(16, loc.y, 0);
+            float xRot = Camera.main.transform.rotation.eulerAngles.x;
+            DemandBox.transform.rotation = Quaternion.Euler(xRot, 0, 0);
         }
     }
 
@@ -42,7 +40,7 @@ public class DeliveryManager : MonoBehaviour
         playerAnimator.SetBool("Happy", false);
         playerAnimator.Rebind();
         playerAnimator.Update(0f);
-        delivered = true;
+        delivered = false;
         DemandBox.SetActive(true);
     }
 }

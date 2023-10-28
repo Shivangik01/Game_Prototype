@@ -216,7 +216,7 @@ public class PlayerController : MonoBehaviour
         Engine.gameObject.SetActive(false);
         isSimulating = false;
 
-        if(PlottingManager.Instance.isConnected && deliveries_queue.Count ==  0)
+        if (PlottingManager.Instance.isConnected && deliveries_queue.Count == 0)
         {
             //push the path data
             int a, b;
@@ -224,11 +224,11 @@ public class PlayerController : MonoBehaviour
             AnalyticsHandler.Instance.PostPathData(PlottingManager.Instance.getRawPath(out a, out b), SceneHandler.Instance.Packing_Level);
             SceneHandler.Instance.SwitchToPacking(true);
         }
-
-
-
-        ResetTrain();
-        isEngineMoving = false; // Reset the movement flag when the engine stops.
+        else
+        {
+            ResetTrain();
+            isEngineMoving = false; // Reset the movement flag when the engine stops.
+        }
     }
 
     // Coroutine for the carriage to follow the engine.

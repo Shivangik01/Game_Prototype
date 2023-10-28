@@ -63,6 +63,7 @@ public class SceneHandler : MonoBehaviour
         positions.Sort((a, b) => {
             return a.y.CompareTo(b.y);
         });
+        positions.Reverse();
 
         for (int idx = 0; idx < positions.Count; idx++)
         {
