@@ -23,6 +23,14 @@ public class PackageTile : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         {
             Destroy(this.gameObject);
         }
+
+        Invoke("Initialize", 0.03f);
+        
+    }
+
+    public void Initialize()
+    {
+        //Debug.Log("Here");
         if (SceneHandler.Instance.StackedItemsPositions.ContainsKey(deliveryRepresentations))
         {
             transform.position = SceneHandler.Instance.StackedItemsPositions[deliveryRepresentations];
