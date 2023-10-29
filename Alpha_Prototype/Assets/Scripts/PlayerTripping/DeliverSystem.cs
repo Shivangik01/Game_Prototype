@@ -44,13 +44,17 @@ public class DeliverSystem : MonoBehaviour
         package.transform.position = A.position;
         float startTime = Time.time;
         
-        while(Vector3.Distance(package.transform.position, B_loc.position) > 0.1f)
+        Vector3 A_pos = new Vector3(A.position.x, 0, A.position.z);
+        Vector3 B_pos = new Vector3(B_loc.position.x, 0, B_loc.position.z);
+
+        while (Vector3.Distance(package.transform.position, B_loc.position) > 0.1f)
         {
             float distCovered = (Time.time - startTime) * speed;
+            //distCovered = Mathf.Clamp01(distCovered);
             float yOffset = Mathf.Sin(Mathf.PI * (distCovered / TotalDistance)) * Amplidute;
             
-            package.transform.position = Vector3.Lerp(A.position, B_loc.position, distCovered / TotalDistance);
-            package.transform.position = new Vector3(package.transform.position.x, A.position.y + yOffset, package.transform.position.z);
+            package.transform.position = Vector3.Lerp(A_pos, B_pos, distCovered / TotalDistance);
+            package.transform.position = new Vector3(package.transform.position.x, B_loc.position.y + yOffset, package.transform.position.z);
 
             yield return null;
         }

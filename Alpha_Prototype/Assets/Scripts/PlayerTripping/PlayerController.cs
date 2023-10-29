@@ -1,5 +1,3 @@
-
-
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -33,7 +31,8 @@ public class PlayerController : MonoBehaviour
     public GameObject pauseButton;
     public GameObject playButton;
 
-    
+    public Transform originalCamera;
+    public Transform simulationCamera;
 
     // Reduced distance for closer follow.
     private float minDistanceToEngine = 0.8f; // This ensures the carriage remains close.
@@ -43,6 +42,7 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
+        Carriage.gameObject.SetActive(false);
         isSimulating = false;
 
         pathPositions = new Queue<Vector3>();
@@ -75,8 +75,36 @@ public class PlayerController : MonoBehaviour
         }
 
         StopAllCoroutines();
+        StartCoroutine(CameraMove(originalCamera, simulationCamera));
         StartCoroutine(TraversePath());
-        StartCoroutine(FollowEngine());
+       // StartCoroutine(FollowEngine());
+    }
+
+    IEnumerator CameraMove(Transform A, Transform B)
+    {
+        Camera camera = Camera.main;
+        camera.transform.position = A.position;
+        camera.transform.rotation = A.rotation;
+        
+        float totalDistance = Vector3.Distance(A.position, B.position);
+
+        float startTime = Time.time;
+        while(Vector3.Distance(camera.transform.position, B.position) > 0.1f)
+        {
+            float distCovered = (Time.time - startTime) * 5.0f;
+            float t = distCovered / totalDistance;
+            t = Mathf.Clamp01(t);
+
+            camera.transform.position = Vector3.Lerp(A.position, B.position, t);
+            camera.transform.rotation = Quaternion.Lerp(A.rotation, B.rotation, t);
+
+            yield return null;
+        }
+
+        camera.transform.position = B.position;
+        camera.transform.rotation = B.rotation;
+
+        yield return null;
     }
 
     public void ResetTrain()
@@ -92,6 +120,7 @@ public class PlayerController : MonoBehaviour
         Carriage.gameObject.SetActive(false);
         StopAllCoroutines();
 
+        StartCoroutine(CameraMove(simulationCamera, originalCamera));
         QueueUI.Instance.ResetUI();
 
         pauseButton.SetActive(false);
