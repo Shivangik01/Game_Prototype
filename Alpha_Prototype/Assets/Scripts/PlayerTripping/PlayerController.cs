@@ -77,7 +77,7 @@ public class PlayerController : MonoBehaviour
         StopAllCoroutines();
         StartCoroutine(CameraMove(originalCamera, simulationCamera));
         StartCoroutine(TraversePath());
-       // StartCoroutine(FollowEngine());
+       StartCoroutine(FollowEngine());
     }
 
     IEnumerator CameraMove(Transform A, Transform B)
@@ -256,59 +256,54 @@ public class PlayerController : MonoBehaviour
         else
         {
             ResetTrain();
-            isEngineMoving = false; // Reset the movement flag when the engine stops.
+            isEngineMoving = false; 
         }
     }
 
-    // Coroutine for the carriage to follow the engine.
-    IEnumerator FollowEngine()
+IEnumerator FollowEngine()
+{
+    Carriage.gameObject.SetActive(true);
+
+    Vector3 lastPosition = Engine.position;
+    Quaternion lastRotation = Engine.rotation;
+
+    while (isEngineMoving || pathPositions.Count > 0)
     {
-        Carriage.gameObject.SetActive(true);
-        // Initial last position and rotation.
-        Vector3 lastPosition = Engine.position;
-        Quaternion lastRotation = Engine.rotation;
-
-        while (isEngineMoving || pathPositions.Count > 0)
+        if (pathPositions.Count > 0 && pathRotations.Count > 0)
         {
-            if (pathPositions.Count > 0 && pathRotations.Count > 0)
+            Vector3 targetPosition = pathPositions.Peek();
+            Quaternion targetRotation = pathRotations.Peek();
+
+            float distanceToEngine = Vector3.Distance(Carriage.position, targetPosition);
+
+            if (distanceToEngine < minDistanceToEngine)
             {
-                Vector3 targetPosition = pathPositions.Peek();
-                Quaternion targetRotation = pathRotations.Peek();
-
-                float distanceToEngine = Vector3.Distance(Carriage.position, targetPosition);
-
-                // If the carriage is within a certain distance, align it directly behind the engine.
-                if (distanceToEngine < minDistanceToEngine)
-                {
-                    Carriage.position = targetPosition;
-                    Carriage.rotation = targetRotation;
-                    lastPosition = pathPositions.Dequeue();
-                    lastRotation = pathRotations.Dequeue();
-                }
-                else
-                {
-                    Carriage.position = Vector3.MoveTowards(Carriage.position, targetPosition, movementSpeed * Time.deltaTime);
-                    Carriage.rotation = Quaternion.Slerp(Carriage.rotation, targetRotation, Time.deltaTime * rotationSpeed);
-                }
+                Carriage.position = targetPosition;
+                Carriage.rotation = targetRotation;
+                lastPosition = pathPositions.Dequeue();
+                lastRotation = pathRotations.Dequeue();
             }
             else
             {
-                // If the engine has stopped, align the carriage with the engine's final position and rotation.
-                Carriage.position = Vector3.MoveTowards(Carriage.position, lastPosition, movementSpeed * Time.deltaTime);
-                Carriage.rotation = Quaternion.Slerp(Carriage.rotation, lastRotation, Time.deltaTime * rotationSpeed);
+                Carriage.position = Vector3.MoveTowards(Carriage.position, targetPosition, movementSpeed * Time.deltaTime);
+                Carriage.rotation = Quaternion.Slerp(Carriage.rotation, targetRotation, Time.deltaTime * rotationSpeed);
             }
-
-            yield return null; // Wait for the next frame.
         }
-     
-        Carriage.gameObject.SetActive(false);
+        else
+        {
+            // If the engine has stopped
+            Carriage.position = Vector3.MoveTowards(Carriage.position, lastPosition, movementSpeed * Time.deltaTime);
+            Carriage.rotation = Quaternion.Slerp(Carriage.rotation, lastRotation, Time.deltaTime * rotationSpeed);
+        }
 
-        // Ensure the carriage stops at the exact position and rotation of the engine.
-        Carriage.position = lastPosition;
-        Carriage.rotation = lastRotation;
-
-
+        yield return null; 
     }
+
+    Carriage.gameObject.SetActive(false);
+    Carriage.position = lastPosition;
+    Carriage.rotation = lastRotation;
+}
+
 }
 
 
