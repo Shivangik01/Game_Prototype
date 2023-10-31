@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
@@ -65,5 +66,19 @@ public class UIManager : MonoBehaviour
             yield return null;
         }
         image.alpha = 0.0f;
+    }
+
+    public void LevelSelection()
+    {
+        GetComponent<Animator>().SetTrigger("levels");
+    }
+    public void MainTitle()
+    {
+        GetComponent<Animator>().SetTrigger("startup");
+    }
+
+    public void loadLevel(int level_number)
+    {
+        SceneManager.LoadScene(level_number);
     }
 }

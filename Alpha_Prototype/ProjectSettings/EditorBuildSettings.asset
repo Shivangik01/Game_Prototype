@@ -6,21 +6,24 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/PackingScene1.unity
+    path: Assets/Scenes/StarterLevels/Startup.unity
+    guid: cb6fa62ac9d433a438dd7642a698ae67
+  - enabled: 1
+    path: Assets/Scenes/Levels/T0/PackingScene1.unity
     guid: 09170163546ad47b0bb2a480a6e0c7e8
   - enabled: 1
-    path: Assets/Scenes/PathPlotting.unity
+    path: Assets/Scenes/Levels/T0/PathPlotting.unity
     guid: 385b4b4d93b686f488b08b1c01a21a0b
   - enabled: 1
-    path: Assets/Scenes/PackingScene2.unity
+    path: Assets/Scenes/Levels/T1/PackingScene2.unity
     guid: ac5dc810ba19641adbb398a131025d8b
   - enabled: 1
-    path: Assets/Scenes/PathPlotting2.unity
+    path: Assets/Scenes/Levels/T1/PathPlotting2.unity
     guid: d9d702b744bd1440e9596da1137100a4
   - enabled: 1
-    path: Assets/Scenes/PackingScene3.unity
+    path: Assets/Scenes/Levels/T2/PackingScene3.unity
     guid: 8bcbd348c48a64369b23b86f08ed0b95
   - enabled: 1
-    path: Assets/Scenes/PathPlotting3.unity
+    path: Assets/Scenes/Levels/T2/PathPlotting3.unity
     guid: d12805856c1dd7843880ce204b64c728
   m_configObjects: {}

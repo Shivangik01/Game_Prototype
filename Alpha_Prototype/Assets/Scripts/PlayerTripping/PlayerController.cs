@@ -145,7 +145,7 @@ public class PlayerController : MonoBehaviour
         Engine.position = initialPosition;
 
         // Set initial rotation for the Engine. This rotation might change based on your model's orientation.
-        Engine.rotation = Quaternion.Euler(-90, 0, 0);
+        Engine.rotation = Quaternion.Euler(-90, 0, -90);
 
         // Calculate the position just behind the engine. You might need to adjust the offset depending on the scale of your models.
          carriageOffset = 2.8f; // The distance between the engine and the carriage - This value can be adjusted.
