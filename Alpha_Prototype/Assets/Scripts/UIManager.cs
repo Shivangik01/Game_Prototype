@@ -16,9 +16,9 @@ public class UIManager : MonoBehaviour
 
     }
 
-    public void SwitchPacking()
+    public void SwitchPacking(bool state = false)
     {
-        SceneHandler.Instance.SwitchToPacking(false);
+        SceneHandler.Instance.SwitchToPacking(state);
     }
 
     public void SwitchPlotting()
@@ -67,7 +67,6 @@ public class UIManager : MonoBehaviour
         }
         image.alpha = 0.0f;
     }
-
     public void LevelSelection()
     {
         GetComponent<Animator>().SetTrigger("levels");
@@ -80,5 +79,10 @@ public class UIManager : MonoBehaviour
     public void loadLevel(int level_number)
     {
         SceneManager.LoadScene(level_number);
+    }
+
+    public void reloadLevel()
+    {
+        SceneHandler.Instance.ResetToPacking();
     }
 }

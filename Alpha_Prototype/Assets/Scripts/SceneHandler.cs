@@ -104,4 +104,14 @@ public class SceneHandler : MonoBehaviour
         else
             SceneManager.LoadScene(Packing_Level);
     }
+
+    public void ResetToPacking()
+    {
+        StackedItems.Clear();
+        StackedItemsPositions.Clear();
+        Path.Clear();
+        Delivered.Clear();
+
+        SceneManager.LoadScene(Packing_Level);
+    }
 }
