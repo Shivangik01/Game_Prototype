@@ -251,7 +251,7 @@ public class PlayerController : MonoBehaviour
 
         yield return new WaitForSeconds(3.0f);
         Engine.gameObject.SetActive(false);
-        isSimulating = false;
+        //isSimulating = false;
 
         if (PlottingManager.Instance.isConnected && deliveries_queue.Count == 0)
         {
