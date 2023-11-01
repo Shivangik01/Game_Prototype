@@ -40,10 +40,19 @@ public class PlayerController : MonoBehaviour
     public Animator LevelComplete;
 
     public List<DeliveryManager> deliveries;
+
+    public List<RobberManager> robberies;
+
     public bool isSimulating;
+
+    public Transform Robber;
+
+    public float robberyDistance = 1.0f;
+    List<DeliveryManager> deliveriesMade;
 
     private void Start()
     {
+        deliveriesMade = new List<DeliveryManager>();
         // Carriage.gameObject.SetActive(false);
         isSimulating = false;
 
@@ -57,6 +66,10 @@ public class PlayerController : MonoBehaviour
             {
                 deliveries.Add(child.gameObject.GetComponent<DeliveryManager>());
             }
+            else if (child.gameObject.CompareTag("Robber") && child.gameObject.activeSelf)
+            {
+                robberies.Add(child.gameObject.GetComponent<RobberManager>());
+            }
         }
     }
 
@@ -68,13 +81,13 @@ public class PlayerController : MonoBehaviour
 
         GetComponent<DeliverSystem>().KillCoroutines();
 
-        foreach (var e in PlottingManager.Instance.getDeliverables())
-        {
-            Animator anim = e.Key.GetComponent<DeliveryManager>().playerAnimator;
-            anim.SetBool("Happy", false);
-            anim.Rebind();
-            anim.Update(0f);
-        }
+        //foreach (var e in PlottingManager.Instance.getDeliverables())
+        //{
+        //    Animator anim = e.Key.GetComponent<DeliveryManager>().playerAnimator;
+        //    anim.SetBool("Happy", false);
+        //    anim.Rebind();
+        //    anim.Update(0f);
+        //}
 
         StopAllCoroutines();
         StartCoroutine(CameraMove(originalCamera, simulationCamera));
@@ -113,9 +126,13 @@ public class PlayerController : MonoBehaviour
     {
         GetComponent<DeliverSystem>().KillCoroutines();
 
-        foreach (var e in PlottingManager.Instance.getDeliverables())
+        foreach (var e in deliveriesMade)
         {
-            e.Key.GetComponent<DeliveryManager>().resetDelivery();
+            e.resetDelivery();
+        }
+        foreach (var e in robberies)
+        {
+            e.resetDelivery();
         }
 
         Engine.gameObject.SetActive(false);
@@ -136,6 +153,7 @@ public class PlayerController : MonoBehaviour
 
     IEnumerator TraversePath()
     {
+        deliveriesMade.Clear();
         Queue<Vector2> deliveries_queue = new Queue<Vector2>(SceneHandler.Instance.StackedItems);
         Engine.gameObject.SetActive(true);
         Carriage.gameObject.SetActive(true);
@@ -160,6 +178,8 @@ public class PlayerController : MonoBehaviour
         // Carriage.position = behindEngine;
         Carriage.rotation = Engine.rotation;
 
+        bool stolen = false;
+
         while (true)
         {
             if (index >= traversalPath.Count)
@@ -171,6 +191,7 @@ public class PlayerController : MonoBehaviour
 
             if (Vector3.Distance(Engine.position, targetPoint) < 0.1f)
             {
+                RobberManager robberTile = null;
                 DeliveryManager deliveryTile = null;
                 for(int x=-1; x<=1; x++)
                 {
@@ -206,11 +227,73 @@ public class PlayerController : MonoBehaviour
                         break;
                 }
 
-                if (deliveryTile != null)
+
+                for (int x = -1; x <= 1; x++)
                 {
+                    for (int y = -1; y <= 1; y++)
+                    {
+                        if (x == y || (x == 1 && y == -1) || (y == 1 && x == -1))
+                            continue;
+
+                        Vector2 pos = new Vector2(targetPoint.x, targetPoint.z);
+                        pos.x += x;
+                        pos.y += y;
+
+                        foreach (RobberManager d in robberies)
+                        {
+                            Vector2 d_pos = new Vector2(d.transform.position.x, d.transform.position.z);
+                            if (Vector2.Distance(d_pos, pos) <= 0.1f && deliveries_queue.Count > 0)
+                            {
+                                if (!d.delivered)
+                                {
+                                    d.deliverPersonPosition = deliveries_queue.Peek();
+                                    deliveries_queue.Dequeue();
+                                    QueueUI.Instance.PopQueue();
+                                    robberTile = d;
+                                    break;
+                                }
+                            }
+                        }
+
+                        if (robberTile != null)
+                            break;
+                    }
+
+                    if (robberTile != null)
+                        break;
+                }
+
+
+                if (robberTile != null)
+                {
+                    stolen = true;
+                    transform.GetComponent<DeliverSystem>().deliverObject(robberTile);
+                    yield return new WaitForSeconds(2.0f);
+
+                }
+                else if (deliveryTile != null)
+                {
+                    deliveriesMade.Add(deliveryTile);
                     transform.GetComponent<DeliverSystem>().deliverObject(deliveryTile);
                     yield return new WaitForSeconds(2.0f);
+                  
                 }
+                //else if (Vector3.Distance(Carriage.position, Robber.position) <= robberyDistance)
+                //{
+
+                //    if (deliveries_queue.Count > 0)
+                //    {
+                //        Vector2 stolenPackage = deliveries_queue.Dequeue();
+                //        QueueUI.Instance.PopQueue();
+
+                //        Debug.Log("Robber stole the package at position: " + stolenPackage);
+                        
+                //        transform.GetComponent<DeliverSystem>().DeliverToRobber(deliveryTile);
+
+                //        yield return new WaitForSeconds(2.0f);
+                        
+                //    }
+                //}
                 index++; // Target point reached, proceed to next point.
                 continue;
             }
@@ -253,7 +336,7 @@ public class PlayerController : MonoBehaviour
         Engine.gameObject.SetActive(false);
         //isSimulating = false;
 
-        if (PlottingManager.Instance.isConnected && deliveries_queue.Count == 0)
+        if (PlottingManager.Instance.isConnected && deliveries_queue.Count == 0 && !stolen)
         {
             //push the path data
             int a, b;

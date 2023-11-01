@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -38,9 +39,17 @@ public class DeliveryManager : MonoBehaviour
     public void resetDelivery()
     {
         playerAnimator.SetBool("Happy", false);
+        playerAnimator.SetBool("Sad", false);
         playerAnimator.Rebind();
         playerAnimator.Update(0f);
         delivered = false;
         DemandBox.SetActive(true);
+    }
+
+    public void makeSad()
+    {
+        playerAnimator.SetBool("Sad", true);
+        delivered = true;
+        DemandBox.SetActive(false);
     }
 }
