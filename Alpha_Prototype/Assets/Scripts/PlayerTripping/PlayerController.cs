@@ -122,7 +122,9 @@ public class PlayerController : MonoBehaviour
         Carriage.gameObject.SetActive(false);
         StopAllCoroutines();
 
-        StartCoroutine(CameraMove(simulationCamera, originalCamera));
+        if(isSimulating)
+            StartCoroutine(CameraMove(simulationCamera, originalCamera));
+        
         QueueUI.Instance.ResetUI();
 
         pauseButton.SetActive(false);
