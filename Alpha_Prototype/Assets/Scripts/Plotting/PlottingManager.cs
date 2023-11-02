@@ -53,6 +53,9 @@ public class PlottingManager : MonoBehaviour
     int startOffset = 0;
     int endOffset = 0;
 
+    Vector2Int startAdder;
+    Vector2Int endAdder;
+
     private void Start()
     {
         if (SceneHandler.Instance.Path.Count == 0)
@@ -76,6 +79,7 @@ public class PlottingManager : MonoBehaviour
 
             startOffset = SceneHandler.Instance.startOffset;
             endOffset = SceneHandler.Instance.endOffset;
+            isConnected = SceneHandler.Instance.PathConnected;
         }
 
         DeliveryTiles = new List<GameObject>();
@@ -174,12 +178,32 @@ public class PlottingManager : MonoBehaviour
             }
         }
 
+        startAdder = Vector2Int.zero;
+        if (StartPoint.transform.position.x == SceneHandler.Instance.Min.x)
+            startAdder.x = -1;
+        else if (StartPoint.transform.position.x == SceneHandler.Instance.Max.x)
+            startAdder.x = 1;
+        else if (StartPoint.transform.position.z == SceneHandler.Instance.Min.y)
+            startAdder.y = -1;
+        else if (StartPoint.transform.position.z == SceneHandler.Instance.Max.y)
+            startAdder.y = 1;
+
+        endAdder = Vector2Int.zero;
+        if (EndPoint.transform.position.x == SceneHandler.Instance.Min.x)
+            endAdder.x = -1;
+        else if (EndPoint.transform.position.x == SceneHandler.Instance.Max.x)
+            endAdder.x = 1;
+        else if (EndPoint.transform.position.z == SceneHandler.Instance.Min.y)
+            endAdder.y = -1;
+        else if (EndPoint.transform.position.z == SceneHandler.Instance.Max.y)
+            endAdder.y = 1;
+
         updateSprites();
 
         {
-            float x = StartPoint.transform.position.x - 1;
+            float x = StartPoint.transform.position.x + startAdder.x;
             float y = StartPoint.transform.position.y + 0.001f;
-            float z = StartPoint.transform.position.z;
+            float z = StartPoint.transform.position.z + startAdder.y;
 
             for(int i=0; i<farOffset; i++)
             {
@@ -187,15 +211,19 @@ public class PlottingManager : MonoBehaviour
                 empty.transform.parent = this.transform;
                 empty.AddComponent<SpriteRenderer>().sprite = dictionary[0].sprite;
                 empty.transform.position = new Vector3(x, y, z);
-                empty.transform.rotation = Quaternion.Euler(-90.0f, 90.0f, 0.0f);
-                x--;
+                if (startAdder.y == 0)
+                    empty.transform.rotation = Quaternion.Euler(-90.0f, 90.0f, 0.0f);
+                else
+                    empty.transform.rotation = Quaternion.Euler(-90.0f, 0.0f, 0.0f);
+                x += startAdder.x;
+                z += startAdder.y;
             }
         }
 
         {
-            float x = EndPoint.transform.position.x + 1;
+            float x = EndPoint.transform.position.x + endAdder.x;
             float y = EndPoint.transform.position.y + 0.001f;
-            float z = EndPoint.transform.position.z;
+            float z = EndPoint.transform.position.z + endAdder.y;
 
             for (int i = 0; i < farOffset; i++)
             {
@@ -203,8 +231,12 @@ public class PlottingManager : MonoBehaviour
                 empty.transform.parent = this.transform;
                 empty.AddComponent<SpriteRenderer>().sprite = dictionary[0].sprite;
                 empty.transform.position = new Vector3(x, y, z);
-                empty.transform.rotation = Quaternion.Euler(-90.0f, 90.0f, 0.0f);
-                x++;
+                if(endAdder.y == 0)
+                   empty.transform.rotation = Quaternion.Euler(-90.0f, 90.0f, 0.0f);
+                else
+                    empty.transform.rotation = Quaternion.Euler(-90.0f, 0.0f, 0.0f);
+                x += endAdder.x;
+                z += endAdder.y;
             }
         }
     }
@@ -225,9 +257,10 @@ public class PlottingManager : MonoBehaviour
     {
         Vector2 start, end;
         Vector2 prev = Path[0];
-        prev.x -= 1;
+        prev.x += startAdder.x;
+        prev.y += startAdder.y;
 
-        for(int i=0; i < startOffset; i++)
+        for (int i=0; i < startOffset; i++)
         {
             start = prev - Path[i];
             end = Path[i + 1] - Path[i];
@@ -262,7 +295,8 @@ public class PlottingManager : MonoBehaviour
         }
 
         prev = Path[Path.Count - 1];
-        prev.x += 1;
+        prev.x += endAdder.x;
+        prev.y += endAdder.y;
 
         for(int i = Path.Count-1; i > Path.Count - 1 - endOffset; i--)
         {
@@ -283,10 +317,13 @@ public class PlottingManager : MonoBehaviour
         }
 
         start = prev - Path[Path.Count - 1 - endOffset];
+        Debug.Log(start);
         if (!isConnected)
             end = start * -1;
         else
             end = Path[Path.Count - 1 - endOffset - 1] - Path[Path.Count - 1 - endOffset];
+
+        Debug.Log(end);
         foreach (var entry in dictionary)
         {
             if ((entry.start == start && entry.end == end) || (entry.start == end && entry.end == start))
@@ -531,7 +568,18 @@ public class PlottingManager : MonoBehaviour
 
         if (isConnected)
         {
-            Vector2 pos = new Vector2(EndPoint.transform.position.x+6, EndPoint.transform.position.z);
+            Vector2 pos = Vector2.zero;
+            pos.x = StartPoint.transform.position.x + startAdder.x;
+            pos.y = StartPoint.transform.position.z + startAdder.y;
+
+            list.Insert(0, pos);
+
+            pos.x += startAdder.x;
+            pos.y += startAdder.y;
+
+            list.Insert(0, pos);
+
+            pos = new Vector2(EndPoint.transform.position.x + (endAdder.x * 6), EndPoint.transform.position.z + (endAdder.y * 6));
             list.Add(pos);
         }
         return list;

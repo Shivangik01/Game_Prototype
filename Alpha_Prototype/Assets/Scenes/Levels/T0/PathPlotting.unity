@@ -489,8 +489,8 @@ MonoBehaviour:
     rotation: 0
     sprite: {fileID: 21300000, guid: 39ba4c9fa688e0e4eb41b2ff92bc253e, type: 3}
   isConnected: 0
-  StartPoint: {fileID: 438781331}
-  EndPoint: {fileID: 1670714647}
+  StartPoint: {fileID: 496289487}
+  EndPoint: {fileID: 1057698580}
   farOffset: 10
   DeliveryTilesParent: {fileID: 339113224}
   CursorIndicator: {fileID: 1552398532}
@@ -2758,12 +2758,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 424202797}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &438781331 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3034677499396220196, guid: 7cccbb5e213f00748a2bb18cad14d205,
-    type: 3}
-  m_PrefabInstance: {fileID: 496289485}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &450860830
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2983,6 +2977,12 @@ PrefabInstance:
 --- !u!4 &496289486 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7865493522919985565, guid: 7cccbb5e213f00748a2bb18cad14d205,
+    type: 3}
+  m_PrefabInstance: {fileID: 496289485}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &496289487 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3034677499396220196, guid: 7cccbb5e213f00748a2bb18cad14d205,
     type: 3}
   m_PrefabInstance: {fileID: 496289485}
   m_PrefabAsset: {fileID: 0}
@@ -7010,6 +7010,12 @@ PrefabInstance:
 --- !u!4 &1057698579 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7865493522919985565, guid: 7cccbb5e213f00748a2bb18cad14d205,
+    type: 3}
+  m_PrefabInstance: {fileID: 1057698578}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1057698580 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3034677499396220196, guid: 7cccbb5e213f00748a2bb18cad14d205,
     type: 3}
   m_PrefabInstance: {fileID: 1057698578}
   m_PrefabAsset: {fileID: 0}
@@ -11977,12 +11983,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1657577733}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1670714647 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3034677499396220196, guid: 7cccbb5e213f00748a2bb18cad14d205,
-    type: 3}
-  m_PrefabInstance: {fileID: 1057698578}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1675036300
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -15164,15 +15164,10 @@ MonoBehaviour:
   Carriage: {fileID: 3232519649187405309}
   pauseButton: {fileID: 1069152485}
   playButton: {fileID: 1838264561}
-  carriageOffset: 0.1
   originalCamera: {fileID: 633820186}
   simulationCamera: {fileID: 323004668}
-  LevelComplete: {fileID: 1628106387}
   deliveries: []
-  robberies: []
   isSimulating: 0
-  Robber: {fileID: 0}
-  robberyDistance: 1
 --- !u!114 &7553275766131887099
 MonoBehaviour:
   m_ObjectHideFlags: 0

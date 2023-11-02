@@ -19,6 +19,7 @@ public class SceneHandler : MonoBehaviour
 
     public List<Vector2> Path;
     public int startOffset, endOffset;
+    public bool PathConnected;
     public List<Vector2> Delivered;
 
     public Queue<Vector2> StackedItems;
@@ -38,6 +39,7 @@ public class SceneHandler : MonoBehaviour
             StackedItemsPositions = new Dictionary<Vector2, Vector2>();
             deletedTiles = new List<Vector2>();
             showDeletion = true;
+            PathConnected = false;
         }
         else
         {
@@ -53,6 +55,7 @@ public class SceneHandler : MonoBehaviour
                 StackedItemsPositions = new Dictionary<Vector2, Vector2>();
                 deletedTiles = new List<Vector2>();
                 showDeletion = true;
+                PathConnected = false;
             }
         }
 
@@ -102,10 +105,12 @@ public class SceneHandler : MonoBehaviour
             showDeletion = true;
             SelectRandomDeleteTiles();
             Path.Clear();
+            PathConnected = false;
         }
         else
         {
             Path = PlottingManager.Instance.getRawPath(out startOffset, out endOffset);
+            PathConnected = PlottingManager.Instance.isConnected;
             showDeletion = false;
         }
         if (Delivered.Count == DeliveryTargets.Count)
@@ -120,7 +125,8 @@ public class SceneHandler : MonoBehaviour
         StackedItemsPositions.Clear();
         Path.Clear();
         Delivered.Clear();
-
+        showDeletion = true;
+        PathConnected = false;
         SceneManager.LoadScene(Packing_Level);
     }
 
