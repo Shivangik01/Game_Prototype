@@ -98,7 +98,7 @@ GameObject:
   - component: {fileID: 3879626648418486642}
   m_Layer: 6
   m_Name: Tile_Light
-  m_TagString: Untagged
+  m_TagString: Tiles
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

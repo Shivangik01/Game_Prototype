@@ -6749,6 +6749,50 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 955471809}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &965664723
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 965664725}
+  - component: {fileID: 965664724}
+  m_Layer: 0
+  m_Name: TileLoader
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &965664724
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 965664723}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e298fbe3f0bfda347a2ef4741953b5fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &965664725
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 965664723}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &967471956
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -15004,7 +15048,10 @@ MonoBehaviour:
   simulationCamera: {fileID: 2001353845}
   LevelComplete: {fileID: 1890794893}
   deliveries: []
+  robberies: []
   isSimulating: 0
+  Robber: {fileID: 0}
+  robberyDistance: 1
 --- !u!114 &7553275766131887099
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15122,3 +15169,4 @@ SceneRoots:
   - {fileID: 1690347096}
   - {fileID: 7553275766131887097}
   - {fileID: 1683513614}
+  - {fileID: 965664725}

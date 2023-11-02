@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -23,6 +24,8 @@ public class SceneHandler : MonoBehaviour
     public Queue<Vector2> StackedItems;
     public Dictionary<Vector2, Vector2> StackedItemsPositions;
 
+    public List<Vector2> deletedTiles;
+    public bool showDeletion;
 
     public static SceneHandler Instance = null;
 
@@ -33,6 +36,8 @@ public class SceneHandler : MonoBehaviour
             Instance = this;
             StackedItems = new Queue<Vector2>();
             StackedItemsPositions = new Dictionary<Vector2, Vector2>();
+            deletedTiles = new List<Vector2>();
+            showDeletion = true;
         }
         else
         {
@@ -46,6 +51,8 @@ public class SceneHandler : MonoBehaviour
                 Instance = this;
                 StackedItems = new Queue<Vector2>();
                 StackedItemsPositions = new Dictionary<Vector2, Vector2>();
+                deletedTiles = new List<Vector2>();
+                showDeletion = true;
             }
         }
 
@@ -92,12 +99,14 @@ public class SceneHandler : MonoBehaviour
             }
             StackedItems.Clear();
             StackedItemsPositions.Clear();
-
+            showDeletion = true;
+            SelectRandomDeleteTiles();
             Path.Clear();
         }
         else
         {
             Path = PlottingManager.Instance.getRawPath(out startOffset, out endOffset);
+            showDeletion = false;
         }
         if (Delivered.Count == DeliveryTargets.Count)
             SceneManager.LoadScene(New_Level);
@@ -113,5 +122,25 @@ public class SceneHandler : MonoBehaviour
         Delivered.Clear();
 
         SceneManager.LoadScene(Packing_Level);
+    }
+
+    void SelectRandomDeleteTiles()
+    {
+        List<Vector2> path = new List<Vector2>(PlottingManager.Instance.getRawPath(out startOffset, out endOffset));
+        path.RemoveAt(0);
+        path.RemoveAt(path.Count - 1);
+        int count = Math.Max(2, (path.Count * (10/100)));
+        for (int i = 0; i < count; i++)
+        {
+            do
+            {
+                Vector2 pos = path[UnityEngine.Random.Range(0, path.Count)];
+                if (!deletedTiles.Contains(pos))
+                {
+                    deletedTiles.Add(pos);
+                    break;
+                }
+            } while (true);
+        }
     }
 }
