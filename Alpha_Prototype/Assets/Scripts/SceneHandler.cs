@@ -129,7 +129,7 @@ public class SceneHandler : MonoBehaviour
         List<Vector2> path = new List<Vector2>(PlottingManager.Instance.getRawPath(out startOffset, out endOffset));
         path.RemoveAt(0);
         path.RemoveAt(path.Count - 1);
-        int count = Math.Max(2, (path.Count * (10/100)));
+        int count = Math.Max(4, (path.Count * (70/100)));
         for (int i = 0; i < count; i++)
         {
             do
