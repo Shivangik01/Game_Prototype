@@ -8,6 +8,8 @@ public class UIManager : MonoBehaviour
 {
     public void ResetPaths()
     {
+        SceneHandler.Instance.UI_resetCounts += 1;
+
         int a, b;
         AnalyticsHandler.Instance.PostPathData(PlottingManager.Instance.getRawPath(out a, out b), SceneHandler.Instance.Packing_Level);
 

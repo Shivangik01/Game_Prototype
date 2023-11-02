@@ -37,7 +37,7 @@ public class PlayerController : MonoBehaviour
     // Reduced distance for closer follow.
     private float minDistanceToEngine = 1.0f; // This ensures the carriage remains close.
 
-    public Animator LevelComplete;
+    public LevelFinishedUI LevelComplete;
 
     public List<DeliveryManager> deliveries;
 
@@ -343,8 +343,11 @@ public class PlayerController : MonoBehaviour
             List<Vector2> rawPath = PlottingManager.Instance.getRawPath(out a, out b);
             AnalyticsHandler.Instance.PostPathData(PlottingManager.Instance.getRawPath(out a, out b), SceneHandler.Instance.Packing_Level);
 
-            if(SceneHandler.Instance.Delivered.Count + SceneHandler.Instance.StackedItems.Count == SceneHandler.Instance.DeliveryTargets.Count)
+            if (SceneHandler.Instance.Delivered.Count + SceneHandler.Instance.StackedItems.Count == SceneHandler.Instance.DeliveryTargets.Count)
+            {
                 LevelComplete.gameObject.SetActive(true);
+                LevelComplete.showData();
+            }
             else
                 SceneHandler.Instance.SwitchToPacking(true);
         }

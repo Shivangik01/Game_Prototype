@@ -30,6 +30,10 @@ public class SceneHandler : MonoBehaviour
 
     public static SceneHandler Instance = null;
 
+    //UI Info
+    public int UI_resetCounts = 0;
+    public int UI_packedItems = 0;
+    public int UI_stagesCount = 0;
     private void Awake()
     {
         if (Instance == null)
@@ -94,6 +98,8 @@ public class SceneHandler : MonoBehaviour
     {
         if (deleteQueue)
         {
+            UI_packedItems = Math.Max(UI_packedItems, StackedItems.Count);
+            UI_stagesCount += 1;
             while (StackedItems.Count > 0)
             {
                 Delivered.Add(StackedItems.Peek());
@@ -128,6 +134,10 @@ public class SceneHandler : MonoBehaviour
         showDeletion = true;
         PathConnected = false;
         SceneManager.LoadScene(Packing_Level);
+
+        UI_resetCounts = 0;
+        UI_packedItems = 0;
+        UI_stagesCount = 0;
     }
 
     void SelectRandomDeleteTiles()

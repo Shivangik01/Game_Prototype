@@ -2399,6 +2399,7 @@ GameObject:
   - component: {fileID: 325700264}
   - component: {fileID: 325700263}
   - component: {fileID: 325700262}
+  - component: {fileID: 325700266}
   m_Layer: 5
   m_Name: LevelComplete
   m_TagString: Untagged
@@ -2414,7 +2415,7 @@ Animator:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 325700261}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: bd20356d54052874f99582b5bdd7e6e2, type: 2}
   m_CullingMode: 0
@@ -2440,7 +2441,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 0.9019608}
+  m_Color: {r: 0, g: 0, b: 0, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -2485,6 +2486,22 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0.000061035156}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &325700266
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 325700261}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea62fd46e55928f4bb4a89b6e231325a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  resetText: {fileID: 1657569190}
+  stagesText: {fileID: 502849394}
+  packagesText: {fileID: 43832382}
+  animator: {fileID: 325700262}
 --- !u!1001 &329244697
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -14668,7 +14685,7 @@ RectTransform:
   m_GameObject: {fileID: 2136553748}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1, y: 0, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 461386605}
@@ -15076,7 +15093,7 @@ MonoBehaviour:
   carriageOffset: 0.1
   originalCamera: {fileID: 1855021971}
   simulationCamera: {fileID: 1855021970}
-  LevelComplete: {fileID: 325700262}
+  LevelComplete: {fileID: 325700266}
   deliveries: []
   robberies: []
   isSimulating: 0

@@ -2016,7 +2016,7 @@ RectTransform:
   m_GameObject: {fileID: 243097923}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1, y: 0, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 850230809}
@@ -13653,6 +13653,7 @@ GameObject:
   - component: {fileID: 1890794895}
   - component: {fileID: 1890794894}
   - component: {fileID: 1890794893}
+  - component: {fileID: 1890794896}
   m_Layer: 5
   m_Name: LevelComplete
   m_TagString: Untagged
@@ -13714,7 +13715,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 0.9019608}
+  m_Color: {r: 0, g: 0, b: 0, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -13739,6 +13740,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1890794891}
   m_CullTransparentMesh: 1
+--- !u!114 &1890794896
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1890794891}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea62fd46e55928f4bb4a89b6e231325a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  resetText: {fileID: 1139910054}
+  stagesText: {fileID: 1841950770}
+  packagesText: {fileID: 17280381}
+  animator: {fileID: 1890794893}
 --- !u!1001 &2000077626
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -15046,7 +15063,7 @@ MonoBehaviour:
   carriageOffset: 0.1
   originalCamera: {fileID: 2001353846}
   simulationCamera: {fileID: 2001353845}
-  LevelComplete: {fileID: 1890794893}
+  LevelComplete: {fileID: 1890794896}
   deliveries: []
   robberies: []
   isSimulating: 0
