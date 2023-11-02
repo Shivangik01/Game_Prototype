@@ -317,13 +317,11 @@ public class PlottingManager : MonoBehaviour
         }
 
         start = prev - Path[Path.Count - 1 - endOffset];
-        Debug.Log(start);
         if (!isConnected)
             end = start * -1;
         else
             end = Path[Path.Count - 1 - endOffset - 1] - Path[Path.Count - 1 - endOffset];
 
-        Debug.Log(end);
         foreach (var entry in dictionary)
         {
             if ((entry.start == start && entry.end == end) || (entry.start == end && entry.end == start))

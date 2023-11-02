@@ -9,6 +9,7 @@ public class UIStartup : MonoBehaviour
         if(SceneHandler.Instance != null)
         {
             GetComponent<Animator>().SetTrigger("force");
+            Destroy(SceneHandler.Instance.gameObject);
         }
     }
 }

@@ -15164,10 +15164,15 @@ MonoBehaviour:
   Carriage: {fileID: 3232519649187405309}
   pauseButton: {fileID: 1069152485}
   playButton: {fileID: 1838264561}
+  carriageOffset: 0.1
   originalCamera: {fileID: 633820186}
   simulationCamera: {fileID: 323004668}
+  LevelComplete: {fileID: 1628106387}
   deliveries: []
+  robberies: []
   isSimulating: 0
+  Robber: {fileID: 0}
+  robberyDistance: 1
 --- !u!114 &7553275766131887099
 MonoBehaviour:
   m_ObjectHideFlags: 0
