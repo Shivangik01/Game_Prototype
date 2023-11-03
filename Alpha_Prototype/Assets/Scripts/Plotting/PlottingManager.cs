@@ -424,7 +424,7 @@ public class PlottingManager : MonoBehaviour
     private void Update()
     {
         CursorIndicator.gameObject.SetActive(false);
-        if (PlayerController.Instance.isSimulating)
+        if (PlayerController_new.Instance.isSimulating)
             return;
 
         Ray cursor = Camera.main.ScreenPointToRay(Input.mousePosition);

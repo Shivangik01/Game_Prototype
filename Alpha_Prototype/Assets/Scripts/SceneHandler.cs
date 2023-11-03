@@ -138,13 +138,14 @@ public class SceneHandler : MonoBehaviour
         Delivered.Clear();
         showDeletion = true;
         PathConnected = false;
-        SceneManager.LoadScene(Packing_Level);
-
         UI_resetCounts = 0;
         UI_packedItems = 0;
         UI_stagesCount = 0;
 
         startLevelTime = Time.time;
+        deletedTiles.Clear();
+
+        SceneManager.LoadScene(Packing_Level);
     }
 
     void SelectRandomDeleteTiles()

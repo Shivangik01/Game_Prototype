@@ -13,7 +13,7 @@ public class UIManager : MonoBehaviour
         int a, b;
         AnalyticsHandler.Instance.PostPathData(PlottingManager.Instance.getRawPath(out a, out b), SceneHandler.Instance.Packing_Level);
 
-        PlayerController.Instance.ResetTrain();
+        PlayerController_new.Instance.ResetTrain();
         PlottingManager.Instance.ResetPaths();
 
     }

@@ -39,6 +39,13 @@ public class AnalyticsHandler : MonoBehaviour
     {
         sendingData = false;
         PathData = new Queue<Tuple<List<Vector2>, int>>();
+        Attempts = new Queue<int>();
+        CompletionTimes = new Queue<float> ();
+        Completions = new Queue<int>();
+
+        RobberInteractions = new Queue<Tuple<Vector2, int>> ();
+        Resets = new Queue<int>();
+        SceneSwitches = new Queue<int>();
     }
 
     private void Update()

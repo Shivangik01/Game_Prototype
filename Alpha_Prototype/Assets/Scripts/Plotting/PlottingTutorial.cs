@@ -35,7 +35,7 @@ public class PlottingTutorial : MonoBehaviour
         int currStart, currEnd;
 
         PlottingManager.Instance.getPathRaw(out currStart, out currEnd, out connected);
-        bool isSmulating = PlayerController.Instance.isSimulating;
+        bool isSmulating = PlayerController_new.Instance.isSimulating;
         if (connected || isSmulating)
             EndCoroutine();
 
