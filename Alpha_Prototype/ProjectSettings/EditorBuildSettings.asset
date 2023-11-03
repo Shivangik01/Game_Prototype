@@ -38,4 +38,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Levels/L2/PathPlotting_5.unity
     guid: 9ce0bab65de3f44c6ae5c2d410d63516
+  - enabled: 1
+    path: Assets/Scenes/Levels/L3/PackingScene_6.unity
+    guid: 8b2ab107530044620bb96823aae9f6bf
+  - enabled: 1
+    path: Assets/Scenes/Levels/L3/PathPlotting_6.unity
+    guid: 3c2ab41007d144168abecb7d8ae1599f
   m_configObjects: {}
