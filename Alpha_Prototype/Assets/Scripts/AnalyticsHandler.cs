@@ -103,7 +103,7 @@ public class AnalyticsHandler : MonoBehaviour
         sendingData = true;
 
         string value_string = level.ToString();
-        string json = "{ \"" + value_string + "\": [";
+        string json = "[";
         for (int i=0; i<path.Count; i++)
         {
             Vector2 item = path[i];
@@ -111,13 +111,13 @@ public class AnalyticsHandler : MonoBehaviour
             if (i + 1 < path.Count)
                 json += ",";
         }
-        json += "]}";
+        json += "]";
 
-        string firebaseUrl = $"{url}gameData/levels/{value_string}.json";
+        string firebaseUrl = $"{url}gameData/levels/{value_string}/tiles.json";
 
         using (UnityWebRequest request = UnityWebRequest.Put(firebaseUrl, json))
         {
-            request.method = "POST";
+            request.method = "PATCH";
             request.SetRequestHeader("Content-Type", "application/json");
 
             yield return request.SendWebRequest();

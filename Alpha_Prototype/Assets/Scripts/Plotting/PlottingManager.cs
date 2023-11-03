@@ -94,6 +94,10 @@ public class PlottingManager : MonoBehaviour
                 else
                 {
                     int index = SceneHandler.Instance.DeliveryTargets.IndexOf(pos);
+                    Debug.Log("Started Debugging");
+                    Debug.Log(pos);
+                    foreach(var d in SceneHandler.Instance.DeliveryTargets)
+                        Debug.Log(d);
                     child.gameObject.GetComponent<DeliveryManager>().Package = SceneHandler.Instance.DeliveryRequirements[index];
                     child.gameObject.GetComponent<DeliveryManager>().PackageSpriteRenderer.sprite = SceneHandler.Instance.DeliveryRequirements[index];
                 }
