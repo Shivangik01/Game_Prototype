@@ -8,10 +8,14 @@ public class UIManager : MonoBehaviour
 {
     public void ResetPaths()
     {
+        AnalyticsHandler.Instance.PostResetUsage(SceneHandler.Instance.Packing_Level);
+
         SceneHandler.Instance.UI_resetCounts += 1;
 
         int a, b;
-        AnalyticsHandler.Instance.PostPathData(PlottingManager.Instance.getRawPath(out a, out b), SceneHandler.Instance.Packing_Level);
+        List<Vector2> values = PlottingManager.Instance.getRawPath(out a, out b);
+        if(values.Count > 2 )
+            AnalyticsHandler.Instance.PostPathData(values, SceneHandler.Instance.Packing_Level);
 
         PlayerController_new.Instance.ResetTrain();
         PlottingManager.Instance.ResetPaths();

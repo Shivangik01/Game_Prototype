@@ -347,6 +347,8 @@ public class PlayerController : MonoBehaviour
             {
                 LevelComplete.gameObject.SetActive(true);
                 LevelComplete.showData();
+
+                AnalyticsHandler.Instance.PostCompletion(SceneHandler.Instance.Packing_Level);
             }
             else
                 SceneHandler.Instance.SwitchToPacking(true);

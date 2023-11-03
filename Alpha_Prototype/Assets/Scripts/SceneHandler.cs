@@ -48,6 +48,8 @@ public class SceneHandler : MonoBehaviour
             showDeletion = true;
             PathConnected = false;
             startLevelTime = Time.time;
+
+            Invoke("AttemptsCntr", 0.03f);
         }
         else
         {
@@ -65,10 +67,16 @@ public class SceneHandler : MonoBehaviour
                 showDeletion = true;
                 PathConnected = false;
                 startLevelTime = Time.time;
+                Invoke("AttemptsCntr", 0.03f);
             }
         }
 
         DontDestroyOnLoad(gameObject);
+    }
+
+    void AttemptsCntr()
+    {
+        AnalyticsHandler.Instance.PostAttempts(Packing_Level);
     }
 
     public void SwitchToPlotting()
@@ -117,6 +125,8 @@ public class SceneHandler : MonoBehaviour
             SelectRandomDeleteTiles();
             Path.Clear();
             PathConnected = false;
+
+            AnalyticsHandler.Instance.PostSceneUsage(Packing_Level);
         }
         else
         {
@@ -145,6 +155,9 @@ public class SceneHandler : MonoBehaviour
         startLevelTime = Time.time;
         deletedTiles.Clear();
 
+        AnalyticsHandler.Instance.PostAttempts(Packing_Level);
+
+        Invoke("AttemptsCntr", 0.03f);
         SceneManager.LoadScene(Packing_Level);
     }
 

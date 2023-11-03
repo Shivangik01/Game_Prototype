@@ -266,6 +266,7 @@ public class PlayerController_new : MonoBehaviour
                                 deliveries_queue.Dequeue();
                                 QueueUI.Instance.PopQueue();
                                 robberTile = d;
+                                AnalyticsHandler.Instance.PostRobberInteractions(d_pos, SceneHandler.Instance.Packing_Level);
                                 break;
                             }
                         }
@@ -316,6 +317,8 @@ public class PlayerController_new : MonoBehaviour
             {
                 LevelComplete.gameObject.SetActive(true);
                 LevelComplete.showData();
+
+                AnalyticsHandler.Instance.PostCompletion(SceneHandler.Instance.Packing_Level);
             }
             else
                 SceneHandler.Instance.SwitchToPacking(true);
