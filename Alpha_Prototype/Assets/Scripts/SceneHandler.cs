@@ -34,6 +34,9 @@ public class SceneHandler : MonoBehaviour
     public int UI_resetCounts = 0;
     public int UI_packedItems = 0;
     public int UI_stagesCount = 0;
+
+    public float startLevelTime;
+
     private void Awake()
     {
         if (Instance == null)
@@ -44,6 +47,7 @@ public class SceneHandler : MonoBehaviour
             deletedTiles = new List<Vector2>();
             showDeletion = true;
             PathConnected = false;
+            startLevelTime = Time.time;
         }
         else
         {
@@ -60,6 +64,7 @@ public class SceneHandler : MonoBehaviour
                 deletedTiles = new List<Vector2>();
                 showDeletion = true;
                 PathConnected = false;
+                startLevelTime = Time.time;
             }
         }
 
@@ -138,6 +143,8 @@ public class SceneHandler : MonoBehaviour
         UI_resetCounts = 0;
         UI_packedItems = 0;
         UI_stagesCount = 0;
+
+        startLevelTime = Time.time;
     }
 
     void SelectRandomDeleteTiles()

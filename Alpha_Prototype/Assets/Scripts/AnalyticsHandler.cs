@@ -26,7 +26,14 @@ public class AnalyticsHandler : MonoBehaviour
     string url = "https://woodsy-wayfinder-default-rtdb.firebaseio.com/";
 
     bool sendingData = false;
+    
     Queue<Tuple<List<Vector2>, int>> PathData;
+    Queue<int> Attempts;
+    Queue<float> CompletionTimes;
+    Queue<int> Completions;
+    Queue<Tuple<Vector2, int>> RobberInteractions;
+    Queue<int> Resets;
+    Queue<int> SceneSwitches;
 
     private void Start()
     {
@@ -36,10 +43,19 @@ public class AnalyticsHandler : MonoBehaviour
 
     private void Update()
     {
-        if (!sendingData && PathData.Count > 0)
+        if (!sendingData)
         {
-            StartCoroutine(PostPathData_coroutine(PathData.Peek().Item1, PathData.Peek().Item2));
-            PathData.Dequeue();
+            if (PathData.Count > 0)
+            {
+                StartCoroutine(PostPathData_coroutine(PathData.Peek().Item1, PathData.Peek().Item2));
+                PathData.Dequeue();
+            }
+            else if(Attempts.Count > 0)
+            {
+                StartCoroutine(PostAttemptsData_coroutine(Attempts.Peek()));
+                PathData.Dequeue();
+            }
+
         }
     }
 
@@ -49,33 +65,38 @@ public class AnalyticsHandler : MonoBehaviour
         PathData.Enqueue(Tuple.Create(newList, level));
     }
 
-    //IEnumerator PostPathData_coroutine(List<Vector2> path, int level)
-    //{
-    //    sendingData = true;
-    //    string URL = url + "levels/" + level.ToString() + ".json";
+    public void PostAttempts(int level)
+    {
+        Attempts.Enqueue(level);
+    }
 
-    //    using (UnityWebRequest response = UnityWebRequest.Get(URL))
-    //    {
-    //        yield return response.SendWebRequest();
-    //        if (response.responseCode == 200)
-    //        {
-    //            Debug.Log(response.downloadHandler.text);
-                
-    //        }
-    //    }
-    //    sendingData = false;
-    //    yield return null;
-    //}
+    public void PostCompletion(int level)
+    {
+        CompletionTimes.Enqueue(Time.time - SceneHandler.Instance.startLevelTime);
+        Completions.Enqueue(level);
+    }
+
+    public void PostRobberInteractions(Vector2 robberPos, int level)
+    {
+        RobberInteractions.Enqueue(Tuple.Create(robberPos, level));
+    }
+
+    public void ResetUsage(int level)
+    {
+        Resets.Enqueue(level);
+    }
+
+    public void SceneUsage(int level)
+    {
+        SceneSwitches.Enqueue(level);
+    }
 
     IEnumerator PostPathData_coroutine(List<Vector2> path, int level)
     {
-        // Indicate that data is being sent.
         sendingData = true;
 
-        // Convert the path data to JSON format.
-        // Here, you may need to create a wrapper class if your data structure is complex.
-        //string jsonData = JsonUtility.ToJson(path); // This might require adjustments based on your data structure.
-        string json = "{\"" + level.ToString() + "\":[";
+        string value_string = level.ToString();
+        string json = "{ \"" + value_string + "\": [";
         for (int i=0; i<path.Count; i++)
         {
             Vector2 item = path[i];
@@ -85,35 +106,51 @@ public class AnalyticsHandler : MonoBehaviour
         }
         json += "]}";
 
-        Debug.Log(json);
-        // Construct the URL for the Firebase database.
-        // Ensure this URL points to the correct location in your database (i.e., 'levels/level_x').
-        string firebaseUrl = $"{url}levels/{level}.json";
+        string firebaseUrl = $"{url}gameData/levels/{value_string}.json";
 
-        // Create a PUT request with the Firebase URL and the JSON payload.
         using (UnityWebRequest request = UnityWebRequest.Put(firebaseUrl, json))
         {
             request.method = "POST";
-            // Set the content type of the request.
             request.SetRequestHeader("Content-Type", "application/json");
 
-            // Send the request and wait for a response.
             yield return request.SendWebRequest();
 
-            // Check for errors in the request.
             if (request.result != UnityWebRequest.Result.Success)
-            {
                 Debug.LogError($"Error sending data: {request.error}");
-            }
-            else
-            {
-                // If successful, log the response.
-                Debug.Log("Data sent successfully. Response: " + request.downloadHandler.text);
-            }
         }
 
-        // Data has been sent, so we're no longer in the sending state.
         sendingData = false;
     }
 
+    IEnumerator PostAttemptsData_coroutine(int level)
+    {
+        sendingData = true;
+
+        //string value_string = level.ToString();
+        //string json = "{ \"" + value_string + "\": [";
+        //for (int i = 0; i < path.Count; i++)
+        //{
+        //    Vector2 item = path[i];
+        //    json += "\"" + item.x.ToString() + "," + item.y.ToString() + "\"";
+        //    if (i + 1 < path.Count)
+        //        json += ",";
+        //}
+        //json += "]}";
+
+        //string firebaseUrl = $"{url}gameData/levels/{value_string}.json";
+
+        //using (UnityWebRequest request = UnityWebRequest.Put(firebaseUrl, json))
+        //{
+        //    request.method = "POST";
+        //    request.SetRequestHeader("Content-Type", "application/json");
+
+        //    yield return request.SendWebRequest();
+
+        //    if (request.result != UnityWebRequest.Result.Success)
+        //        Debug.LogError($"Error sending data: {request.error}");
+        //}
+        yield return null;
+
+        sendingData = false;
+    }
 }
