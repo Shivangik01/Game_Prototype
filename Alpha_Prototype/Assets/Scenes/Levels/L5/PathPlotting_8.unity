@@ -2064,6 +2064,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tile (6)
       objectReference: {fileID: 0}
+    - target: {fileID: 2698243395533982706, guid: eba0ad6eb23346f4d80a6d34787c0d7e,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7082079354094698315, guid: eba0ad6eb23346f4d80a6d34787c0d7e,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -7338,7 +7343,7 @@ PrefabInstance:
     - target: {fileID: 107990967577542036, guid: 2c70921ed64bb284a935dc9eeaf368de,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 107990967577542036, guid: 2c70921ed64bb284a935dc9eeaf368de,
         type: 3}
@@ -7600,7 +7605,7 @@ PrefabInstance:
     - target: {fileID: 3034677499396220196, guid: 7cccbb5e213f00748a2bb18cad14d205,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7865493522919985565, guid: 7cccbb5e213f00748a2bb18cad14d205,
         type: 3}
