@@ -228,8 +228,6 @@ public class PlayerController_new : MonoBehaviour
                         {
                             if (!d.delivered)
                             {
-                                deliveries_queue.Dequeue();
-                                QueueUI.Instance.PopQueue();
                                 deliveryTile = d;
                                 break;
                             }
@@ -263,8 +261,6 @@ public class PlayerController_new : MonoBehaviour
                             if (!d.delivered)
                             {
                                 d.deliverPersonPosition = deliveries_queue.Peek();
-                                deliveries_queue.Dequeue();
-                                QueueUI.Instance.PopQueue();
                                 robberTile = d;
                                 AnalyticsHandler.Instance.PostRobberInteractions(d_pos, SceneHandler.Instance.Packing_Level);
                                 break;
@@ -283,6 +279,8 @@ public class PlayerController_new : MonoBehaviour
             if (robberTile != null)
             {
                 stolen = true;
+                deliveries_queue.Dequeue();
+                QueueUI.Instance.PopQueue();
                 transform.GetComponent<DeliverSystem>().deliverObject(robberTile);
                 yield return new WaitForSeconds(2.0f);
 
@@ -290,6 +288,8 @@ public class PlayerController_new : MonoBehaviour
             else if (deliveryTile != null)
             {
                 deliveriesMade.Add(deliveryTile);
+                deliveries_queue.Dequeue();
+                QueueUI.Instance.PopQueue();
                 transform.GetComponent<DeliverSystem>().deliverObject(deliveryTile);
                 yield return new WaitForSeconds(2.0f);
 
