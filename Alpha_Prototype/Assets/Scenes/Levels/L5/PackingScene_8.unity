@@ -1822,12 +1822,12 @@ PrefabInstance:
     - target: {fileID: 1675895796196378868, guid: 400b0c5c2672640f882563e253a8c3fb,
         type: 3}
       propertyPath: deliveryRepresentations.x
-      value: -1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1675895796196378868, guid: 400b0c5c2672640f882563e253a8c3fb,
         type: 3}
       propertyPath: deliveryRepresentations.y
-      value: -3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5948640247114810372, guid: 400b0c5c2672640f882563e253a8c3fb,
         type: 3}
@@ -8156,12 +8156,12 @@ PrefabInstance:
     - target: {fileID: 4455629144759734148, guid: 96cdf67c2cbfa419896b2c8aa3d269d2,
         type: 3}
       propertyPath: deliveryRepresentations.x
-      value: 0
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 4455629144759734148, guid: 96cdf67c2cbfa419896b2c8aa3d269d2,
         type: 3}
       propertyPath: deliveryRepresentations.y
-      value: 2
+      value: -3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
