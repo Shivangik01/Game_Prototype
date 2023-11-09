@@ -34,8 +34,7 @@ public class PlayerController : MonoBehaviour
     public Transform originalCamera;
     public Transform simulationCamera;
 
-    // Reduced distance for closer follow.
-    private float minDistanceToEngine = 1.0f; // This ensures the carriage remains close.
+    private float minDistanceToEngine = 1.0f; 
 
     public LevelFinishedUI LevelComplete;
 
@@ -72,29 +71,6 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
-
-    public void MoveAlongPath()
-    {
-        pathPositions.Clear(); // Clearing the previous path, if any.
-        pathRotations.Clear(); // Clearing the previous rotations, if any.
-        isEngineMoving = true; // Set the movement flag.
-
-        GetComponent<DeliverSystem>().KillCoroutines();
-
-        //foreach (var e in PlottingManager.Instance.getDeliverables())
-        //{
-        //    Animator anim = e.Key.GetComponent<DeliveryManager>().playerAnimator;
-        //    anim.SetBool("Happy", false);
-        //    anim.Rebind();
-        //    anim.Update(0f);
-        //}
-
-        StopAllCoroutines();
-        StartCoroutine(CameraMove(originalCamera, simulationCamera));
-        StartCoroutine(TraversePath());
-       StartCoroutine(FollowEngine());
-    }
-
     IEnumerator CameraMove(Transform A, Transform B)
     {
         Camera camera = Camera.main;
@@ -120,6 +96,28 @@ public class PlayerController : MonoBehaviour
         camera.transform.rotation = B.rotation;
 
         yield return null;
+    }
+
+        public void MoveAlongPath()
+    {
+        pathPositions.Clear(); // Clearing the previous path, if any.
+        pathRotations.Clear(); // Clearing the previous rotations, if any.
+        isEngineMoving = true; // Set the movement flag.
+
+        GetComponent<DeliverSystem>().KillCoroutines();
+
+        //foreach (var e in PlottingManager.Instance.getDeliverables())
+        //{
+        //    Animator anim = e.Key.GetComponent<DeliveryManager>().playerAnimator;
+        //    anim.SetBool("Happy", false);
+        //    anim.Rebind();
+        //    anim.Update(0f);
+        //}
+
+        StopAllCoroutines();
+        StartCoroutine(CameraMove(originalCamera, simulationCamera));
+        StartCoroutine(TraversePath());
+       StartCoroutine(FollowEngine());
     }
 
     public void ResetTrain()
