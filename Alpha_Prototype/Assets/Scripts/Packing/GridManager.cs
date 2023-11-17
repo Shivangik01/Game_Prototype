@@ -8,13 +8,12 @@ public class GridManager : MonoBehaviour
     public List<Vector2> gridPoints;
     public List<bool> occupied;
 
-    public GridLayoutGroup gridLayout;
+    public Transform gridLayout;
+    public int cellSize;
 
     public static GridManager Instance = null;
 
     public Button deliverButton;
-    
-
 
     int items = 0;
     private void Awake()
@@ -26,6 +25,7 @@ public class GridManager : MonoBehaviour
 
         items = 0;
         deliverButton.interactable = false;
+        getTiles();
     }
 
     private void Start()
@@ -54,12 +54,26 @@ public class GridManager : MonoBehaviour
             gridPoints.Add(pos);
         }
 
+        if (occupied == null)
+            occupied = new List<bool>();
+        else
+            occupied.Clear();
+
+        foreach (Transform child in gridLayout.transform)
+        {
+            if (child.childCount > 0)
+                occupied.Add(true);
+            else
+                occupied.Add(false);
+        }
+
         return gridPoints;
     }
 
     public bool inGrid(List<Vector2> positions, out Vector2 lockedPos, bool bypassOccupied = false)
     {
         getTiles();
+        Debug.Log(gridPoints);
 
         int count = 0;
         Vector2 gridPoint = Vector2.zero;
@@ -74,7 +88,7 @@ public class GridManager : MonoBehaviour
             for(int j=0; j<positions.Count; j++)
             {
                 Vector2 pos = positions[j];
-                if(Vector2.Distance(pos, gridPoints[i]) < gridLayout.cellSize.x/2)
+                if(Vector2.Distance(pos, gridPoints[i]) < cellSize / 2)
                 {
                     count += 1;
                     if (j == 0)
@@ -120,7 +134,7 @@ public class GridManager : MonoBehaviour
                 for (int j = 0; j < positions.Count; j++)
                 {
                     Vector2 pos = positions[j];
-                    if (Vector2.Distance(pos, gridPoints[i]) < gridLayout.cellSize.x / 2)
+                    if (Vector2.Distance(pos, gridPoints[i]) < cellSize / 2)
                     {
                         occupied[i] = set;
                         break;

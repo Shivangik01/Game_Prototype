@@ -26,7 +26,7 @@ public class PackageTile : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         else if (SceneHandler.Instance.StackedItemsPositions.ContainsKey(deliveryRepresentations))
         {
             transform.position = SceneHandler.Instance.StackedItemsPositions[deliveryRepresentations];
-            Invoke("Initialize", 0.03f);
+            Initialize();
         }
     }
 
@@ -41,6 +41,7 @@ public class PackageTile : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
             checkers.Add(off);
         }
 
+        Debug.Log(GridManager.Instance.gameObject.name);
         if (GridManager.Instance.inGrid(checkers, out finalPos))
         {
             GridManager.Instance.markOccupied(checkers, true);
