@@ -30,15 +30,15 @@ public class GridManager : MonoBehaviour
 
     private void Start()
     {
-        occupied = new List<bool>();
+        //occupied = new List<bool>();
 
-        foreach (Transform child in gridLayout.transform)
-        {
-            if (child.childCount > 0)
-                occupied.Add(true);
-            else
-                occupied.Add(false);
-        }
+        //foreach (Transform child in gridLayout.transform)
+        //{
+        //    if (child.childCount > 0)
+        //        occupied.Add(true);
+        //    else
+        //        occupied.Add(false);
+        //}
     }
 
 
@@ -54,17 +54,20 @@ public class GridManager : MonoBehaviour
             gridPoints.Add(pos);
         }
 
-        if (occupied == null)
-            occupied = new List<bool>();
-        else
-            occupied.Clear();
-
-        foreach (Transform child in gridLayout.transform)
+        if (occupied == null || occupied.Count == 0)
         {
-            if (child.childCount > 0)
-                occupied.Add(true);
-            else
-                occupied.Add(false);
+            occupied = new List<bool>();
+
+            //else
+            //    occupied.Clear();
+
+            foreach (Transform child in gridLayout.transform)
+            {
+                if (child.childCount > 0)
+                    occupied.Add(true);
+                else
+                    occupied.Add(false);
+            }
         }
 
         return gridPoints;
@@ -73,7 +76,6 @@ public class GridManager : MonoBehaviour
     public bool inGrid(List<Vector2> positions, out Vector2 lockedPos, bool bypassOccupied = false)
     {
         getTiles();
-        Debug.Log(gridPoints);
 
         int count = 0;
         Vector2 gridPoint = Vector2.zero;
