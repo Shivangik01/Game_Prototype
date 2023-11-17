@@ -22,6 +22,11 @@ public class UIManager : MonoBehaviour
 
     }
 
+    public void fastForwardTrain()
+    {
+        PlayerController_new.Instance.FastForwardTrain();
+    }
+
     public void SwitchPacking(bool state = false)
     {
         SceneHandler.Instance.SwitchToPacking(state);

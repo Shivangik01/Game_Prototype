@@ -17,10 +17,15 @@ public class PlayerController_new : MonoBehaviour
     }
 
     [Header("Train Attribs")]
-    public float RotationSpeed = 2f;
-    public float speed = 2f;
+    public float normal_RotationSpeed = 1.5f;
+    public float normal_speed = 2f;
+    public float fast_RotationSpeed = 3f;
+    public float fast_speed = 4f;
     public Transform Engine;
     public Transform Carriage;
+
+    float RotationSpeed;
+    float speed;
 
     Vector3 enginePos;
     Vector3 carriagePos;
@@ -49,6 +54,9 @@ public class PlayerController_new : MonoBehaviour
 
     private void Start()
     {
+        speed = normal_speed;
+        RotationSpeed = normal_RotationSpeed;
+
         enginePos = Engine.transform.position;
         engineRot = Engine.transform.rotation;
 
@@ -88,6 +96,9 @@ public class PlayerController_new : MonoBehaviour
 
     public void ResetTrain()
     {
+        speed = normal_speed;
+        RotationSpeed = normal_RotationSpeed;
+
         GetComponent<DeliverSystem>().KillCoroutines();
         StopAllCoroutines();
 
@@ -116,6 +127,12 @@ public class PlayerController_new : MonoBehaviour
         playButton.SetActive(true);
 
         isSimulating = false;
+    }
+
+    public void FastForwardTrain()
+    {
+        speed = fast_speed;
+        RotationSpeed = fast_RotationSpeed;
     }
 
     IEnumerator CameraMove(Transform A, Transform B)
