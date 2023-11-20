@@ -90,6 +90,14 @@ public class UIManager : MonoBehaviour
     public void loadLevel(int level_number)
     {
         SceneManager.LoadScene(level_number);
+        Scene currentScene = SceneManager.GetActiveScene();
+
+        // Use GameObject.Find to find a specific object by name
+        GameObject robberObject = GameObject.Find("RobberInfo");
+
+        if( robberObject){
+            Debug.Log("found robber object ");
+        }
     }
 
     public void reloadLevel()
