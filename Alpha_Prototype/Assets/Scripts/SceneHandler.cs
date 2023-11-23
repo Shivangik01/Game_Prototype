@@ -12,6 +12,7 @@ public class SceneHandler : MonoBehaviour
 
     public List<Vector2> DeliveryTargets;
     public List<Sprite> DeliveryRequirements;
+    public List<Vector2> UsedTiles;
 
     public int Packing_Level;
     public int Plotting_Level;
@@ -164,6 +165,7 @@ public class SceneHandler : MonoBehaviour
     void SelectRandomDeleteTiles()
     {
         List<Vector2> path = new List<Vector2>(PlottingManager.Instance.getRawPath(out startOffset, out endOffset));
+        UsedTiles = path;
         path.RemoveAt(0);
         path.RemoveAt(path.Count - 1);
         int count = Math.Max(4, (path.Count * (70/100)));
@@ -177,6 +179,7 @@ public class SceneHandler : MonoBehaviour
                     deletedTiles.Add(pos);
                     break;
                 }
+
             } while (true);
         }
     }

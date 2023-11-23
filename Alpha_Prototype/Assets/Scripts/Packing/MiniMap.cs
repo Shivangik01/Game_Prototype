@@ -28,6 +28,26 @@ public class MiniMap : MonoBehaviour
         }
 
         List<GameObject> tiles = GameObject.FindGameObjectsWithTag("Tiles").ToList();
+        List<Vector2> tilesToBeColoured = SceneHandler.Instance.UsedTiles;
+        Material material = Resources.Load("UsedTile", typeof(Material)) as Material;
+
+        foreach (var tbc in tilesToBeColoured)
+        {
+
+            foreach (var tile in tiles)
+            {
+                if (!tile)
+                    continue;
+                Vector2 pos = new Vector2(tile.transform.position.x, tile.transform.position.z);
+                if (pos == tbc)
+                {
+                    Debug.Log("inside if" + tbc);
+                    tile.GetComponent<Renderer>().material = material;
+
+                }
+            }
+        }
+
         foreach (GameObject tile in tiles) {
             Vector2 pos = new Vector2(tile.transform.position.x, tile.transform.position.z);
             if (SceneHandler.Instance.deletedTiles.Contains(pos))

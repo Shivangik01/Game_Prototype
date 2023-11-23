@@ -7,6 +7,8 @@ public class TileHandler : MonoBehaviour
 {
     List<GameObject> tiles;
 
+   
+
     public void Start()
     {
         tiles = GameObject.FindGameObjectsWithTag("Tiles").ToList();
@@ -17,20 +19,45 @@ public class TileHandler : MonoBehaviour
         else
         {
             List<Vector2> tilesToBeDestroyed = SceneHandler.Instance.deletedTiles;
+           
+         
             foreach (Vector2 tbd in tilesToBeDestroyed)
-            {
+            {  
                 foreach (var tile in tiles)
                 {
                     Vector2 pos = new Vector2(tile.transform.position.x, tile.transform.position.z);
                     if (pos == tbd)
                         Destroy(tile.gameObject);
                 }
+
             }
+            
         }
     }
+
     IEnumerator DestroyTiles()
     {
         List<Vector2> tilesToBeDestroyed = SceneHandler.Instance.deletedTiles;
+        List<Vector2> tilesToBeColoured = SceneHandler.Instance.UsedTiles;
+        Material material = Resources.Load("UsedTile", typeof(Material)) as Material;
+
+        foreach (var tbc in tilesToBeColoured)
+        {
+
+            foreach (var tile in tiles)
+            {
+                if (!tile)
+                    continue;
+                Vector2 pos = new Vector2(tile.transform.position.x, tile.transform.position.z);
+                if (pos == tbc)
+                {
+                    Debug.Log("inside if" + tbc);
+                    tile.GetComponent<Renderer>().material = material;
+
+                }
+            }
+        }
+
         foreach (Vector2 tbd in tilesToBeDestroyed)
         {
             foreach (var tile in tiles)
@@ -45,7 +72,29 @@ public class TileHandler : MonoBehaviour
                     yield return new WaitForSeconds(0.5f);
                 }
             }
+
         }
+       /* List<Vector2> tilesToBeColoured = SceneHandler.Instance.UsedTiles;
+        Material material = Resources.Load("UsedTile", typeof(Material)) as Material ;
+       
+        foreach (var tbc in tilesToBeColoured)
+        {
+
+            foreach (var tile in tiles)
+            {
+                if (!tile)
+                    continue;
+                Vector2 pos = new Vector2(tile.transform.position.x, tile.transform.position.z);
+                if (pos == tbc)
+                {
+                    Debug.Log("inside if" + tbc);
+                    tile.GetComponent<Renderer>().material = material;
+                    
+                }
+            }
+        }*/
+
+
     }
 
     IEnumerator DropTile(Transform tile)
