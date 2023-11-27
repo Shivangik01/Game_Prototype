@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -40,6 +41,8 @@ public class PlayerController_new : MonoBehaviour
     public GameObject pauseButton;
     public GameObject playButton;
     public LevelFinishedUI LevelComplete;
+
+    public Camera mainCamera;
 
     [Header("Simulation Cameras")]
     public Transform originalCamera;
@@ -299,8 +302,11 @@ public class PlayerController_new : MonoBehaviour
                 deliveries_queue.Dequeue();
                 QueueUI.Instance.PopQueue();
                 transform.GetComponent<DeliverSystem>().deliverObject(robberTile);
+                Color darkRed = new Color(180f / 255f, 0f / 255f, 1f / 255f);
+                Color originalColor = mainCamera.backgroundColor;
+                mainCamera.backgroundColor = darkRed;
                 yield return new WaitForSeconds(2.0f);
-
+                mainCamera.backgroundColor = originalColor;
             }
             else if (deliveryTile != null)
             {
@@ -335,6 +341,7 @@ public class PlayerController_new : MonoBehaviour
                 LevelComplete.gameObject.SetActive(true);
                 LevelComplete.showData();
 
+                removeRobberDemandBox();
                 AnalyticsHandler.Instance.PostCompletion(SceneHandler.Instance.Packing_Level);
             }
             else
@@ -347,5 +354,13 @@ public class PlayerController_new : MonoBehaviour
         }
 
         yield return null;
+    }
+
+    private void removeRobberDemandBox()
+    {
+        foreach (RobberManager d in robberies)
+        {
+            d.levelComplete();
+        }
     }
 }

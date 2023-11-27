@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class RobberManager : MonoBehaviour
 {
+    public GameObject DemandBox;
 
     public GameObject deliveryLocation;
 
@@ -34,6 +35,7 @@ public class RobberManager : MonoBehaviour
     public void makeDelivery()
     {
         playerAnimator.SetBool("Happy", true);
+        DemandBox.SetActive(false);
         delivered = true;
         foreach (var target in deliveries)
         {
@@ -50,6 +52,7 @@ public class RobberManager : MonoBehaviour
     public void resetDelivery()
     {
         playerAnimator.SetBool("Happy", false);
+        DemandBox.SetActive(true);
         playerAnimator.Rebind();
         playerAnimator.Update(0f);
         delivered = false;
@@ -64,5 +67,10 @@ public class RobberManager : MonoBehaviour
 
         }
         deliverPersonPosition = Vector2.negativeInfinity;
+    }
+
+    public void levelComplete()
+    {
+        DemandBox.SetActive(false);
     }
 }
