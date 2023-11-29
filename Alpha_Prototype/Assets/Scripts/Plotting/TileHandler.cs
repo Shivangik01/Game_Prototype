@@ -65,6 +65,23 @@ public class TileHandler : MonoBehaviour
                 if (!tile)
                     continue;
 
+                
+                Vector2 pos = new Vector2(tile.transform.position.x, tile.transform.position.z);
+                if (pos == tbd)
+                {
+                    tile.gameObject.layer = LayerMask.GetMask("Ignore Raycast");
+                }
+            }
+
+        }
+
+        foreach (Vector2 tbd in tilesToBeDestroyed)
+        {
+            foreach (var tile in tiles)
+            {
+                if (!tile)
+                    continue;
+
                 Vector2 pos = new Vector2(tile.transform.position.x, tile.transform.position.z);
                 if (pos == tbd)
                 {
