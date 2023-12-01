@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028326, g: 0.22571333, b: 0.30692202, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -6580,7 +6580,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 0}
+        - m_Target: {fileID: 1681553334}
           m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
           m_MethodName: FadeInInfo
           m_Mode: 2
@@ -6596,7 +6596,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 0}
+        - m_Target: {fileID: 1681553334}
           m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
           m_MethodName: FadeOutInfo
           m_Mode: 2
@@ -6652,7 +6652,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1681553334}
         m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
         m_MethodName: reloadLevel
         m_Mode: 1
@@ -10595,7 +10595,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 0}
+        - m_Target: {fileID: 1681553334}
           m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
           m_MethodName: FadeInInfo
           m_Mode: 2
@@ -10611,7 +10611,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 0}
+        - m_Target: {fileID: 1681553334}
           m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
           m_MethodName: FadeOutInfo
           m_Mode: 2
@@ -10667,7 +10667,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1681553334}
         m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
         m_MethodName: SwitchPacking
         m_Mode: 6
@@ -11782,7 +11782,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 0}
+        - m_Target: {fileID: 1681553334}
           m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
           m_MethodName: FadeInInfo
           m_Mode: 2
@@ -11798,7 +11798,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 0}
+        - m_Target: {fileID: 1681553334}
           m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
           m_MethodName: FadeOutInfo
           m_Mode: 2
@@ -11854,7 +11854,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1681553334}
         m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
         m_MethodName: loadLevel
         m_Mode: 3
