@@ -35,6 +35,7 @@ public class SceneHandler : MonoBehaviour
     public int UI_resetCounts = 0;
     public int UI_packedItems = 0;
     public int UI_stagesCount = 0;
+    public int UI_score = 0;
 
     public float startLevelTime;
 
@@ -49,6 +50,7 @@ public class SceneHandler : MonoBehaviour
             showDeletion = true;
             PathConnected = false;
             startLevelTime = Time.time;
+            UI_score = 0;
 
             Invoke("AttemptsCntr", 0.03f);
         }
@@ -68,6 +70,7 @@ public class SceneHandler : MonoBehaviour
                 showDeletion = true;
                 PathConnected = false;
                 startLevelTime = Time.time;
+                UI_score = 0;
                 Invoke("AttemptsCntr", 0.03f);
             }
         }
@@ -124,19 +127,23 @@ public class SceneHandler : MonoBehaviour
             StackedItemsPositions.Clear();
             showDeletion = true;
             SelectRandomDeleteTiles();
+            UI_score += PlottingManager.Instance.getRawPath(out startOffset, out endOffset).Count;
             Path.Clear();
             PathConnected = false;
-
             AnalyticsHandler.Instance.PostSceneUsage(Packing_Level);
         }
         else
         {
             Path = PlottingManager.Instance.getRawPath(out startOffset, out endOffset);
+            
             PathConnected = PlottingManager.Instance.isConnected;
             showDeletion = false;
         }
         if (Delivered.Count == DeliveryTargets.Count)
+        {
+            AnalyticsHandler.Instance.PostScore(Packing_Level, UI_score);
             SceneManager.LoadScene(New_Level);
+        }
         else
             SceneManager.LoadScene(Packing_Level);
     }

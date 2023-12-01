@@ -34,6 +34,7 @@ public class AnalyticsHandler : MonoBehaviour
     Queue<Tuple<Vector2, int>> RobberInteractions;
     Queue<int> Resets;
     Queue<int> SceneSwitches;
+    Queue<Tuple<int,int>> highScores;
 
     private void Start()
     {
@@ -46,6 +47,7 @@ public class AnalyticsHandler : MonoBehaviour
         RobberInteractions = new Queue<Tuple<Vector2, int>> ();
         Resets = new Queue<int>();
         SceneSwitches = new Queue<int>();
+        highScores = new Queue<Tuple<int, int>>();
     }
 
     private void Update()
@@ -83,6 +85,11 @@ public class AnalyticsHandler : MonoBehaviour
                 StartCoroutine(PostSceneSwitchData_coroutine(SceneSwitches.Peek()));
                 SceneSwitches.Dequeue();
             }
+            else if (highScores.Count > 0)
+            {
+                StartCoroutine(UpdateLevelScore_coroutine(highScores.Peek().Item1, highScores.Peek().Item2));
+                highScores.Dequeue();
+            }
         }
     }
 
@@ -116,6 +123,11 @@ public class AnalyticsHandler : MonoBehaviour
     public void PostSceneUsage(int level)
     {
         SceneSwitches.Enqueue(level);
+    }
+
+    public void PostScore(int level, int score)
+    {
+        highScores.Enqueue(Tuple.Create(level,score));
     }
 
     IEnumerator PostPathData_coroutine(List<Vector2> path, int level)
@@ -293,6 +305,44 @@ public class AnalyticsHandler : MonoBehaviour
                     if (sendData.result != UnityWebRequest.Result.Success)
                         Debug.LogError($"Error sending data: {sendData.error}");
                 }
+            }
+        }
+        yield return null;
+
+        sendingData = false;
+    }
+
+    IEnumerator UpdateLevelScore_coroutine(int level, int Score)
+    {
+        sendingData = true;
+
+        string value_string = level.ToString();
+        string firebaseUrl = $"{url}highscores/levels/{value_string}/";
+
+        using (UnityWebRequest request = UnityWebRequest.Get(firebaseUrl + "highScore.json"))
+        {
+            yield return request.SendWebRequest();
+            if (request.result == UnityWebRequest.Result.Success)
+            {
+                string result = request.downloadHandler.text;
+                if (result == "null")
+                    result = "400";
+                if (int.Parse(result) > Score)
+                {
+                    result = Score.ToString();
+                    result = "{ \"highScore\": " + result + "}";
+
+                    using (UnityWebRequest sendData = UnityWebRequest.Put(firebaseUrl + ".json", result))
+                    {
+                        sendData.method = "PATCH";
+                        sendData.SetRequestHeader("Content-Type", "application/json");
+
+                        yield return sendData.SendWebRequest();
+                        if (sendData.result != UnityWebRequest.Result.Success)
+                            Debug.LogError($"Error sending data: {sendData.error}");
+                    }
+                }
+                
             }
         }
         yield return null;
