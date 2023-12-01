@@ -5,6 +5,7 @@ using Unity.VisualScripting;
 using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.UIElements;
+using static UnityEngine.EventSystems.EventTrigger;
 
 [System.Serializable]
 public struct Combinations
@@ -32,7 +33,7 @@ public class PlottingManager : MonoBehaviour
     public bool isConnected = false;
     List<Vector2> Path;
     List<SpriteRenderer> TileSprites;
-
+    Dictionary<SpriteRenderer, Tuple<Sprite, float>> prevDirtData;
 
     [Header("Path Start/End")]
     public GameObject StartPoint;
@@ -59,6 +60,7 @@ public class PlottingManager : MonoBehaviour
 
     private void Start()
     {
+        prevDirtData = new Dictionary<SpriteRenderer, Tuple<Sprite, float>>();
         TileHandler.Instance.Initiate();
 
         if (SceneHandler.Instance.Path.Count == 0)
@@ -258,6 +260,7 @@ public class PlottingManager : MonoBehaviour
             endAdder.y = 1;
 
         updateSprites();
+        updateDirt();
 
         {
             float x = StartPoint.transform.position.x + startAdder.x;
@@ -390,7 +393,252 @@ public class PlottingManager : MonoBehaviour
                 break;
             }
         }
+    }
 
+    private void updateDirt()
+    {
+        SpriteRenderer dirtTile;
+        List<Vector2> tilePoints = new List<Vector2>();
+        Vector2 start, end;
+        Vector2 prev = Path[0];
+        prev.x += startAdder.x;
+        prev.y += startAdder.y;
+
+        for (int i = 0; i < startOffset; i++)
+        {
+            start = prev - Path[i];
+            end = Path[i + 1] - Path[i];
+            dirtTile = TileSprites[i].transform.parent.GetComponentsInChildren<SpriteRenderer>()[1];
+            tilePoints.Clear();
+            tilePoints.Add(start);
+            tilePoints.Add(end);
+            if (dirtTile.sprite != null)
+            {
+                if (prevDirtData.ContainsKey(dirtTile))
+                {
+                    dirtTile.sprite = prevDirtData[dirtTile].Item1;
+                    dirtTile.transform.rotation = Quaternion.Euler(90.0f, prevDirtData[dirtTile].Item2, 0);
+                }
+                foreach (var entry in TileHandler.Instance.dictionary)
+                {
+                    if (entry.sprite == dirtTile.sprite)
+                    {
+                        if (entry.rotation == dirtTile.transform.rotation.eulerAngles.y)
+                        {
+                            if (!prevDirtData.ContainsKey(dirtTile))
+                                prevDirtData.Add(dirtTile, Tuple.Create(dirtTile.sprite, entry.rotation));
+
+                            foreach (var p in entry.points)
+                            {
+                                if (!tilePoints.Contains(p))
+                                    tilePoints.Add(p);
+                            }
+
+                            break;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                if (!prevDirtData.ContainsKey(dirtTile))
+                    prevDirtData.Add(dirtTile, Tuple.Create<Sprite, float>(null, 0.0f));
+            }
+            foreach (var entry in TileHandler.Instance.dictionary)
+            {
+                int pointCount = 0;
+                foreach (var p in entry.points)
+                    if (tilePoints.Contains(p))
+                        pointCount++;
+
+                if (pointCount == entry.points.Count && tilePoints.Count == entry.points.Count)
+                {
+                    dirtTile.sprite = entry.sprite;
+                    dirtTile.transform.rotation = Quaternion.Euler(90.0f, entry.rotation, 0);
+                    break;
+                }
+            }
+
+            prev = Path[i];
+        }
+
+        start = prev - Path[startOffset];
+
+        if (!isConnected)
+            end = start * -1;
+        else
+            end = Path[startOffset + 1] - Path[startOffset];
+
+        dirtTile = TileSprites[startOffset].transform.parent.GetComponentsInChildren<SpriteRenderer>()[1];
+        tilePoints.Clear();
+        tilePoints.Add(start);
+        tilePoints.Add(end);
+        if (dirtTile.sprite != null)
+        {
+            if (prevDirtData.ContainsKey(dirtTile))
+            {
+                dirtTile.sprite = prevDirtData[dirtTile].Item1;
+                dirtTile.transform.rotation = Quaternion.Euler(90.0f, prevDirtData[dirtTile].Item2, 0);
+            }
+            foreach (var entry in TileHandler.Instance.dictionary)
+            {
+                if (entry.sprite == dirtTile.sprite)
+                {
+                    if (entry.rotation == dirtTile.transform.rotation.eulerAngles.y)
+                    {
+                        if (!prevDirtData.ContainsKey(dirtTile))
+                            prevDirtData.Add(dirtTile, Tuple.Create(dirtTile.sprite, entry.rotation));
+
+                        foreach (var p in entry.points)
+                        {
+                            if (!tilePoints.Contains(p))
+                                tilePoints.Add(p);
+                        }
+
+                        break;
+                    }
+                }
+            }
+        }
+        else
+        {
+            if (!prevDirtData.ContainsKey(dirtTile))
+                prevDirtData.Add(dirtTile, Tuple.Create<Sprite, float>(null, 0.0f));
+        }
+        foreach (var entry in TileHandler.Instance.dictionary)
+        {
+            int pointCount = 0;
+            foreach (var p in entry.points)
+                if (tilePoints.Contains(p))
+                    pointCount++;
+
+            if (pointCount == entry.points.Count && tilePoints.Count == entry.points.Count)
+            {
+                dirtTile.sprite = entry.sprite;
+                dirtTile.transform.rotation = Quaternion.Euler(90.0f, entry.rotation, 0);
+                break;
+            }
+        }
+
+        prev = Path[Path.Count - 1];
+        prev.x += endAdder.x;
+        prev.y += endAdder.y;
+
+        for (int i = Path.Count - 1; i > Path.Count - 1 - endOffset; i--)
+        {
+            start = prev - Path[i];
+            end = Path[i - 1] - Path[i];
+
+            dirtTile = TileSprites[i].transform.parent.GetComponentsInChildren<SpriteRenderer>()[1];
+            tilePoints.Clear();
+            tilePoints.Add(start);
+            tilePoints.Add(end);
+            if (dirtTile.sprite != null)
+            {
+                if (prevDirtData.ContainsKey(dirtTile))
+                {
+                    dirtTile.sprite = prevDirtData[dirtTile].Item1;
+                    dirtTile.transform.rotation = Quaternion.Euler(90.0f, prevDirtData[dirtTile].Item2, 0);
+                }
+                foreach (var entry in TileHandler.Instance.dictionary)
+                {
+                    if (entry.sprite == dirtTile.sprite)
+                    {
+                        if (entry.rotation == dirtTile.transform.rotation.eulerAngles.y)
+                        {
+                            if (!prevDirtData.ContainsKey(dirtTile))
+                                prevDirtData.Add(dirtTile, Tuple.Create(dirtTile.sprite, entry.rotation));
+
+                            foreach (var p in entry.points)
+                            {
+                                if (!tilePoints.Contains(p))
+                                    tilePoints.Add(p);
+                            }
+
+                            break;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                if (!prevDirtData.ContainsKey(dirtTile))
+                    prevDirtData.Add(dirtTile, Tuple.Create<Sprite, float>(null, 0.0f));
+            }
+            foreach (var entry in TileHandler.Instance.dictionary)
+            {
+                int pointCount = 0;
+                foreach (var p in entry.points)
+                    if (tilePoints.Contains(p))
+                        pointCount++;
+
+                if (pointCount == entry.points.Count && tilePoints.Count == entry.points.Count)
+                {
+                    dirtTile.sprite = entry.sprite;
+                    dirtTile.transform.rotation = Quaternion.Euler(90.0f, entry.rotation, 0);
+                    break;
+                }
+            }
+
+            prev = Path[i];
+        }
+
+        start = prev - Path[Path.Count - 1 - endOffset];
+        if (!isConnected)
+            end = start * -1;
+        else
+            end = Path[Path.Count - 1 - endOffset - 1] - Path[Path.Count - 1 - endOffset];
+
+        dirtTile = TileSprites[Path.Count - 1 - endOffset].transform.parent.GetComponentsInChildren<SpriteRenderer>()[1];
+        tilePoints.Clear();
+        tilePoints.Add(start);
+        tilePoints.Add(end);
+        if (dirtTile.sprite != null)
+        {
+            if (prevDirtData.ContainsKey(dirtTile))
+            {
+                dirtTile.sprite = prevDirtData[dirtTile].Item1;
+                dirtTile.transform.rotation = Quaternion.Euler(90.0f, prevDirtData[dirtTile].Item2, 0);
+            }
+            foreach (var entry in TileHandler.Instance.dictionary)
+            {
+                if (entry.sprite == dirtTile.sprite)
+                {
+                    if (entry.rotation == dirtTile.transform.rotation.eulerAngles.y)
+                    {
+                        if (!prevDirtData.ContainsKey(dirtTile))
+                            prevDirtData.Add(dirtTile, Tuple.Create(dirtTile.sprite, entry.rotation));
+
+                        foreach (var p in entry.points)
+                        {
+                            if (!tilePoints.Contains(p))
+                                tilePoints.Add(p);
+                        }
+
+                        break;
+                    }
+                }
+            }
+        }
+        else
+        {
+            if (!prevDirtData.ContainsKey(dirtTile))
+                prevDirtData.Add(dirtTile, Tuple.Create<Sprite, float>(null, 0.0f));
+        }
+        foreach (var entry in TileHandler.Instance.dictionary)
+        {
+            int pointCount = 0;
+            foreach (var p in entry.points)
+                if (tilePoints.Contains(p))
+                    pointCount++;
+
+            if (pointCount == entry.points.Count && tilePoints.Count == entry.points.Count)
+            {
+                dirtTile.sprite = entry.sprite;
+                dirtTile.transform.rotation = Quaternion.Euler(90.0f, entry.rotation, 0);
+                break;
+            }
+        }
     }
 
     private void AddPoint(int index, Vector2 position, SpriteRenderer renderer)
@@ -531,6 +779,17 @@ public class PlottingManager : MonoBehaviour
 
         Path.RemoveAt(index);
         TileSprites[index].sprite = null;
+        if (prevDirtData.ContainsKey(TileSprites[index].transform.parent.GetComponentsInChildren<SpriteRenderer>()[1]))
+        {
+            SpriteRenderer dirt = TileSprites[index].transform.parent.GetComponentsInChildren<SpriteRenderer>()[1];
+            dirt.sprite = prevDirtData[dirt].Item1;
+            dirt.transform.rotation = Quaternion.Euler(90.0f, prevDirtData[dirt].Item2, 0);
+        }
+        else
+        {
+            SpriteRenderer dirt = TileSprites[index].transform.parent.GetComponentsInChildren<SpriteRenderer>()[1];
+            dirt.sprite = null;
+        }
         TileSprites.RemoveAt(index);
     }
 
@@ -582,6 +841,7 @@ public class PlottingManager : MonoBehaviour
                         RemovePoint(startOffset);
                         startOffset--;
                         updateSprites();
+                        updateDirt();
                     }
                     else if((Path.Count - 1 -(endOffset-1)) < Path.Count && Path[(Path.Count - 1 - (endOffset - 1))] == tile_position)
                     {
@@ -589,6 +849,7 @@ public class PlottingManager : MonoBehaviour
                         RemovePoint(index);
                         endOffset--;
                         updateSprites();
+                        updateDirt();
                     }
                     // maybe invalid
                     else
@@ -614,6 +875,7 @@ public class PlottingManager : MonoBehaviour
                         isConnected = true;
 
                     updateSprites();
+                    updateDirt();
                 }
             }
         }
@@ -629,6 +891,17 @@ public class PlottingManager : MonoBehaviour
     {
         foreach(SpriteRenderer sr in TileSprites)
         {
+            if (prevDirtData.ContainsKey(sr.transform.parent.GetComponentsInChildren<SpriteRenderer>()[1]))
+            {
+                SpriteRenderer dirt = sr.transform.parent.GetComponentsInChildren<SpriteRenderer>()[1];
+                dirt.sprite = prevDirtData[dirt].Item1;
+                dirt.transform.rotation = Quaternion.Euler(90.0f, prevDirtData[dirt].Item2, 0);
+            }
+            else
+            {
+                SpriteRenderer dirt = sr.transform.parent.GetComponentsInChildren<SpriteRenderer>()[1];
+                dirt.sprite = null;
+            }
             sr.sprite = null;
         }
 
@@ -637,6 +910,7 @@ public class PlottingManager : MonoBehaviour
         Path.Add(new Vector2(EndPoint.transform.position.x, EndPoint.transform.position.z));
 
         TileSprites.Clear();
+        prevDirtData.Clear();
         TileSprites.Add(StartPoint.GetComponentsInChildren<SpriteRenderer>()[0]);
         TileSprites.Add(EndPoint.GetComponentsInChildren<SpriteRenderer>()[0]);
 
@@ -652,6 +926,7 @@ public class PlottingManager : MonoBehaviour
         Deliverables.Clear();
 
         updateSprites();
+        updateDirt();
     }
 
     public void getPathRaw(out int startIndex, out int endIndex, out bool connected)

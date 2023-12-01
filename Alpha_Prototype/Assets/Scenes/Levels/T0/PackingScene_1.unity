@@ -5415,6 +5415,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tile (0)
       objectReference: {fileID: 0}
+    - target: {fileID: 3194558203998591659, guid: 7cccbb5e213f00748a2bb18cad14d205,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3194558203998591659, guid: 7cccbb5e213f00748a2bb18cad14d205,
+        type: 3}
+      propertyPath: m_Color.a
+      value: 0.5019608
+      objectReference: {fileID: 0}
+    - target: {fileID: 3194558203998591659, guid: 7cccbb5e213f00748a2bb18cad14d205,
+        type: 3}
+      propertyPath: m_WasSpriteAssigned
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7865493522919985565, guid: 7cccbb5e213f00748a2bb18cad14d205,
         type: 3}
       propertyPath: m_LocalPosition.x
