@@ -256,6 +256,7 @@ public class TileHandler : MonoBehaviour
 
     IEnumerator DropTile(Transform tile)
     {
+        audioManager.instance.playPop();
         tile.gameObject.layer = LayerMask.GetMask("Ignore Raycast");
         Vector3 Gotoposition = new Vector3(tile.position.x, tile.position.y - 10.0f, tile.position.z);
         float elapsedTime = 0;

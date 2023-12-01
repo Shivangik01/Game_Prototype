@@ -52,6 +52,7 @@ MonoBehaviour:
   Ambient: {fileID: 51071202948627277}
   buttonClip: {fileID: 8300000, guid: 54286e1b2a7fa404596c5166325a4481, type: 3}
   digClip: {fileID: 8300000, guid: 6b403229652b3ba47aab85f60bf45096, type: 3}
+  popClip: {fileID: 8300000, guid: dc96ebd3ccd44f2478ea227232d68b89, type: 3}
   dragClip: {fileID: 8300000, guid: 24c8291463f703343b939f6c983d0d39, type: 3}
   happyClip: {fileID: 8300000, guid: 8580d71005d2fe0428872881c8f198af, type: 3}
   sadClip: {fileID: 8300000, guid: f583cd2e219d7a44199e5566ac2b4b2f, type: 3}

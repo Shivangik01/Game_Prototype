@@ -21,6 +21,7 @@ public class audioManager : MonoBehaviour
 
     public AudioClip buttonClip;
     public AudioClip digClip;
+    public AudioClip popClip;
     public AudioClip dragClip;
     public AudioClip happyClip;
     public AudioClip sadClip;
@@ -33,6 +34,11 @@ public class audioManager : MonoBehaviour
     public void playDig()
     {
         SFX.PlayOneShot(digClip);
+    }
+
+    public void playPop()
+    {
+        SFX.PlayOneShot(popClip);
     }
 
     public void playDrag()

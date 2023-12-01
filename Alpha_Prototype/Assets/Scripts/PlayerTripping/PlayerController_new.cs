@@ -339,6 +339,8 @@ public class PlayerController_new : MonoBehaviour
 
         if (PlottingManager.Instance.isConnected && deliveries_queue.Count == 0 && !stolen)
         {
+            audioManager.instance.stopTrain();
+
             int a, b;
             List<Vector2> rawPath = PlottingManager.Instance.getRawPath(out a, out b);
             AnalyticsHandler.Instance.PostPathData(PlottingManager.Instance.getRawPath(out a, out b), SceneHandler.Instance.Packing_Level);
