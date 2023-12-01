@@ -3342,7 +3342,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 0}
+        - m_Target: {fileID: 1681553334}
           m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
           m_MethodName: FadeInInfo
           m_Mode: 2
@@ -3358,7 +3358,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 0}
+        - m_Target: {fileID: 1681553334}
           m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
           m_MethodName: FadeOutInfo
           m_Mode: 2
@@ -3414,7 +3414,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1681553334}
         m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
         m_MethodName: SwitchPacking
         m_Mode: 6
@@ -8197,7 +8197,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 0}
+        - m_Target: {fileID: 1681553334}
           m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
           m_MethodName: FadeInInfo
           m_Mode: 2
@@ -8213,7 +8213,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 0}
+        - m_Target: {fileID: 1681553334}
           m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
           m_MethodName: FadeOutInfo
           m_Mode: 2
@@ -8269,7 +8269,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1681553334}
         m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
         m_MethodName: loadLevel
         m_Mode: 3
@@ -8577,7 +8577,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 0}
+        - m_Target: {fileID: 1681553334}
           m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
           m_MethodName: FadeInInfo
           m_Mode: 2
@@ -8593,7 +8593,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 0}
+        - m_Target: {fileID: 1681553334}
           m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
           m_MethodName: FadeOutInfo
           m_Mode: 2
@@ -8649,7 +8649,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1681553334}
         m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
         m_MethodName: reloadLevel
         m_Mode: 1
