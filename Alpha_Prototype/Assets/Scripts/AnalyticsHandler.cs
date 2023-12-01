@@ -325,9 +325,7 @@ public class AnalyticsHandler : MonoBehaviour
             if (request.result == UnityWebRequest.Result.Success)
             {
                 string result = request.downloadHandler.text;
-                if (result == "null")
-                    result = "400";
-                if (int.Parse(result) > Score)
+                if (result == "null" || int.Parse(result) > Score)
                 {
                     result = Score.ToString();
                     result = "{ \"highScore\": " + result + "}";
@@ -342,12 +340,37 @@ public class AnalyticsHandler : MonoBehaviour
                             Debug.LogError($"Error sending data: {sendData.error}");
                     }
                 }
-                
             }
         }
         yield return null;
 
         sendingData = false;
+    }
+
+
+    public int levelHighScore = int.MaxValue;
+    public IEnumerator GetLevelScore_coroutine(int level)
+    {
+        string value_string = level.ToString();
+        string firebaseUrl = $"{url}highscores/levels/{value_string}/";
+
+        using (UnityWebRequest request = UnityWebRequest.Get(firebaseUrl + "highScore.json"))
+        {
+            yield return request.SendWebRequest();
+            if (request.result == UnityWebRequest.Result.Success)
+            {
+                string result = request.downloadHandler.text;
+                if (result == "null")
+                {
+                    levelHighScore = int.MaxValue;
+                }
+                else
+                {
+                    levelHighScore = int.Parse(result);
+                }
+            }
+        }
+        yield return null;
     }
 
 }
