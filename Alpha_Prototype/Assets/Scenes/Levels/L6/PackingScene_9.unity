@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028326, g: 0.22571333, b: 0.30692202, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1018,7 +1018,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: Thief_Tile (2)
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 4464497062535810693, guid: 2c70921ed64bb284a935dc9eeaf368de, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 107990967577542036, guid: 2c70921ed64bb284a935dc9eeaf368de,
@@ -13577,7 +13578,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: Thief_Tile (1)
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 4464497062535810693, guid: 2c70921ed64bb284a935dc9eeaf368de, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 107990967577542036, guid: 2c70921ed64bb284a935dc9eeaf368de,
@@ -13794,7 +13796,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: Thief_Tile
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 4464497062535810693, guid: 2c70921ed64bb284a935dc9eeaf368de, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 107990967577542036, guid: 2c70921ed64bb284a935dc9eeaf368de,
