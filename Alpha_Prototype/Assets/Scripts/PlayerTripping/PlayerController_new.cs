@@ -57,6 +57,7 @@ public class PlayerController_new : MonoBehaviour
 
     private void Start()
     {
+        mainCamera = Camera.main;
         speed = normal_speed;
         RotationSpeed = normal_RotationSpeed;
 
