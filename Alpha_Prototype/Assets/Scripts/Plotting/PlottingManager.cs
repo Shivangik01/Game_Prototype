@@ -59,6 +59,8 @@ public class PlottingManager : MonoBehaviour
 
     private void Start()
     {
+        TileHandler.Instance.Initiate();
+
         if (SceneHandler.Instance.Path.Count == 0)
         {
             Path = new List<Vector2>
@@ -69,8 +71,8 @@ public class PlottingManager : MonoBehaviour
 
             TileSprites = new List<SpriteRenderer>
             {
-                StartPoint.GetComponentInChildren<SpriteRenderer>(),
-                EndPoint.GetComponentInChildren<SpriteRenderer>()
+                StartPoint.GetComponentsInChildren<SpriteRenderer>()[0],
+                EndPoint.GetComponentsInChildren<SpriteRenderer>()[0]
             };
         }
         else
@@ -230,7 +232,7 @@ public class PlottingManager : MonoBehaviour
                 if (Path.Contains(pos))
                 {
                     int index = Path.IndexOf(pos);
-                    TileSprites[index] = child.GetComponentInChildren<SpriteRenderer>();
+                    TileSprites[index] = child.GetComponentsInChildren<SpriteRenderer>()[0];
                 }
             }
         }
@@ -598,13 +600,13 @@ public class PlottingManager : MonoBehaviour
                 {
                     if(start_neighbours.Contains(tile_position))
                     {
-                        AddPoint(startOffset + 1, tile_position, tile.GetComponentInChildren<SpriteRenderer>());
+                        AddPoint(startOffset + 1, tile_position, tile.GetComponentsInChildren<SpriteRenderer>()[0]);
                         startOffset++;
                     }
                     else
                     {
                         int index = Path.Count - 1 - (endOffset);
-                        AddPoint(index, tile_position, tile.GetComponentInChildren<SpriteRenderer>());                        
+                        AddPoint(index, tile_position, tile.GetComponentsInChildren<SpriteRenderer>()[0]);                        
                         endOffset++;
                     }
 
@@ -635,8 +637,8 @@ public class PlottingManager : MonoBehaviour
         Path.Add(new Vector2(EndPoint.transform.position.x, EndPoint.transform.position.z));
 
         TileSprites.Clear();
-        TileSprites.Add(StartPoint.GetComponentInChildren<SpriteRenderer>());
-        TileSprites.Add(EndPoint.GetComponentInChildren<SpriteRenderer>());
+        TileSprites.Add(StartPoint.GetComponentsInChildren<SpriteRenderer>()[0]);
+        TileSprites.Add(EndPoint.GetComponentsInChildren<SpriteRenderer>()[0]);
 
         startOffset = 0;
         endOffset = 0;

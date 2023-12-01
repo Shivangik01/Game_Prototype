@@ -12,7 +12,7 @@ public class SceneHandler : MonoBehaviour
 
     public List<Vector2> DeliveryTargets;
     public List<Sprite> DeliveryRequirements;
-    public List<Vector2> UsedTiles;
+    public List<List<Vector2>> UsedTiles;
 
     public int Packing_Level;
     public int Plotting_Level;
@@ -52,6 +52,7 @@ public class SceneHandler : MonoBehaviour
             showDeletion = true;
             PathConnected = false;
             startLevelTime = Time.time;
+            UsedTiles = new List<List<Vector2>>();
             UI_score = 0;
 
             Invoke("AttemptsCntr", 0.03f);
@@ -73,6 +74,7 @@ public class SceneHandler : MonoBehaviour
                 showDeletion = true;
                 PathConnected = false;
                 startLevelTime = Time.time;
+                UsedTiles = new List<List<Vector2>>();
                 UI_score = 0;
                 Invoke("AttemptsCntr", 0.03f);
             }
@@ -164,16 +166,16 @@ public class SceneHandler : MonoBehaviour
         StackedItemsPositions.Clear();
         Path.Clear();
         Delivered.Clear();
+        UsedTiles.Clear();
         showDeletion = true;
         PathConnected = false;
         UI_resetCounts = 0;
         UI_packedItems = 0;
         UI_stagesCount = 0;
-
         startLevelTime = Time.time;
-        deletedTiles.Clear();
+        UI_score = 0;
 
-        AnalyticsHandler.Instance.PostAttempts(Packing_Level);
+        deletedTiles.Clear();
 
         Invoke("AttemptsCntr", 0.03f);
         SceneManager.LoadScene(Packing_Level);
@@ -182,7 +184,7 @@ public class SceneHandler : MonoBehaviour
     void SelectRandomDeleteTiles()
     {
         List<Vector2> path = new List<Vector2>(PlottingManager.Instance.getRawPath(out startOffset, out endOffset));
-        UsedTiles = path;
+        UsedTiles.Add(new List<Vector2>(path));
         path.RemoveAt(0);
         path.RemoveAt(path.Count - 1);
         int count = Math.Max(4, (path.Count * (70/100)));

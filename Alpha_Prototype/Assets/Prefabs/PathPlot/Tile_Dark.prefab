@@ -8,6 +8,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 772221410704938940, guid: eba0ad6eb23346f4d80a6d34787c0d7e,
+        type: 3}
+      propertyPath: m_Name
+      value: Sprite_Road
+      objectReference: {fileID: 0}
+    - target: {fileID: 2538368600681247869, guid: eba0ad6eb23346f4d80a6d34787c0d7e,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2538368600681247869, guid: eba0ad6eb23346f4d80a6d34787c0d7e,
+        type: 3}
+      propertyPath: m_Color.a
+      value: 0.5019608
+      objectReference: {fileID: 0}
+    - target: {fileID: 2538368600681247869, guid: eba0ad6eb23346f4d80a6d34787c0d7e,
+        type: 3}
+      propertyPath: m_WasSpriteAssigned
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2698243395533982706, guid: eba0ad6eb23346f4d80a6d34787c0d7e,
         type: 3}
       propertyPath: m_Name

@@ -1,15 +1,39 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
+using Unity.VisualScripting;
 using UnityEngine;
+
+[System.Serializable]
+public struct arrangement
+{
+    public List<Vector2> points;
+    public float rotation;
+    public Sprite sprite;
+};
 
 public class TileHandler : MonoBehaviour
 {
+    public static TileHandler Instance;
+
+    private void Awake()
+    {
+        Instance = this;
+    }
+
     List<GameObject> tiles;
-    public void Start()
+    public List<arrangement> dictionary;
+
+    Vector2Int startAdder;
+    Vector2Int endAdder;
+
+    public void Initiate()
     {
         tiles = GameObject.FindGameObjectsWithTag("Tiles").ToList();
 
+        ColorDirtTiles(tiles);
 
         if (SceneHandler.Instance.showDeletion)
         {
@@ -18,8 +42,6 @@ public class TileHandler : MonoBehaviour
         else
         {
             List<Vector2> tilesToBeDestroyed = SceneHandler.Instance.deletedTiles;
-           
-         
             foreach (Vector2 tbd in tilesToBeDestroyed)
             {  
                 foreach (var tile in tiles)
@@ -34,28 +56,168 @@ public class TileHandler : MonoBehaviour
         }
     }
 
-    IEnumerator DestroyTiles()
+    public void ColorDirtTiles(List<GameObject> Tiles)
     {
-        List<Vector2> tilesToBeDestroyed = SceneHandler.Instance.deletedTiles;
-        List<Vector2> tilesToBeColoured = SceneHandler.Instance.UsedTiles;
-        Material material = Resources.Load("UsedTile", typeof(Material)) as Material;
-
-        foreach (var tbc in tilesToBeColoured)
+        startAdder = Vector2Int.zero;
+        if (PlottingManager.Instance)
         {
+            if (PlottingManager.Instance.StartPoint.transform.position.x == SceneHandler.Instance.Min.x)
+                startAdder.x = -1;
+            else if (PlottingManager.Instance.StartPoint.transform.position.x == SceneHandler.Instance.Max.x)
+                startAdder.x = 1;
+            else if (PlottingManager.Instance.StartPoint.transform.position.z == SceneHandler.Instance.Min.y)
+                startAdder.y = -1;
+            else if (PlottingManager.Instance.StartPoint.transform.position.z == SceneHandler.Instance.Max.y)
+                startAdder.y = 1;
+        }
+        else
+        {
+            if (FindObjectOfType<MiniMap>().StartPoint.transform.position.x == SceneHandler.Instance.Min.x)
+                startAdder.x = -1;
+            else if (FindObjectOfType<MiniMap>().StartPoint.transform.position.x == SceneHandler.Instance.Max.x)
+                startAdder.x = 1;
+            else if (FindObjectOfType<MiniMap>().StartPoint.transform.position.z == SceneHandler.Instance.Min.y)
+                startAdder.y = -1;
+            else if (FindObjectOfType<MiniMap>().StartPoint.transform.position.z == SceneHandler.Instance.Max.y)
+                startAdder.y = 1;
+        }
 
-            foreach (var tile in tiles)
+        endAdder = Vector2Int.zero;
+        if (PlottingManager.Instance)
+        {
+            if (PlottingManager.Instance.EndPoint.transform.position.x == SceneHandler.Instance.Min.x)
+                endAdder.x = -1;
+            else if (PlottingManager.Instance.EndPoint.transform.position.x == SceneHandler.Instance.Max.x)
+                endAdder.x = 1;
+            else if (PlottingManager.Instance.EndPoint.transform.position.z == SceneHandler.Instance.Min.y)
+                endAdder.y = -1;
+            else if (PlottingManager.Instance.EndPoint.transform.position.z == SceneHandler.Instance.Max.y)
+                endAdder.y = 1;
+        }
+        else
+        {
+            if (FindObjectOfType<MiniMap>().EndPoint.transform.position.x == SceneHandler.Instance.Min.x)
+                endAdder.x = -1;
+            else if (FindObjectOfType<MiniMap>().EndPoint.transform.position.x == SceneHandler.Instance.Max.x)
+                endAdder.x = 1;
+            else if (FindObjectOfType<MiniMap>().EndPoint.transform.position.z == SceneHandler.Instance.Min.y)
+                endAdder.y = -1;
+            else if (FindObjectOfType<MiniMap>().EndPoint.transform.position.z == SceneHandler.Instance.Max.y)
+                endAdder.y = 1;
+        }
+        List<List<Vector2>> pathsToBeColoured = SceneHandler.Instance.UsedTiles;
+
+        foreach (var path in pathsToBeColoured)
+        {
+            Vector2 start, end;
+            Vector2 prev = path[0];
+            prev.x += startAdder.x;
+            prev.y += startAdder.y;
+
+            for (int i=0; i< path.Count-1; i++)
+            {
+                start = prev - path[i];
+                end = path[i + 1] - path[i];
+
+                foreach (var tile in Tiles)
+                {
+                    if (!tile)
+                        continue;
+                    Vector2 pos = new Vector2(tile.transform.position.x, tile.transform.position.z);
+                    if (pos == path[i])
+                    {
+                        List<Vector2> tilePoints = new List<Vector2>{ start, end };
+                        if(tile.GetComponentsInChildren<SpriteRenderer>()[1].sprite)
+                        {
+                            foreach (var entry in dictionary)
+                            {
+                                if(entry.sprite == tile.GetComponentsInChildren<SpriteRenderer>()[1].sprite)
+                                {
+                                    if(entry.rotation == tile.GetComponentsInChildren<SpriteRenderer>()[1].transform.rotation.eulerAngles.y)
+                                    {
+                                        foreach (var p in entry.points)
+                                        {
+                                            if(!tilePoints.Contains(p))
+                                                tilePoints.Add(p);
+                                        }
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+
+                        foreach (var entry in dictionary)
+                        {
+                            int pointCount = 0;
+                            foreach(var p in entry.points)
+                                if(tilePoints.Contains(p))
+                                    pointCount++;
+                            
+                            if(pointCount == entry.points.Count && tilePoints.Count == entry.points.Count)
+                            {
+                                tile.GetComponentsInChildren<SpriteRenderer>()[1].sprite = entry.sprite;
+                                tile.GetComponentsInChildren<SpriteRenderer>()[1].transform.rotation = Quaternion.Euler(90.0f, entry.rotation, 0);
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                prev = path[i];
+            }
+            prev = path[path.Count - 1];
+            prev.x += endAdder.x;
+            prev.y += endAdder.y;
+
+            start = prev - path[path.Count - 1];
+            end = path[path.Count - 2] - path[path.Count - 1];
+            foreach (var tile in Tiles)
             {
                 if (!tile)
                     continue;
                 Vector2 pos = new Vector2(tile.transform.position.x, tile.transform.position.z);
-                if (pos == tbc)
+                if (pos == path[path.Count - 1])
                 {
-                    Debug.Log("inside if" + tbc);
-                    tile.GetComponent<Renderer>().material = material;
+                    List<Vector2> tilePoints = new List<Vector2> { start, end };
+                    if (tile.GetComponentsInChildren<SpriteRenderer>()[1].sprite)
+                    {
+                        foreach (var entry in dictionary)
+                        {
+                            if (entry.sprite == tile.GetComponentsInChildren<SpriteRenderer>()[1].sprite)
+                            {
+                                if (entry.rotation == tile.GetComponentsInChildren<SpriteRenderer>()[1].transform.rotation.eulerAngles.y)
+                                {
+                                    foreach (var p in entry.points)
+                                    {
+                                        if (!tilePoints.Contains(p))
+                                            tilePoints.Add(p);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    foreach (var entry in dictionary)
+                    {
+                        int pointCount = 0;
+                        foreach (var p in entry.points)
+                            if (tilePoints.Contains(p))
+                                pointCount++;
 
+                        if (pointCount == entry.points.Count)
+                        {
+                            tile.GetComponentsInChildren<SpriteRenderer>()[1].sprite = entry.sprite;
+                            tile.GetComponentsInChildren<SpriteRenderer>()[1].transform.rotation = Quaternion.Euler(90.0f, entry.rotation, 0);
+                            break;
+                        }
+                    }
                 }
             }
         }
+    }
+
+    IEnumerator DestroyTiles()
+    {
+        List<Vector2> tilesToBeDestroyed = SceneHandler.Instance.deletedTiles;
 
         foreach (Vector2 tbd in tilesToBeDestroyed)
         {
@@ -73,7 +235,6 @@ public class TileHandler : MonoBehaviour
             }
 
         }
-
         foreach (Vector2 tbd in tilesToBeDestroyed)
         {
             foreach (var tile in tiles)
@@ -90,7 +251,6 @@ public class TileHandler : MonoBehaviour
             }
 
         }
-
 
     }
 
