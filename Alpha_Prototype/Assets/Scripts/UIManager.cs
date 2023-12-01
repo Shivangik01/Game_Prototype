@@ -8,6 +8,8 @@ public class UIManager : MonoBehaviour
 {
     public void ResetPaths()
     {
+        audioManager.instance.playButton();
+
         AnalyticsHandler.Instance.PostResetUsage(SceneHandler.Instance.Packing_Level);
 
         SceneHandler.Instance.UI_resetCounts += 1;
@@ -24,16 +26,19 @@ public class UIManager : MonoBehaviour
 
     public void fastForwardTrain()
     {
+        audioManager.instance.playButton();
         PlayerController_new.Instance.FastForwardTrain();
     }
 
     public void SwitchPacking(bool state = false)
     {
+        audioManager.instance.playButton();
         SceneHandler.Instance.SwitchToPacking(state);
     }
 
     public void SwitchPlotting()
     {
+        audioManager.instance.playButton();
         SceneHandler.Instance.SwitchToPlotting();
     }
 
@@ -80,15 +85,18 @@ public class UIManager : MonoBehaviour
     }
     public void LevelSelection()
     {
+        audioManager.instance.playButton();
         GetComponent<Animator>().SetTrigger("levels");
     }
     public void MainTitle()
     {
+        audioManager.instance.playButton();
         GetComponent<Animator>().SetTrigger("startup");
     }
 
     public void loadLevel(int level_number)
     {
+        audioManager.instance.playButton();
         SceneManager.LoadScene(level_number);
         Scene currentScene = SceneManager.GetActiveScene();
 
@@ -102,6 +110,7 @@ public class UIManager : MonoBehaviour
 
     public void reloadLevel()
     {
+        audioManager.instance.playButton();
         SceneHandler.Instance.ResetToPacking();
     }
 }

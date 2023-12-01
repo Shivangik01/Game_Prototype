@@ -643,6 +643,7 @@ public class PlottingManager : MonoBehaviour
 
     private void AddPoint(int index, Vector2 position, SpriteRenderer renderer)
     {
+        audioManager.instance.playDig();
         foreach (GameObject d in DeliveryTiles)
         {
             if (d.GetComponent<DeliveryManager>().delivered == true)
@@ -761,6 +762,7 @@ public class PlottingManager : MonoBehaviour
 
     private void RemovePoint(int index)
     {
+        audioManager.instance.playDig();
         List<Transform> removals = new List<Transform>();
         foreach(var entry in Deliverables)
         {

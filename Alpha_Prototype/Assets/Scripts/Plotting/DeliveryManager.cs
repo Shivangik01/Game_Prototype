@@ -31,6 +31,7 @@ public class DeliveryManager : MonoBehaviour
 
     public void makeDelivery()
     {
+        audioManager.instance.playHappy();
         playerAnimator.SetBool("Happy", true);
         delivered = true;
         DemandBox.SetActive(false);
@@ -48,6 +49,7 @@ public class DeliveryManager : MonoBehaviour
 
     public void makeSad()
     {
+        audioManager.instance.playSad();
         playerAnimator.SetBool("Sad", true);
         delivered = true;
         DemandBox.SetActive(false);

@@ -52,6 +52,7 @@ public class PackageTile : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
     Transform parentAfterDrag;
     public void OnBeginDrag(PointerEventData eventData)
     {
+        audioManager.instance.playDrag();
         spotlight.SetActive(true);
         spotlight.transform.position = new Vector3(deliveryRepresentations.x, spotlight.transform.position.y, deliveryRepresentations.y);
 
@@ -84,7 +85,7 @@ public class PackageTile : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
 
     public void OnEndDrag(PointerEventData eventData)
     {
-
+        audioManager.instance.playDrag();
         spotlight.SetActive(false);
         deliverText.SetActive(false);
 
