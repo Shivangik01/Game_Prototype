@@ -39,6 +39,8 @@ public class SceneHandler : MonoBehaviour
 
     public float startLevelTime;
 
+    public int highScore;
+
     private void Awake()
     {
         if (Instance == null)
@@ -53,6 +55,7 @@ public class SceneHandler : MonoBehaviour
             UI_score = 0;
 
             Invoke("AttemptsCntr", 0.03f);
+
         }
         else
         {
@@ -81,6 +84,14 @@ public class SceneHandler : MonoBehaviour
     void AttemptsCntr()
     {
         AnalyticsHandler.Instance.PostAttempts(Packing_Level);
+        StartCoroutine(GetHighScoreOfLevel());
+    }
+
+    IEnumerator GetHighScoreOfLevel()
+    {
+        yield return StartCoroutine(AnalyticsHandler.Instance.GetLevelScore_coroutine(Packing_Level));
+        highScore = AnalyticsHandler.Instance.levelHighScore;
+        yield return null;
     }
 
     public void SwitchToPlotting()
@@ -141,7 +152,6 @@ public class SceneHandler : MonoBehaviour
         }
         if (Delivered.Count == DeliveryTargets.Count)
         {
-            AnalyticsHandler.Instance.PostScore(Packing_Level, UI_score);
             SceneManager.LoadScene(New_Level);
         }
         else
