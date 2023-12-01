@@ -10990,46 +10990,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1633838202}
     m_Modifications:
-    - target: {fileID: 1923008793606739523, guid: 7cccbb5e213f00748a2bb18cad14d205,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 1923008793606739523, guid: 7cccbb5e213f00748a2bb18cad14d205,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 1923008793606739523, guid: 7cccbb5e213f00748a2bb18cad14d205,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 1923008793606739523, guid: 7cccbb5e213f00748a2bb18cad14d205,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 1923008793606739523, guid: 7cccbb5e213f00748a2bb18cad14d205,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 90
-      objectReference: {fileID: 0}
     - target: {fileID: 3034677499396220196, guid: 7cccbb5e213f00748a2bb18cad14d205,
         type: 3}
       propertyPath: m_Name
       value: Tile (8)
-      objectReference: {fileID: 0}
-    - target: {fileID: 7488347997411674256, guid: 7cccbb5e213f00748a2bb18cad14d205,
-        type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 21300000, guid: 61286c5dbb4c01243ad5497aea754698,
-        type: 3}
-    - target: {fileID: 7488347997411674256, guid: 7cccbb5e213f00748a2bb18cad14d205,
-        type: 3}
-      propertyPath: m_WasSpriteAssigned
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7865493522919985565, guid: 7cccbb5e213f00748a2bb18cad14d205,
         type: 3}
