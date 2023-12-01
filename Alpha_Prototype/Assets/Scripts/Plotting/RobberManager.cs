@@ -35,7 +35,8 @@ public class RobberManager : MonoBehaviour
     public void makeDelivery()
     {
         playerAnimator.SetBool("Happy", true);
-        DemandBox.SetActive(false);
+        if(DemandBox)
+            DemandBox.SetActive(false);
         delivered = true;
         foreach (var target in deliveries)
         {
@@ -52,7 +53,8 @@ public class RobberManager : MonoBehaviour
     public void resetDelivery()
     {
         playerAnimator.SetBool("Happy", false);
-        DemandBox.SetActive(false);
+        if (DemandBox)
+            DemandBox.SetActive(false);
         playerAnimator.Rebind();
         playerAnimator.Update(0f);
         delivered = false;
@@ -71,6 +73,7 @@ public class RobberManager : MonoBehaviour
 
     public void levelComplete()
     {
-        DemandBox.SetActive(false);
+        if (DemandBox)
+            DemandBox.SetActive(false);
     }
 }

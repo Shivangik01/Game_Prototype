@@ -41,7 +41,7 @@ public class PackageTile : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
             checkers.Add(off);
         }
 
-        Debug.Log(GridManager.Instance.gameObject.name);
+        //Debug.Log(GridManager.Instance.gameObject.name);
         if (GridManager.Instance.inGrid(checkers, out finalPos))
         {
             GridManager.Instance.markOccupied(checkers, true);

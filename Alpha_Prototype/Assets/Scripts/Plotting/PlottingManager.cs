@@ -42,6 +42,7 @@ public class PlottingManager : MonoBehaviour
     [Header("Delivery Targets")]
     public Transform DeliveryTilesParent;
     List<GameObject> DeliveryTiles;
+    List<GameObject> RobberTiles;
 
     Dictionary<Transform, List<Vector2>> Deliverables;
 
@@ -83,7 +84,8 @@ public class PlottingManager : MonoBehaviour
         }
 
         DeliveryTiles = new List<GameObject>();
-        foreach(Transform child in DeliveryTilesParent)
+        RobberTiles = new List<GameObject>();
+        foreach (Transform child in DeliveryTilesParent)
         {
             if (child.gameObject.CompareTag("Targets") && child.gameObject.activeSelf)
             {
@@ -98,6 +100,8 @@ public class PlottingManager : MonoBehaviour
                     child.gameObject.GetComponent<DeliveryManager>().PackageSpriteRenderer.sprite = SceneHandler.Instance.DeliveryRequirements[index];
                 }
             }
+            else if (child.gameObject.CompareTag("Robber") && child.gameObject.activeSelf)
+                RobberTiles.Add(child.gameObject);
         }
 
         Deliverables = new Dictionary<Transform, List<Vector2>>();
@@ -110,6 +114,8 @@ public class PlottingManager : MonoBehaviour
 
                 foreach (GameObject d in DeliveryTiles)
                 {
+                    if (d.GetComponent<DeliveryManager>().delivered == true)
+                        continue;
                     Vector2 pos = new Vector2(d.transform.position.x, d.transform.position.z);
                     if (new Vector2(position.x + 1, position.y) == pos)
                     {
@@ -117,10 +123,7 @@ public class PlottingManager : MonoBehaviour
                             Deliverables[d.transform].Add(position);
                         else
                         {
-                            Deliverables[d.transform] = new List<Vector2>
-                    {
-                        position
-                    };
+                            Deliverables[d.transform] = new List<Vector2> {position};
                             d.transform.position = new Vector3(d.transform.position.x, 0.2f, d.transform.position.z);
                         }
                     }
@@ -164,6 +167,60 @@ public class PlottingManager : MonoBehaviour
                         }
                     }
                 }
+                foreach (GameObject d in RobberTiles)
+                {
+                    Vector2 pos = new Vector2(d.transform.position.x, d.transform.position.z);
+                    if (new Vector2(position.x + 1, position.y) == pos)
+                    {
+                        if (Deliverables.ContainsKey(d.transform))
+                            Deliverables[d.transform].Add(position);
+                        else
+                        {
+                            Deliverables[d.transform] = new List<Vector2> { position };
+                            d.transform.position = new Vector3(d.transform.position.x, 0.2f, d.transform.position.z);
+                        }
+                    }
+                    else if (new Vector2(position.x - 1, position.y) == pos)
+                    {
+                        if (Deliverables.ContainsKey(d.transform))
+                            Deliverables[d.transform].Add(position);
+                        else
+                        {
+                            Deliverables[d.transform] = new List<Vector2>
+                    {
+                        position
+                    };
+                            d.transform.position = new Vector3(d.transform.position.x, 0.2f, d.transform.position.z);
+                        }
+                    }
+                    else if (new Vector2(position.x, position.y + 1) == pos)
+                    {
+                        if (Deliverables.ContainsKey(d.transform))
+                            Deliverables[d.transform].Add(position);
+                        else
+                        {
+                            Deliverables[d.transform] = new List<Vector2>
+                    {
+                        position
+                    };
+                            d.transform.position = new Vector3(d.transform.position.x, 0.2f, d.transform.position.z);
+                        }
+                    }
+                    else if (new Vector2(position.x, position.y - 1) == pos)
+                    {
+                        if (Deliverables.ContainsKey(d.transform))
+                            Deliverables[d.transform].Insert(Math.Min(3, Deliverables[d.transform].Count - 1), position);
+                        else
+                        {
+                            Deliverables[d.transform] = new List<Vector2>
+                    {
+                        position
+                    };
+                            d.transform.position = new Vector3(d.transform.position.x, 0.2f, d.transform.position.z);
+                        }
+                    }
+                }
+
             }
 
             MeshRenderer[] meshes = DeliveryTilesParent.GetComponentsInChildren<MeshRenderer>();
@@ -338,6 +395,8 @@ public class PlottingManager : MonoBehaviour
     {
         foreach (GameObject d in DeliveryTiles)
         {
+            if (d.GetComponent<DeliveryManager>().delivered == true)
+                continue;
             Vector2 pos = new Vector2(d.transform.position.x, d.transform.position.z);
             if (new Vector2(position.x + 1, position.y) == pos)
             {
@@ -349,6 +408,59 @@ public class PlottingManager : MonoBehaviour
                     {
                         position
                     };
+                    d.transform.position = new Vector3(d.transform.position.x, 0.2f, d.transform.position.z);
+                }
+            }
+            else if (new Vector2(position.x - 1, position.y) == pos)
+            {
+                if (Deliverables.ContainsKey(d.transform))
+                    Deliverables[d.transform].Add(position);
+                else
+                {
+                    Deliverables[d.transform] = new List<Vector2>
+                    {
+                        position
+                    };
+                    d.transform.position = new Vector3(d.transform.position.x, 0.2f, d.transform.position.z);
+                }
+            }
+            else if (new Vector2(position.x, position.y + 1) == pos)
+            {
+                if (Deliverables.ContainsKey(d.transform))
+                    Deliverables[d.transform].Add(position);
+                else
+                {
+                    Deliverables[d.transform] = new List<Vector2>
+                    {
+                        position
+                    };
+                    d.transform.position = new Vector3(d.transform.position.x, 0.2f, d.transform.position.z);
+                }
+            }
+            else if (new Vector2(position.x, position.y - 1) == pos)
+            {
+                if (Deliverables.ContainsKey(d.transform))
+                    Deliverables[d.transform].Insert(Math.Min(3, Deliverables[d.transform].Count - 1), position);
+                else
+                {
+                    Deliverables[d.transform] = new List<Vector2>
+                    {
+                        position
+                    };
+                    d.transform.position = new Vector3(d.transform.position.x, 0.2f, d.transform.position.z);
+                }
+            }
+        }
+        foreach (GameObject d in RobberTiles)
+        {
+            Vector2 pos = new Vector2(d.transform.position.x, d.transform.position.z);
+            if (new Vector2(position.x + 1, position.y) == pos)
+            {
+                if (Deliverables.ContainsKey(d.transform))
+                    Deliverables[d.transform].Add(position);
+                else
+                {
+                    Deliverables[d.transform] = new List<Vector2> { position };
                     d.transform.position = new Vector3(d.transform.position.x, 0.2f, d.transform.position.z);
                 }
             }
