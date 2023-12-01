@@ -52,7 +52,7 @@ public class RobberManager : MonoBehaviour
     public void resetDelivery()
     {
         playerAnimator.SetBool("Happy", false);
-        DemandBox.SetActive(true);
+        DemandBox.SetActive(false);
         playerAnimator.Rebind();
         playerAnimator.Update(0f);
         delivered = false;
