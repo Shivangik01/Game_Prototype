@@ -12,6 +12,9 @@ public class PlottingTutorial : MonoBehaviour
     public float moveSpeed = 100.0f;
     public Gradient fallOffs;
 
+    [Header("Queue Indicator")]
+    public GameObject arrow;
+
     int prevStart, prevEnd;
     bool connected;
 
@@ -29,6 +32,11 @@ public class PlottingTutorial : MonoBehaviour
 
     void Update()
     {
+        if (FindObjectOfType<DeliverSystem>().isDelivering)
+            arrow.SetActive(true);
+        else
+            arrow.SetActive(false);
+
         if (connected)
             return;
 

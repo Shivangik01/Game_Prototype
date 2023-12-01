@@ -10,10 +10,13 @@ public class DeliverSystem : MonoBehaviour
     public GameObject DeliveryObject;
     public Transform startPosition;
 
+    public bool isDelivering;
+
     List<GameObject> instantiated;
 
     private void Start()
     {
+        isDelivering = false;
         instantiated = new List<GameObject>();
     }
 
@@ -30,6 +33,7 @@ public class DeliverSystem : MonoBehaviour
     public void KillCoroutines()
     {
         StopAllCoroutines();
+        isDelivering = false;
         foreach (GameObject obj in instantiated)
         {
             if(obj != null)
@@ -42,6 +46,9 @@ public class DeliverSystem : MonoBehaviour
 
     IEnumerator DeliverPackage(Transform A, DeliveryManager B)
     {
+        isDelivering = true;
+        if (FindObjectOfType<PlottingTutorial>() != null)
+            yield return new WaitForSeconds(1);
         Transform B_loc = B.deliveryLocation.transform;
         float TotalDistance = Vector3.Distance(A.position, B_loc.position);
         float speed = TotalDistance / time;
@@ -66,6 +73,7 @@ public class DeliverSystem : MonoBehaviour
         }
         package.transform.position = B_loc.position;
         B.makeDelivery();
+        isDelivering = false;
 
         Destroy(package.gameObject, 2.0f);
 
@@ -74,6 +82,7 @@ public class DeliverSystem : MonoBehaviour
 
     IEnumerator DeliverPackage(Transform A, RobberManager B)
     {
+        isDelivering = true;
         Transform B_loc = B.deliveryLocation.transform;
         float TotalDistance = Vector3.Distance(A.position, B_loc.position);
         float speed = TotalDistance / time;
@@ -98,6 +107,7 @@ public class DeliverSystem : MonoBehaviour
         }
         package.transform.position = B_loc.position;
         B.makeDelivery();
+        isDelivering = false;
 
         Destroy(package.gameObject, 2.0f);
 

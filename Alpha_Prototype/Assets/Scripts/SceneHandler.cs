@@ -24,7 +24,7 @@ public class SceneHandler : MonoBehaviour
     public List<Vector2> Delivered;
 
     public Queue<Vector2> StackedItems;
-    public Dictionary<Vector2, Vector2> StackedItemsPositions;
+    public Dictionary<Vector2, Tuple<Vector2, int>> StackedItemsPositions;
 
     public List<Vector2> deletedTiles;
     public bool showDeletion;
@@ -47,7 +47,7 @@ public class SceneHandler : MonoBehaviour
         {
             Instance = this;
             StackedItems = new Queue<Vector2>();
-            StackedItemsPositions = new Dictionary<Vector2, Vector2>();
+            StackedItemsPositions = new Dictionary<Vector2, Tuple<Vector2, int>>();
             deletedTiles = new List<Vector2>();
             showDeletion = true;
             PathConnected = false;
@@ -69,7 +69,7 @@ public class SceneHandler : MonoBehaviour
                 Destroy(Instance.gameObject);
                 Instance = this;
                 StackedItems = new Queue<Vector2>();
-                StackedItemsPositions = new Dictionary<Vector2, Vector2>();
+                StackedItemsPositions = new Dictionary<Vector2, Tuple<Vector2, int>>();
                 deletedTiles = new List<Vector2>();
                 showDeletion = true;
                 PathConnected = false;
@@ -99,21 +99,21 @@ public class SceneHandler : MonoBehaviour
     public void SwitchToPlotting()
     {
         StackedItems.Clear();
-        List<Vector2> positions = new List<Vector2>();
+        List<int> positions = new List<int>();
 
         foreach (var entry in StackedItemsPositions)
-            positions.Add(entry.Value);
+            positions.Add(entry.Value.Item2);
 
         positions.Sort((a, b) => {
-            return a.y.CompareTo(b.y);
+            return a.CompareTo(b);
         });
-        positions.Reverse();
+        //positions.Reverse();
 
         for (int idx = 0; idx < positions.Count; idx++)
         {
             foreach (var entry in StackedItemsPositions)
             {
-                if (entry.Value == positions[idx])
+                if (entry.Value.Item2 == positions[idx])
                 {
                     StackedItems.Enqueue(entry.Key);
                     break;

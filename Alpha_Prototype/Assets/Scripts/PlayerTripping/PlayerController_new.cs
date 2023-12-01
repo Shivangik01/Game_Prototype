@@ -306,7 +306,10 @@ public class PlayerController_new : MonoBehaviour
                 Color darkRed = new Color(180f / 255f, 0f / 255f, 1f / 255f);
                 Color originalColor = mainCamera.backgroundColor;
                 mainCamera.backgroundColor = darkRed;
-                yield return new WaitForSeconds(2.0f);
+                if (FindObjectOfType<PlottingTutorial>() != null)
+                    yield return new WaitForSeconds(3.0f);
+                else
+                    yield return new WaitForSeconds(2.0f);
                 mainCamera.backgroundColor = originalColor;
             }
             else if (deliveryTile != null)
@@ -315,7 +318,10 @@ public class PlayerController_new : MonoBehaviour
                 deliveries_queue.Dequeue();
                 QueueUI.Instance.PopQueue();
                 transform.GetComponent<DeliverSystem>().deliverObject(deliveryTile);
-                yield return new WaitForSeconds(2.0f);
+                if (FindObjectOfType<PlottingTutorial>() != null)
+                    yield return new WaitForSeconds(3.0f);
+                else
+                    yield return new WaitForSeconds(2.0f);
 
             }
 

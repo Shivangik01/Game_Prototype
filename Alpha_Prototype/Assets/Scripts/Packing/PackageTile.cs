@@ -1,9 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class PackageTile : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerDownHandler, IPointerUpHandler
+public class PackageTile : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
     public Transform originalPosition;
     public Vector2 deliveryRepresentations;
@@ -25,7 +26,7 @@ public class PackageTile : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         }
         else if (SceneHandler.Instance.StackedItemsPositions.ContainsKey(deliveryRepresentations))
         {
-            transform.position = SceneHandler.Instance.StackedItemsPositions[deliveryRepresentations];
+            transform.position = SceneHandler.Instance.StackedItemsPositions[deliveryRepresentations].Item1;
             Initialize();
         }
     }
@@ -41,28 +42,11 @@ public class PackageTile : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
             checkers.Add(off);
         }
 
-        //Debug.Log(GridManager.Instance.gameObject.name);
+        Debug.Log(GridManager.Instance.gameObject.name);
         if (GridManager.Instance.inGrid(checkers, out finalPos))
         {
             GridManager.Instance.markOccupied(checkers, true);
         }
-    }
-
-    public void OnPointerDown(PointerEventData eventData)
-    {
-        // Turn on the spotlight when the package is clicked
-        spotlight.SetActive(true);
-        spotlight.transform.position = new Vector3(deliveryRepresentations.x, spotlight.transform.position.y, deliveryRepresentations.y);
-
-         deliverText.SetActive(true);
-    }
-
-    public void OnPointerUp(PointerEventData eventData)
-    {
-        // Turn off the spotlight when the click is released
-        spotlight.SetActive(false);
-
-         deliverText.SetActive(false);
     }
 
     Transform parentAfterDrag;
@@ -117,7 +101,7 @@ public class PackageTile : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         {
             GridManager.Instance.markOccupied(checkers, true);
             transform.position = finalPos + offset;
-            SceneHandler.Instance.StackedItemsPositions.Add(deliveryRepresentations, transform.position);
+            SceneHandler.Instance.StackedItemsPositions.Add(deliveryRepresentations, Tuple.Create<Vector2,int>(transform.position, SceneHandler.Instance.StackedItemsPositions.Count));
         }
         else
         {
