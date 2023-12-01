@@ -283,11 +283,12 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 21300000, guid: 61286c5dbb4c01243ad5497aea754698,
+        type: 3}
     - target: {fileID: 7488347997411674256, guid: 7cccbb5e213f00748a2bb18cad14d205,
         type: 3}
       propertyPath: m_WasSpriteAssigned
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7865493522919985565, guid: 7cccbb5e213f00748a2bb18cad14d205,
         type: 3}
@@ -2769,8 +2770,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a68344533dd20f4090a6136a614cd37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  StartPoint: {fileID: 0}
-  EndPoint: {fileID: 0}
+  StartPoint: {fileID: 600169975}
+  EndPoint: {fileID: 14639352}
 --- !u!4 &682482430
 Transform:
   m_ObjectHideFlags: 0

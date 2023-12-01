@@ -9628,8 +9628,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a68344533dd20f4090a6136a614cd37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  StartPoint: {fileID: 0}
-  EndPoint: {fileID: 0}
+  StartPoint: {fileID: 1669821101}
+  EndPoint: {fileID: 1837382577}
 --- !u!224 &2112585876 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8502259220921200622, guid: 383ed6abec7624fe2986b5e7990b299c,
