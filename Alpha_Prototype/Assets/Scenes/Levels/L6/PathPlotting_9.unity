@@ -17331,7 +17331,7 @@ MonoBehaviour:
   pauseButton: {fileID: 1069152485}
   playButton: {fileID: 1838264561}
   LevelComplete: {fileID: 1213918895}
-  mainCamera: {fileID: 0}
+  mainCamera: {fileID: 943102003}
   originalCamera: {fileID: 633820186}
   simulationCamera: {fileID: 323004668}
   isSimulating: 0
