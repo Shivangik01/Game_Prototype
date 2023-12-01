@@ -6,12 +6,11 @@ using UnityEngine;
 public class TileHandler : MonoBehaviour
 {
     List<GameObject> tiles;
-
-   
-
     public void Start()
     {
         tiles = GameObject.FindGameObjectsWithTag("Tiles").ToList();
+
+
         if (SceneHandler.Instance.showDeletion)
         {
             StartCoroutine(DestroyTiles());

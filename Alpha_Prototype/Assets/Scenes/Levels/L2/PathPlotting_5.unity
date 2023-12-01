@@ -3845,7 +3845,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &702739412
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3859,11 +3859,11 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 343218660}
-  m_Father: {fileID: 1069152486}
+  m_Father: {fileID: 1681553333}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 59.8, y: -0.7000084}
+  m_AnchoredPosition: {x: 59.8, y: 19.3}
   m_SizeDelta: {x: 50, y: 50}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &702739413
@@ -4021,7 +4021,7 @@ PrefabInstance:
     - target: {fileID: 107990967577542036, guid: 2c70921ed64bb284a935dc9eeaf368de,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 107990967577542036, guid: 2c70921ed64bb284a935dc9eeaf368de,
         type: 3}
@@ -5515,7 +5515,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 542295495}
-  - {fileID: 702739412}
   m_Father: {fileID: 1681553333}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
@@ -5642,6 +5641,18 @@ MonoBehaviour:
         m_Mode: 2
         m_Arguments:
           m_ObjectArgument: {fileID: 1069152485}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1681553334}
+        m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+        m_MethodName: SetInactive
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 702739411}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
@@ -9311,6 +9322,7 @@ RectTransform:
   - {fileID: 209862937}
   - {fileID: 1838264562}
   - {fileID: 1069152486}
+  - {fileID: 702739412}
   - {fileID: 1178314449}
   - {fileID: 1314152934}
   - {fileID: 325700265}
@@ -9564,7 +9576,7 @@ PrefabInstance:
     - target: {fileID: 107990967577542036, guid: 2c70921ed64bb284a935dc9eeaf368de,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 107990967577542036, guid: 2c70921ed64bb284a935dc9eeaf368de,
         type: 3}
@@ -10406,6 +10418,18 @@ MonoBehaviour:
         m_Mode: 2
         m_Arguments:
           m_ObjectArgument: {fileID: 1838264561}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1681553334}
+        m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+        m_MethodName: SetActive
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 702739411}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
