@@ -676,19 +676,19 @@ public class PlottingManager : MonoBehaviour
         for(int i=0; i<end; i++)
             list.Add(Path[i]);
 
+        Vector2 pos = Vector2.zero;
+        pos.x = StartPoint.transform.position.x + startAdder.x;
+        pos.y = StartPoint.transform.position.z + startAdder.y;
+
+        list.Insert(0, pos);
+
+        pos.x += startAdder.x;
+        pos.y += startAdder.y;
+
+        list.Insert(0, pos);
+
         if (isConnected)
         {
-            Vector2 pos = Vector2.zero;
-            pos.x = StartPoint.transform.position.x + startAdder.x;
-            pos.y = StartPoint.transform.position.z + startAdder.y;
-
-            list.Insert(0, pos);
-
-            pos.x += startAdder.x;
-            pos.y += startAdder.y;
-
-            list.Insert(0, pos);
-
             pos = new Vector2(EndPoint.transform.position.x + (endAdder.x * 6), EndPoint.transform.position.z + (endAdder.y * 6));
             list.Add(pos);
         }
