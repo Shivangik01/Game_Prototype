@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class PackageTile : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
+public class PackageTile : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerDownHandler, IPointerUpHandler
 {
     public Transform originalPosition;
     public Vector2 deliveryRepresentations;
@@ -47,6 +47,20 @@ public class PackageTile : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         {
             GridManager.Instance.markOccupied(checkers, true);
         }
+    }
+
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        // Turn on the spotlight when the package is clicked
+        spotlight.SetActive(true);
+        spotlight.transform.position = new Vector3(deliveryRepresentations.x, spotlight.transform.position.y, deliveryRepresentations.y);
+        deliverText.SetActive(true);
+    }
+    public void OnPointerUp(PointerEventData eventData)
+    {
+        // Turn off the spotlight when the click is released
+        spotlight.SetActive(false);
+        deliverText.SetActive(false);
     }
 
     Transform parentAfterDrag;
