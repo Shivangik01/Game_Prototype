@@ -16,6 +16,7 @@ public class audioManager : MonoBehaviour
     }
 
     public AudioSource SFX;
+    public AudioSource TrainSFX;
     public AudioSource Ambient;
 
     public AudioClip buttonClip;
@@ -47,5 +48,44 @@ public class audioManager : MonoBehaviour
     public void playSad()
     {
         SFX.PlayOneShot(sadClip);
+    }
+
+    public void playTrain()
+    {
+        StartCoroutine(FadeInTrain());
+    }
+
+    public void stopTrain()
+    {
+        StopAllCoroutines();
+        StartCoroutine(FadeOutTrain());
+    }
+
+    IEnumerator FadeInTrain()
+    {
+        float volume = TrainSFX.volume;
+        while(volume < 0.3f)
+        {
+            volume += Time.deltaTime;
+            TrainSFX.volume = volume;
+
+            yield return null;
+        }
+        TrainSFX.volume = 0.3f;
+        yield return null;
+    }
+
+    IEnumerator FadeOutTrain()
+    {
+        float volume = TrainSFX.volume;
+        while (volume > 0f)
+        {
+            volume -= Time.deltaTime;
+            TrainSFX.volume = volume;
+
+            yield return null;
+        }
+        TrainSFX.volume = 0.0f;
+        yield return null;
     }
 }

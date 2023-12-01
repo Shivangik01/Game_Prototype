@@ -90,6 +90,7 @@ public class PlayerController_new : MonoBehaviour
 
     public void MoveAlongPath()
     {
+        audioManager.instance.playTrain();
         GetComponent<DeliverSystem>().KillCoroutines();
 
         StopAllCoroutines();
@@ -100,6 +101,7 @@ public class PlayerController_new : MonoBehaviour
 
     public void ResetTrain()
     {
+        audioManager.instance.stopTrain();
         speed = normal_speed;
         RotationSpeed = normal_RotationSpeed;
 

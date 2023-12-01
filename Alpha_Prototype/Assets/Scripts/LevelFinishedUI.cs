@@ -13,6 +13,7 @@ public class LevelFinishedUI : MonoBehaviour
     public Animator animator;
     public void showData()
     {
+        audioManager.instance.stopTrain();
         int startOffset, endOffset;
         int PathCount = SceneHandler.Instance.UI_score + PlottingManager.Instance.getRawPath(out startOffset, out endOffset).Count;
         AnalyticsHandler.Instance.PostScore(SceneHandler.Instance.Packing_Level, PathCount);
